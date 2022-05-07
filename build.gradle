@@ -29,51 +29,6 @@ archivesBaseName = '${mod_name}'
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
-
-import org.apache.tools.ant.taskdefs.condition.Os
-
-boolean hasShimmerProject = findProject(':Shimmer') != null
-
-if (hasShimmerProject) {
-    println('TesseractAPI in local workspace')
-}
-
-sourceSets {
-    main {
-        java {
-            srcDir 'src/main/java'
-        }
-        resources {
-            include '**/**'
-            srcDirs += 'src/generated/resources'
-            exclude '.cache'
-            exclude 'Thumbs.db'
-        }
-    }
-}
-
-static def getPathSeparator() {
-    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-        return ";"
-    }
-    return ":"
-}
-
-String getEnv() {
-    boolean vscode = gradle.startParameter.taskNames[0].equals("genVSCodeRuns")  || gradle.startParameter.taskNames[0].equals(":genVSCodeRuns")
-    boolean hasShimmerProject = findProject(':Shimmer') != null
-
-    String resourcePath = vscode ? 'bin/main' : 'build/resources/main'
-    String codePath = vscode ? 'bin/main' : 'build/classes/java/main'
-    String s = "shimmerfire%%${project.file(resourcePath)}" + getPathSeparator() + "shimmerfire%%${project.file(codePath)}"
-    if (hasShimmerProject) {
-        s += getPathSeparator() + "shimmer%%${project(':Shimmer').file(resourcePath)}" + getPathSeparator() + "shimmer%%${project(':Shimmer').file(codePath)}"
-    }
-    return s
-}
-
-
-
 minecraft {
     mappings channel: 'parchment', version: "${mappings_version}"
 
@@ -93,11 +48,6 @@ minecraft {
 
             property 'forge.enabledGameTestNamespaces', 'shimmerfire'
 
-            if (hasShimmerProject) {
-                environment 'MOD_CLASSES', getEnv()
-            }
-
-            arg "-mixin.config=shimmer.mixins.json"
             mods {
                 shimmerfire {
                     source sourceSets.main
@@ -117,11 +67,6 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'examplemod'
 
-            if (hasShimmerProject) {
-                environment 'MOD_CLASSES', getEnv()
-            }
-
-            arg "-mixin.config=shimmer.mixins.json"
             mods {
                 shimmerfire {
                     source sourceSets.main
@@ -142,10 +87,6 @@ minecraft {
 
             property 'forge.enabledGameTestNamespaces', 'examplemod'
 
-            if (hasShimmerProject) {
-                environment 'MOD_CLASSES', getEnv()
-            }
-            arg "-mixin.config=shimmer.mixins.json"
             mods {
                 shimmerfire {
                     source sourceSets.main
@@ -163,18 +104,9 @@ minecraft {
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             args '--mod', 'shimmerfire', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
-            if (hasShimmerProject) {
-                environment 'MOD_CLASSES', getEnv()
-            }
-
-            arg "-mixin.config=shimmer.mixins.json"
-
             mods {
                 shimmerfire {
                     source sourceSets.main
-                }
-                shimmer {
-                    source project(':Shimmer').sourceSets.main
                 }
             }
         }
@@ -185,16 +117,15 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-
+    flatDir {
+        dir 'libs'
+    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    //dont know why idea import failed. import module manually.
-//    if (hasShimmerProject) {
-//        implementation project(path: ':Shimmer')
-//    }
+    implementation fg.deobf("blank:Shimmer-1.18.2:0.1")
 
     if (System.getProperty('idea.sync.active') != 'true') {
         annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
@@ -204,6 +135,8 @@ dependencies {
 
 mixin {
     add sourceSets.main, 'shimmerfire.refmap.json'
+
+    config 'shimmerfire.mixins.json'
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

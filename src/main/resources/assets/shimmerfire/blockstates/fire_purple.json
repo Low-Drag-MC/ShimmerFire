@@ -10,10 +10,10 @@
       },
       "apply": [
         {
-          "model": "shimmer:block/fire_purple/fire_floor0"
+          "model": "shimmerfire:block/fire_purple/fire_floor0"
         },
         {
-          "model": "shimmer:block/fire_purple/fire_floor1"
+          "model": "shimmerfire:block/fire_purple/fire_floor1"
         }
       ]
     },
@@ -34,16 +34,16 @@
       },
       "apply": [
         {
-          "model": "shimmer:block/fire_purple/fire_side0"
+          "model": "shimmerfire:block/fire_purple/fire_side0"
         },
         {
-          "model": "shimmer:block/fire_purple/fire_side1"
+          "model": "shimmerfire:block/fire_purple/fire_side1"
         },
         {
-          "model": "shimmer:block/fire_purple/fire_side_alt0"
+          "model": "shimmerfire:block/fire_purple/fire_side_alt0"
         },
         {
-          "model": "shimmer:block/fire_purple/fire_side_alt1"
+          "model": "shimmerfire:block/fire_purple/fire_side_alt1"
         }
       ]
     },
@@ -64,19 +64,19 @@
       },
       "apply": [
         {
-          "model": "shimmer:block/fire_purple/fire_side0",
+          "model": "shimmerfire:block/fire_purple/fire_side0",
           "y": 90
         },
         {
-          "model": "shimmer:block/fire_purple/fire_side1",
+          "model": "shimmerfire:block/fire_purple/fire_side1",
           "y": 90
         },
         {
-          "model": "shimmer:block/fire_purple/fire_side_alt0",
+          "model": "shimmerfire:block/fire_purple/fire_side_alt0",
           "y": 90
         },
         {
-          "model": "shimmer:block/fire_purple/fire_side_alt1",
+          "model": "shimmerfire:block/fire_purple/fire_side_alt1",
           "y": 90
         }
       ]
@@ -98,19 +98,19 @@
       },
       "apply": [
         {
-          "model": "shimmer:block/fire_purple/fire_side0",
+          "model": "shimmerfire:block/fire_purple/fire_side0",
           "y": 180
         },
         {
-          "model": "shimmer:block/fire_purple/fire_side1",
+          "model": "shimmerfire:block/fire_purple/fire_side1",
           "y": 180
         },
         {
-          "model": "shimmer:block/fire_purple/fire_side_alt0",
+          "model": "shimmerfire:block/fire_purple/fire_side_alt0",
           "y": 180
         },
         {
-          "model": "shimmer:block/fire_purple/fire_side_alt1",
+          "model": "shimmerfire:block/fire_purple/fire_side_alt1",
           "y": 180
         }
       ]
@@ -132,19 +132,19 @@
       },
       "apply": [
         {
-          "model": "shimmer:block/fire_purple/fire_side0",
+          "model": "shimmerfire:block/fire_purple/fire_side0",
           "y": 270
         },
         {
-          "model": "shimmer:block/fire_purple/fire_side1",
+          "model": "shimmerfire:block/fire_purple/fire_side1",
           "y": 270
         },
         {
-          "model": "shimmer:block/fire_purple/fire_side_alt0",
+          "model": "shimmerfire:block/fire_purple/fire_side_alt0",
           "y": 270
         },
         {
-          "model": "shimmer:block/fire_purple/fire_side_alt1",
+          "model": "shimmerfire:block/fire_purple/fire_side_alt1",
           "y": 270
         }
       ]
@@ -155,16 +155,16 @@
       },
       "apply": [
         {
-          "model": "shimmer:block/fire_purple/fire_up0"
+          "model": "shimmerfire:block/fire_purple/fire_up0"
         },
         {
-          "model": "shimmer:block/fire_purple/fire_up1"
+          "model": "shimmerfire:block/fire_purple/fire_up1"
         },
         {
-          "model": "shimmer:block/fire_purple/fire_up_alt0"
+          "model": "shimmerfire:block/fire_purple/fire_up_alt0"
         },
         {
-          "model": "shimmer:block/fire_purple/fire_up_alt1"
+          "model": "shimmerfire:block/fire_purple/fire_up_alt1"
         }
       ]
     }

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/template_fire_side",
   "textures": {
-    "fire": "shimmer:blocks/fire/fire_1_purple"
+    "fire": "shimmerfire:blocks/fire/fire_1_purple"
   }
 }
