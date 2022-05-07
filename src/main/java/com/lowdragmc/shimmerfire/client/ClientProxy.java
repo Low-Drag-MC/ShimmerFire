@@ -1,6 +1,6 @@
 package com.lowdragmc.shimmerfire.client;
 
-import com.lowdragmc.shimmer.CommonProxy;
+import com.lowdragmc.shimmerfire.CommonProxy;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraftforge.client.event.ModelBakeEvent;
