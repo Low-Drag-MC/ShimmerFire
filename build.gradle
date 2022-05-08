@@ -125,7 +125,8 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    implementation fg.deobf("blank:Shimmer-1.18.2:0.1")
+    implementation fg.deobf("blank:shimmer-1.18.2:0.1")
+    implementation fg.deobf("blank:cannonfire-forge-1.18:0.1.4")
 
     if (System.getProperty('idea.sync.active') != 'true') {
         annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'

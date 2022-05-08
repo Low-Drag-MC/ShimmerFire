@@ -5,10 +5,13 @@ import com.lowdragmc.shimmer.client.light.LightManager;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
+import static com.lowdragmc.shimmerfire.block.ColoredFireBlock.FIRE_COLOR;
 
 /**
  * @author KilaBash
@@ -25,9 +28,9 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void clientSetup(FMLClientSetupEvent e) {
         e.enqueueWork(()->{
-            for (ColoredFireBlock fireBlock : FIRE_BLOCKS) {
-                ItemBlockRenderTypes.setRenderLayer(fireBlock, ShimmerRenderTypes.bloom());
-                LightManager.INSTANCE.registerBlockLight(fireBlock, fireBlock.color, 8);
+            ItemBlockRenderTypes.setRenderLayer(FIRE_BLOCK, ShimmerRenderTypes.bloom());
+            for (ColoredFireBlock.FireColor color : ColoredFireBlock.FireColor.values()) {
+                LightManager.INSTANCE.registerBlockStateLight(FIRE_BLOCK.defaultBlockState().setValue(FIRE_COLOR, color), color.colorVale, color.radius);
             }
         });
     }

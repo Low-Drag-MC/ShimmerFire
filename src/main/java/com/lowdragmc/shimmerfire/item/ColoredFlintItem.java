@@ -1,5 +1,6 @@
 package com.lowdragmc.shimmerfire.item;
 
+import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -20,11 +21,14 @@ import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.CandleCakeBlock;
+import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 
 import javax.annotation.Nonnull;
+
+import static com.lowdragmc.shimmerfire.block.ColoredFireBlock.FIRE_COLOR;
 
 /**
  * @author KilaBash
@@ -32,11 +36,15 @@ import javax.annotation.Nonnull;
  * @implNote ColoredFlintItem
  */
 public class ColoredFlintItem extends FlintAndSteelItem {
-    ColoredFireBlock fireBlock;
-    public ColoredFlintItem(ColoredFireBlock fireBlock) {
+    public final ColoredFireBlock.FireColor color;
+    public ColoredFlintItem(ColoredFireBlock.FireColor color) {
         super(new Item.Properties().durability(64).tab(CreativeModeTab.TAB_TOOLS));
-        this.fireBlock = fireBlock;
-        setRegistryName(new ResourceLocation(ShimmerFireMod.MODID, "flint_" + fireBlock.getRegistryName().getPath()));
+        setRegistryName(new ResourceLocation(ShimmerFireMod.MODID, "flint_fire_" + color.colorName));
+        this.color = color;
+    }
+
+    public BlockState getFireState() {
+        return CommonProxy.FIRE_BLOCK.defaultBlockState().setValue(FIRE_COLOR, color);
     }
 
     @Override
@@ -50,7 +58,7 @@ public class ColoredFlintItem extends FlintAndSteelItem {
             BlockPos blockpos1 = blockpos.relative(context.getClickedFace());
             if (BaseFireBlock.canBePlacedAt(level, blockpos1, context.getHorizontalDirection())) {
                 level.playSound(player, blockpos1, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
-                BlockState blockstate1 = fireBlock.defaultBlockState();
+                BlockState blockstate1 = getFireState();
                 level.setBlock(blockpos1, blockstate1, 11);
                 level.gameEvent(player, GameEvent.BLOCK_PLACE, blockpos);
                 ItemStack itemstack = context.getItemInHand();

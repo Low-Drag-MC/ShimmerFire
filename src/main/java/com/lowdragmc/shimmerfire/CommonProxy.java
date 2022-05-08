@@ -18,7 +18,7 @@ import net.minecraftforge.registries.IForgeRegistry;
  * @implNote com.lowdragmc.shimmer.CommonProxy
  */
 public class CommonProxy {
-    public static ColoredFireBlock[] FIRE_BLOCKS;
+    public static ColoredFireBlock FIRE_BLOCK;
     public CommonProxy() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.register(this);
@@ -27,22 +27,14 @@ public class CommonProxy {
     @SubscribeEvent
     public void registerBlocks(RegistryEvent.Register<Block> event) {
         IForgeRegistry<Block> registry = event.getRegistry();
-        FIRE_BLOCKS = new ColoredFireBlock[]{
-                new ColoredFireBlock("orange", 0xFFA500),
-                new ColoredFireBlock("cyan", 0xff00FFFF),
-                new ColoredFireBlock("green", 0xff008000),
-                new ColoredFireBlock("purple", 0xff800080),
-        };
-        for (ColoredFireBlock block : FIRE_BLOCKS) {
-            registry.register(block);
-        }
+        registry.register(FIRE_BLOCK = new ColoredFireBlock());
     }
 
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> event) {
         IForgeRegistry<Item> registry = event.getRegistry();
-        for (ColoredFireBlock fireBlock : FIRE_BLOCKS) {
-            registry.register(new ColoredFlintItem(fireBlock));
+        for (ColoredFireBlock.FireColor color : ColoredFireBlock.FireColor.values()) {
+            registry.register(new ColoredFlintItem(color));
         }
     }
 }

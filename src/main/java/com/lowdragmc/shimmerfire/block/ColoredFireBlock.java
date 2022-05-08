@@ -3,12 +3,18 @@ package com.lowdragmc.shimmerfire.block;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author KilaBash
@@ -16,12 +22,23 @@ import net.minecraft.world.level.material.MaterialColor;
  * @implNote ColoredFireBlock
  */
 public class ColoredFireBlock extends FireBlock {
-    public int color;
+    public static final EnumProperty<FireColor> FIRE_COLOR = EnumProperty.create("color", FireColor.class, FireColor.values());
 
-    public ColoredFireBlock(String name, int color) {
+    public ColoredFireBlock() {
         super(Properties.of(Material.FIRE, MaterialColor.FIRE).noCollission().instabreak().sound(SoundType.WOOL));
-        this.color = color;
-        setRegistryName(new ResourceLocation(ShimmerFireMod.MODID, "fire_" + name));
+        setRegistryName(new ResourceLocation(ShimmerFireMod.MODID, "color_fire"));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(AGE, 0)
+                .setValue(NORTH, Boolean.FALSE)
+                .setValue(EAST, Boolean.FALSE)
+                .setValue(SOUTH, Boolean.FALSE)
+                .setValue(WEST, Boolean.FALSE)
+                .setValue(UP, Boolean.FALSE)
+                .setValue(FIRE_COLOR, FireColor.ORANGE));
+
+    }
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+        pBuilder.add(AGE, NORTH, EAST, SOUTH, WEST, UP, FIRE_COLOR);
     }
 
     @Override
@@ -29,4 +46,26 @@ public class ColoredFireBlock extends FireBlock {
         return 4;
     }
 
+    public enum FireColor implements StringRepresentable {
+        ORANGE("orange", 0xFFA500, 8),
+        CYAN("cyan", 0xff00FFFF, 8),
+        GREEN("green", 0xff008000, 8),
+        PURPLE("purple", 0xff800080, 8);
+
+        public final String colorName;
+        public final int colorVale;
+        public final float radius;
+
+        FireColor(String colorName, int colorVale, float radius){
+            this.colorName = colorName;
+            this.colorVale = colorVale;
+            this.radius = radius;
+        }
+
+        @Override
+        @Nonnull
+        public String getSerializedName() {
+            return colorName;
+        }
+    }
 }
