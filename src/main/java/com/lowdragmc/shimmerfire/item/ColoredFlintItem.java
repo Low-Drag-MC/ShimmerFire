@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
@@ -29,6 +30,8 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import javax.annotation.Nonnull;
 
 import static com.lowdragmc.shimmerfire.block.ColoredFireBlock.FIRE_COLOR;
+import static net.minecraft.world.level.block.CampfireBlock.LIT;
+import static net.minecraft.world.level.block.CampfireBlock.WATERLOGGED;
 
 /**
  * @author KilaBash
@@ -47,6 +50,13 @@ public class ColoredFlintItem extends FlintAndSteelItem {
         return CommonProxy.FIRE_BLOCK.defaultBlockState().setValue(FIRE_COLOR, color);
     }
 
+    public static boolean canLight(BlockState pState) {
+        return pState.is(BlockTags.CAMPFIRES, (stateBase) -> stateBase.hasProperty(WATERLOGGED)
+                && stateBase.hasProperty(LIT))
+                && !pState.getValue(WATERLOGGED)
+                && (!pState.getValue(LIT) || pState.hasProperty(FIRE_COLOR));
+    }
+
     @Override
     @Nonnull
     public InteractionResult useOn(@Nonnull UseOnContext context) {
@@ -54,7 +64,7 @@ public class ColoredFlintItem extends FlintAndSteelItem {
         Level level = context.getLevel();
         BlockPos blockpos = context.getClickedPos();
         BlockState blockstate = level.getBlockState(blockpos);
-        if (!CampfireBlock.canLight(blockstate) && !CandleBlock.canLight(blockstate) && !CandleCakeBlock.canLight(blockstate)) {
+        if (!canLight(blockstate) && !CandleBlock.canLight(blockstate) && !CandleCakeBlock.canLight(blockstate)) {
             BlockPos blockpos1 = blockpos.relative(context.getClickedFace());
             if (BaseFireBlock.canBePlacedAt(level, blockpos1, context.getHorizontalDirection())) {
                 level.playSound(player, blockpos1, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
@@ -74,13 +84,15 @@ public class ColoredFlintItem extends FlintAndSteelItem {
                 return InteractionResult.FAIL;
             }
         } else {
+            blockstate = blockstate.setValue(BlockStateProperties.LIT, Boolean.TRUE);
+            if (blockstate.hasProperty(FIRE_COLOR)) {
+                blockstate = blockstate.setValue(FIRE_COLOR, color);
+            }
             level.playSound(player, blockpos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
-            level.setBlock(blockpos, blockstate.setValue(BlockStateProperties.LIT, Boolean.TRUE), 11);
+            level.setBlock(blockpos, blockstate, 11);
             level.gameEvent(player, GameEvent.BLOCK_PLACE, blockpos);
             if (player != null) {
-                context.getItemInHand().hurtAndBreak(1, player, (p_41303_) -> {
-                    p_41303_.broadcastBreakEvent(context.getHand());
-                });
+                context.getItemInHand().hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
             }
 
             return InteractionResult.sidedSuccess(level.isClientSide());

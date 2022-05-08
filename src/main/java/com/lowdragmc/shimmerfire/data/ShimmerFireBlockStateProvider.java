@@ -90,7 +90,7 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
                         .parent(baseModel))
                 .submodel(ShimmerRenderTypes.bloom(), new BlockModelBuilder(new ResourceLocation("dummy"), models().existingFileHelper)
                         .parent(fireModel)
-                        .texture("fire", "block/campfire_fire"))
+                        .texture("fire", "shimmerfire:blocks/campfire/campfire_fire_" + color.colorName))
                 .end();
     }
 

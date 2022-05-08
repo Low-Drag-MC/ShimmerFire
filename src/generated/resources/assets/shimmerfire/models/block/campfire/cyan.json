@@ -8,7 +8,7 @@
     "bloom": {
       "parent": "shimmerfire:block/template_campfire_fire",
       "textures": {
-        "fire": "minecraft:block/campfire_fire"
+        "fire": "shimmerfire:blocks/campfire/campfire_fire_cyan"
       }
     }
   }
