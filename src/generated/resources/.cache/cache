@@ -1,4 +1,10 @@
+69232602cf4fd62fc7be09bb6b8ef150af0a0218 assets/shimmerfire/blockstates/color_campfire.json
 539ea556e12bfa9c465ec3475185d21c83fc6637 assets/shimmerfire/blockstates/color_fire.json
+3127c37148cb550c96ac74089628bead6dc8933a assets/shimmerfire/models/block/campfire/cyan.json
+3127c37148cb550c96ac74089628bead6dc8933a assets/shimmerfire/models/block/campfire/green.json
+5aa24b6652d17b96a441fc5cb6df29f032eedb6a assets/shimmerfire/models/block/campfire/off.json
+3127c37148cb550c96ac74089628bead6dc8933a assets/shimmerfire/models/block/campfire/orange.json
+3127c37148cb550c96ac74089628bead6dc8933a assets/shimmerfire/models/block/campfire/purple.json
 e0cf070ab8ab88409ee64b8ddd79b95dd12f1c95 assets/shimmerfire/models/block/fire/cyan/fire_floor_0.json
 8ac50cc4c67bbd15c681d7c3ca4be4ece6229960 assets/shimmerfire/models/block/fire/cyan/fire_floor_1.json
 2f14babea313b3258004b4012fd82003109c42c2 assets/shimmerfire/models/block/fire/cyan/fire_side_0.json
@@ -39,3 +45,4 @@ f167d6096565bd8023d1bb754169eeb14a77577f assets/shimmerfire/models/block/fire/pu
 5c2e75a024b5dcf31039c903ff74396ffce13cc2 assets/shimmerfire/models/block/fire/purple/fire_up_1.json
 8ea055a4d42f85718e92170543c52a9b8b9ada65 assets/shimmerfire/models/block/fire/purple/fire_up_alt_0.json
 3b55e3e74ebe3650649f42dae6f2252436cc27b2 assets/shimmerfire/models/block/fire/purple/fire_up_alt_1.json
+b6be5a88eac3f1c92cdfad7f91713c4a629cb37b data/minecraft/tags/blocks/campfires.json

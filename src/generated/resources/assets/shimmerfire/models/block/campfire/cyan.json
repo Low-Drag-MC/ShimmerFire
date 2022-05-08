@@ -1,0 +1,15 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "forge:multi-layer",
+  "layers": {
+    "cutout": {
+      "parent": "shimmerfire:block/template_campfire"
+    },
+    "bloom": {
+      "parent": "shimmerfire:block/template_campfire_fire",
+      "textures": {
+        "fire": "minecraft:block/campfire_fire"
+      }
+    }
+  }
+}

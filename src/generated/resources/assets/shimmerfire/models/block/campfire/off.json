@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "forge:multi-layer",
+  "layers": {
+    "cutout": {
+      "parent": "minecraft:block/campfire_off"
+    }
+  }
+}

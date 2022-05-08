@@ -125,6 +125,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
+//    dec(files("libs/shimmer-1.18.2-0.2.jar"))
     implementation fg.deobf("blank:shimmer-1.18.2:0.1")
     implementation fg.deobf("blank:cannonfire-forge-1.18:0.1.4")
 

@@ -1,14 +1,22 @@
 package com.lowdragmc.shimmerfire.data;
 
+import com.lowdragmc.shimmer.client.ShimmerRenderTypes;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.models.model.ModelLocationUtils;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
+import net.minecraftforge.client.model.generators.loaders.MultiLayerModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,6 +25,9 @@ import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.lowdragmc.shimmerfire.block.ColoredFireBlock.FIRE_COLOR;
+import static net.minecraft.world.level.block.CampfireBlock.FACING;
+import static net.minecraft.world.level.block.CampfireBlock.SIGNAL_FIRE;
+import static net.minecraft.world.level.block.CampfireBlock.WATERLOGGED;
 import static net.minecraft.world.level.block.FireBlock.EAST;
 import static net.minecraft.world.level.block.FireBlock.NORTH;
 import static net.minecraft.world.level.block.FireBlock.SOUTH;
@@ -31,19 +42,59 @@ import static net.minecraft.world.level.block.FireBlock.WEST;
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ColoredFireBlockStateProvider extends BlockStateProvider {
+public class ShimmerFireBlockStateProvider extends BlockStateProvider {
 
     @SubscribeEvent
     public static void onGatherData(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();
-        generator.addProvider(new ColoredFireBlockStateProvider(generator, event.getExistingFileHelper()));
+        generator.addProvider(new ShimmerFireBlockStateProvider(generator, event.getExistingFileHelper()));
     }
 
-    private ColoredFireBlockStateProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+    private ShimmerFireBlockStateProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator, ShimmerFireMod.MODID, existingFileHelper);
     }
 
     protected void registerStatesAndModels() {
+        createColoredCampfire();
+        createColoredFire();
+    }
+
+    private void createColoredCampfire() {
+        ModelFile onModel = models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/template_campfire"));
+        ModelFile fireModel = models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/template_campfire_fire"));
+        ModelFile offModel = ((this.models().withExistingParent("block/campfire/off", this.mcLoc("block/block")))
+                .customLoader(MultiLayerModelBuilder::begin))
+                .submodel(RenderType.cutout(), new BlockModelBuilder(new ResourceLocation("dummy"), models().existingFileHelper)
+                        .parent(models().getExistingFile(ModelLocationUtils.decorateBlockModelLocation("campfire_off"))))
+                .end();
+        getVariantBuilder(CommonProxy.CAMPFIRE_BLOCK).forAllStatesExcept(state -> {
+            ColoredFireBlock.FireColor fireColor = state.getValue(FIRE_COLOR);
+            ModelFile modelFile;
+            if (state.getValue(BlockStateProperties.LIT)) {
+                modelFile = campfireLit(fireColor, onModel, fireModel);
+            } else {
+                modelFile = offModel;
+            }
+            return ConfiguredModel.builder()
+                    .modelFile(modelFile)
+                    .rotationY((int) state.getValue(FACING).toYRot())
+                    .build();
+        }, SIGNAL_FIRE, WATERLOGGED);
+    }
+
+
+    private ModelFile campfireLit(ColoredFireBlock.FireColor color, ModelFile baseModel, ModelFile fireModel) {
+        return ((this.models().withExistingParent("block/campfire/" + color.colorName, this.mcLoc("block/block")))
+                .customLoader(MultiLayerModelBuilder::begin))
+                .submodel(RenderType.cutout(), new BlockModelBuilder(new ResourceLocation("dummy"), models().existingFileHelper)
+                        .parent(baseModel))
+                .submodel(ShimmerRenderTypes.bloom(), new BlockModelBuilder(new ResourceLocation("dummy"), models().existingFileHelper)
+                        .parent(fireModel)
+                        .texture("fire", "block/campfire_fire"))
+                .end();
+    }
+
+    private void createColoredFire() {
         MultiPartBlockStateBuilder partBuilder = getMultipartBuilder(CommonProxy.FIRE_BLOCK);
         for (ColoredFireBlock.FireColor color : ColoredFireBlock.FireColor.values()) {
             fireDir(partBuilder, color);
