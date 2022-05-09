@@ -36,7 +36,7 @@ public class ShimmerFireBlockTagsProvider extends BlockTagsProvider {
 
     @Override
     protected void addTags() {
-        this.tag(BlockTags.CAMPFIRES).add(CommonProxy.CAMPFIRE_BLOCK);
+        this.tag(BlockTags.CAMPFIRES).add(CommonProxy.CAMPFIRE_BLOCK.get());
     }
 
     @Override

@@ -1,8 +1,6 @@
 package com.lowdragmc.shimmerfire.block;
 
-import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
@@ -26,7 +24,6 @@ public class ColoredFireBlock extends FireBlock {
 
     public ColoredFireBlock() {
         super(Properties.of(Material.FIRE, MaterialColor.FIRE).noCollission().instabreak().sound(SoundType.WOOL));
-        setRegistryName(new ResourceLocation(ShimmerFireMod.MODID, "color_fire"));
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(AGE, 0)
                 .setValue(NORTH, Boolean.FALSE)

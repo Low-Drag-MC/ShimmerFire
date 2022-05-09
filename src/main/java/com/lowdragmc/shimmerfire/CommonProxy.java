@@ -3,17 +3,22 @@ package com.lowdragmc.shimmerfire;
 
 import com.lowdragmc.shimmerfire.block.ColoredCampfireBlock;
 import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
+import com.lowdragmc.shimmerfire.blockentity.ColoredCampfireBlockEntity;
 import com.lowdragmc.shimmerfire.item.ColoredFlintItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryObject;
 
 
 /**
@@ -22,25 +27,23 @@ import net.minecraftforge.registries.IForgeRegistry;
  * @implNote com.lowdragmc.shimmer.CommonProxy
  */
 public class CommonProxy {
-    public static ColoredFireBlock FIRE_BLOCK;
-    public static ColoredCampfireBlock CAMPFIRE_BLOCK;
-    public static Item CAMPFIRE_ITEM;
+    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ShimmerFireMod.MODID);
+    private static final DeferredRegister<BlockEntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, ShimmerFireMod.MODID);
+    public static RegistryObject<ColoredFireBlock> FIRE_BLOCK = BLOCKS.register("color_fire", ColoredFireBlock::new);
+    public static RegistryObject<ColoredCampfireBlock> CAMPFIRE_BLOCK = BLOCKS.register("color_campfire", ColoredCampfireBlock::new);
+    public static RegistryObject<BlockEntityType<ColoredCampfireBlockEntity>> COLORED_CAMPFIRE = ENTITIES.register("campfire", () -> BlockEntityType.Builder.of(ColoredCampfireBlockEntity::new, CAMPFIRE_BLOCK.get()).build(null));
     public CommonProxy() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.register(this);
+        BLOCKS.register(eventBus);
+        ENTITIES.register(eventBus);
     }
 
-    @SubscribeEvent
-    public void registerBlocks(RegistryEvent.Register<Block> event) {
-        IForgeRegistry<Block> registry = event.getRegistry();
-        registry.register(FIRE_BLOCK = new ColoredFireBlock());
-        registry.register(CAMPFIRE_BLOCK = new ColoredCampfireBlock());
-    }
 
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> event) {
         IForgeRegistry<Item> registry = event.getRegistry();
-        registry.register(CAMPFIRE_ITEM = new BlockItem(CAMPFIRE_BLOCK, new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)).setRegistryName(CAMPFIRE_BLOCK.getRegistryName()));
+        registry.register(new BlockItem(CAMPFIRE_BLOCK.get(), new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)).setRegistryName(CAMPFIRE_BLOCK.get().getRegistryName()));
         for (ColoredFireBlock.FireColor color : ColoredFireBlock.FireColor.values()) {
             registry.register(new ColoredFlintItem(color));
         }

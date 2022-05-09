@@ -3,7 +3,10 @@
   "loader": "forge:multi-layer",
   "layers": {
     "cutout": {
-      "parent": "minecraft:block/campfire_off"
+      "parent": "minecraft:block/campfire_off",
+      "textures": {
+        "particle": "minecraft:block/campfire_log"
+      }
     }
   }
 }

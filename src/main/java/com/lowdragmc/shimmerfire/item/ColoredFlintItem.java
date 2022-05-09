@@ -47,7 +47,7 @@ public class ColoredFlintItem extends FlintAndSteelItem {
     }
 
     public BlockState getFireState() {
-        return CommonProxy.FIRE_BLOCK.defaultBlockState().setValue(FIRE_COLOR, color);
+        return CommonProxy.FIRE_BLOCK.get().defaultBlockState().setValue(FIRE_COLOR, color);
     }
 
     public static boolean canLight(BlockState pState) {

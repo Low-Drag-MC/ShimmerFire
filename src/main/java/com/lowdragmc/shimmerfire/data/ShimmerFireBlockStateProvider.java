@@ -65,9 +65,10 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
         ModelFile offModel = ((this.models().withExistingParent("block/campfire/off", this.mcLoc("block/block")))
                 .customLoader(MultiLayerModelBuilder::begin))
                 .submodel(RenderType.cutout(), new BlockModelBuilder(new ResourceLocation("dummy"), models().existingFileHelper)
-                        .parent(models().getExistingFile(ModelLocationUtils.decorateBlockModelLocation("campfire_off"))))
+                        .parent(models().getExistingFile(ModelLocationUtils.decorateBlockModelLocation("campfire_off")))
+                        .texture("particle", "minecraft:block/campfire_log"))
                 .end();
-        getVariantBuilder(CommonProxy.CAMPFIRE_BLOCK).forAllStatesExcept(state -> {
+        getVariantBuilder(CommonProxy.CAMPFIRE_BLOCK.get()).forAllStatesExcept(state -> {
             ColoredFireBlock.FireColor fireColor = state.getValue(FIRE_COLOR);
             ModelFile modelFile;
             if (state.getValue(BlockStateProperties.LIT)) {
@@ -95,7 +96,7 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
     }
 
     private void createColoredFire() {
-        MultiPartBlockStateBuilder partBuilder = getMultipartBuilder(CommonProxy.FIRE_BLOCK);
+        MultiPartBlockStateBuilder partBuilder = getMultipartBuilder(CommonProxy.FIRE_BLOCK.get());
         for (ColoredFireBlock.FireColor color : ColoredFireBlock.FireColor.values()) {
             fireDir(partBuilder, color);
         }
