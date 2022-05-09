@@ -1,0 +1,5 @@
+def folder = new File( 'Shimmer' )
+if(folder.exists() ) {
+    include 'Shimmer'
+    project(':Shimmer').setProjectDir(new File("Shimmer"))
+}

@@ -29,8 +29,8 @@ import net.minecraftforge.registries.RegistryObject;
 public class CommonProxy {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ShimmerFireMod.MODID);
     private static final DeferredRegister<BlockEntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, ShimmerFireMod.MODID);
-    public static RegistryObject<ColoredFireBlock> FIRE_BLOCK = BLOCKS.register("color_fire", ColoredFireBlock::new);
-    public static RegistryObject<ColoredCampfireBlock> CAMPFIRE_BLOCK = BLOCKS.register("color_campfire", ColoredCampfireBlock::new);
+    public static RegistryObject<ColoredFireBlock> FIRE_BLOCK = BLOCKS.register("colored_fire", ColoredFireBlock::new);
+    public static RegistryObject<ColoredCampfireBlock> CAMPFIRE_BLOCK = BLOCKS.register("colored_campfire", ColoredCampfireBlock::new);
     public static RegistryObject<BlockEntityType<ColoredCampfireBlockEntity>> COLORED_CAMPFIRE = ENTITIES.register("campfire", () -> BlockEntityType.Builder.of(ColoredCampfireBlockEntity::new, CAMPFIRE_BLOCK.get()).build(null));
     public CommonProxy() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
