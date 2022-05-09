@@ -7,6 +7,7 @@ import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -42,6 +43,7 @@ public class ClientProxy extends CommonProxy {
                 }
                 return null;
             });
+            LightManager.INSTANCE.registerBlockLight(Blocks.SOUL_LANTERN, state -> new ColorPointLight.Template(8, 0xff74F1F5));
         });
     }
 
