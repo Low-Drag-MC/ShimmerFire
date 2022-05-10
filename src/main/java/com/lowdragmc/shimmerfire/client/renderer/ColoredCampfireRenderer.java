@@ -1,4 +1,4 @@
-package com.lowdragmc.shimmerfire.client;
+package com.lowdragmc.shimmerfire.client.renderer;
 
 import com.lowdragmc.shimmerfire.blockentity.ColoredCampfireBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
