@@ -1,6 +1,6 @@
 package com.lowdragmc.shimmerfire.client.model;
 
-import com.lowdragmc.shimmerfire.entity.FireSpirit;
+import com.lowdragmc.shimmerfire.entity.FireSpiritEntity;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -18,7 +18,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * @implNote FireSpiritModel
  */
 @OnlyIn(Dist.CLIENT)
-public class FireSpiritModel extends HierarchicalModel<FireSpirit> {
+public class FireSpiritModel extends HierarchicalModel<FireSpiritEntity> {
     private final ModelPart root;
     private final ModelPart head;
     private final ModelPart body;
@@ -58,7 +58,7 @@ public class FireSpiritModel extends HierarchicalModel<FireSpirit> {
     /**
      * Sets this entity's model rotation angles
      */
-    public void setupAnim(FireSpirit pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+    public void setupAnim(FireSpiritEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         if (pEntity.isResting()) {
             this.head.xRot = pHeadPitch * ((float)Math.PI / 180F);
             this.head.yRot = (float)Math.PI - pNetHeadYaw * ((float)Math.PI / 180F);

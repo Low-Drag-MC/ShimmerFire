@@ -5,13 +5,17 @@ import com.lowdragmc.shimmer.client.light.ColorPointLight;
 import com.lowdragmc.shimmer.client.light.LightManager;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
+import com.lowdragmc.shimmerfire.client.particle.SparkParticle;
 import com.lowdragmc.shimmerfire.client.renderer.ColoredCampfireRenderer;
 import com.lowdragmc.shimmerfire.client.renderer.FireSpiritRenderer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -23,6 +27,11 @@ import static com.lowdragmc.shimmerfire.block.ColoredFireBlock.FIRE_COLOR;
  * @implNote com.lowdragmc.shimmer.client.ClientProxy
  */
 public class ClientProxy extends CommonProxy {
+
+    @SubscribeEvent
+    public void onParticleFactoryRegister(ParticleFactoryRegisterEvent event) {
+        Minecraft.getInstance().particleEngine.register(FIRE_SPARK.get(), SparkParticle.Provider::new);
+    }
 
     @SubscribeEvent
     public void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {

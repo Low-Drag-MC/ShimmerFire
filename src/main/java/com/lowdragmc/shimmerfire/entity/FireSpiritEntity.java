@@ -2,9 +2,14 @@ package com.lowdragmc.shimmerfire.entity;
 
 import com.lowdragmc.shimmer.client.light.ColorPointLight;
 import com.lowdragmc.shimmer.client.light.LightManager;
+import com.lowdragmc.shimmerfire.CommonProxy;
+import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
 import com.mojang.math.Vector3f;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -12,6 +17,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -21,6 +27,7 @@ import net.minecraft.world.entity.ambient.AmbientCreature;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -38,16 +45,18 @@ import java.util.Random;
  * @date 2022/5/10
  * @implNote FireSpirit
  */
-public class FireSpirit extends AmbientCreature {
-    private static final EntityDataAccessor<Integer> ID_COLOR = SynchedEntityData.defineId(FireSpirit.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Byte> DATA_ID_FLAGS = SynchedEntityData.defineId(FireSpirit.class, EntityDataSerializers.BYTE);
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class FireSpiritEntity extends AmbientCreature {
+    private static final EntityDataAccessor<Integer> FIRE_COLOR = SynchedEntityData.defineId(FireSpiritEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Byte> DATA_ID_FLAGS = SynchedEntityData.defineId(FireSpiritEntity.class, EntityDataSerializers.BYTE);
     private static final TargetingConditions BAT_RESTING_TARGETING = TargetingConditions.forNonCombat().range(4.0D);
     @Nullable
     private BlockPos targetPosition;
     @OnlyIn(Dist.CLIENT)
     private ColorPointLight colorPointLight;
 
-    public FireSpirit(EntityType<? extends FireSpirit> entityType, Level level) {
+    public FireSpiritEntity(EntityType<? extends FireSpiritEntity> entityType, Level level) {
         super(entityType, level);
         this.setResting(true);
     }
@@ -59,6 +68,7 @@ public class FireSpirit extends AmbientCreature {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_ID_FLAGS, (byte)0);
+        this.entityData.define(FIRE_COLOR, ColoredFireBlock.FireColor.ORANGE.ordinal());
     }
 
     /**
@@ -89,9 +99,10 @@ public class FireSpirit extends AmbientCreature {
     }
 
     @OnlyIn(Dist.CLIENT)
+    @Nullable
     public ColorPointLight getOrCreateLight() {
         if (colorPointLight == null) {
-            colorPointLight = LightManager.INSTANCE.addLight(new Vector3f(0,0,0), 0xffff0000, 10);
+            colorPointLight = LightManager.INSTANCE.addLight(new Vector3f(0,0,0), getColor().colorVale, 10);
         }
         return colorPointLight;
     }
@@ -135,7 +146,14 @@ public class FireSpirit extends AmbientCreature {
         } else {
             this.entityData.set(DATA_ID_FLAGS, (byte)(b0 & -2));
         }
+    }
 
+    public void setColor(ColoredFireBlock.FireColor color) {
+        this.entityData.set(FIRE_COLOR, color.ordinal());
+    }
+
+    public ColoredFireBlock.FireColor getColor() {
+        return ColoredFireBlock.FireColor.values()[this.entityData.get(FIRE_COLOR)];
     }
 
     /**
@@ -147,17 +165,33 @@ public class FireSpirit extends AmbientCreature {
             this.setDeltaMovement(Vec3.ZERO);
             this.setPosRaw(this.getX(), (double)Mth.floor(this.getY()) + 1.0D - (double)this.getBbHeight(), this.getZ());
         } else {
-            this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.6D, 1.0D));
+            this.setDeltaMovement(this.getDeltaMovement().multiply(.5D, 0.3D, .5D));
+        }
+        if (level.isClientSide) {
+            Random random = level.random;
+            Vec3 pos = getPosition(0);
+            if (random.nextInt(5) == 0) {
+                for(int i = 0; i < random.nextInt(1) + 1; ++i) {
+                    Particle particle = Minecraft.getInstance().particleEngine.createParticle(CommonProxy.FIRE_SPARK.get(), pos.x + 0.5D, pos.y + 0.5D, pos.z + 0.5D,
+                            random.nextFloat() / 2.0F, 5.0E-5D, random.nextFloat() / 2.0F);
+                    if (particle != null) {
+                        int color = getColor().colorVale;
+                        particle.setColor((color >> 16) & 0xff, (color >> 8) & 0xff, (color) & 0xff);
+                    }
+                }
+            }
         }
     }
+
+
 
     protected void customServerAiStep() {
         super.customServerAiStep();
         BlockPos blockpos = this.blockPosition();
-        BlockPos blockpos1 = blockpos.above();
+        BlockPos abovePos = blockpos.above();
         if (this.isResting()) {
             boolean flag = this.isSilent();
-            if (this.level.getBlockState(blockpos1).isRedstoneConductor(this.level, blockpos)) {
+            if (this.level.getBlockState(abovePos).isRedstoneConductor(this.level, blockpos)) {
                 if (this.random.nextInt(200) == 0) {
                     this.yHeadRot = (float)this.random.nextInt(360);
                 }
@@ -193,7 +227,7 @@ public class FireSpirit extends AmbientCreature {
             float f1 = Mth.wrapDegrees(f - this.getYRot());
             this.zza = 0.5F;
             this.setYRot(this.getYRot() + f1);
-            if (this.random.nextInt(100) == 0 && this.level.getBlockState(blockpos1).isRedstoneConductor(this.level, blockpos1)) {
+            if (this.random.nextInt(100) == 0 && this.level.getBlockState(abovePos).isRedstoneConductor(this.level, abovePos)) {
                 this.setResting(true);
             }
         }
@@ -241,11 +275,20 @@ public class FireSpirit extends AmbientCreature {
     public void readAdditionalSaveData(@Nonnull CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
         this.entityData.set(DATA_ID_FLAGS, pCompound.getByte("Flags"));
+        this.entityData.set(FIRE_COLOR, pCompound.getInt("Color"));
     }
 
     public void addAdditionalSaveData(@Nonnull CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
         pCompound.putByte("Flags", this.entityData.get(DATA_ID_FLAGS));
+        pCompound.putInt("Color", this.entityData.get(FIRE_COLOR));
+    }
+
+    @Nullable
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @org.jetbrains.annotations.Nullable SpawnGroupData pSpawnData, @org.jetbrains.annotations.Nullable CompoundTag pDataTag) {
+        setColor(ColoredFireBlock.FireColor.values()[random.nextInt(ColoredFireBlock.FireColor.values().length)]);
+        return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
 
     public static boolean checkBatSpawnRules(EntityType<Bat> pBat, LevelAccessor pLevel, MobSpawnType pReason, BlockPos pPos, Random pRandom) {
