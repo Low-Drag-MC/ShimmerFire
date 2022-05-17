@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "shimmerfire:block/fire_container",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "shimmerfire:block/fire_container"
+    },
+    "facing=west": {
+      "model": "shimmerfire:block/fire_container",
+      "y": 90
+    },
+    "facing=east": {
+      "model": "shimmerfire:block/fire_container",
+      "y": 270
+    }
+  }
+}

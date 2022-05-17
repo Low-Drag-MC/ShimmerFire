@@ -5,7 +5,6 @@ import com.lowdragmc.shimmer.client.light.ColorPointLight;
 import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
 import com.lowdragmc.shimmer.client.shader.RenderUtils;
 import com.lowdragmc.shimmerfire.CommonProxy;
-import com.lowdragmc.shimmerfire.block.ColoredCampfireBlock;
 import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
 import com.lowdragmc.shimmerfire.entity.FireSpiritEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -14,7 +13,6 @@ import com.mojang.math.Vector3f;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -26,8 +24,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -35,7 +31,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.EmptyModelData;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 /**
@@ -100,7 +95,7 @@ public class FireSpiritRenderer extends EntityRenderer<FireSpiritEntity> {
 
     private void updatePointLight(FireSpiritEntity entity, float partialTicks) {
         ColorPointLight light = entity.getOrCreateLight();
-        if (light != null) {
+        if (light != null && !light.isRemoved()) {
             Vec3 pos = entity.getPosition(partialTicks);
             light.setPos((float) pos.x, (float) pos.y, (float) pos.z);
             light.update();

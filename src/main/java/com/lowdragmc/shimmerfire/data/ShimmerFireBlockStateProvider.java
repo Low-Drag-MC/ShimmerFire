@@ -57,6 +57,13 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         createColoredCampfire();
         createColoredFire();
+        createFireContainer();
+    }
+
+    private void createFireContainer() {
+        getVariantBuilder(CommonProxy.FIRE_CONTAINER_BLOCK.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_container")))
+                .build());
     }
 
     private void createColoredCampfire() {

@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.model.MultiLayerModel;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -44,6 +45,7 @@ public class ClientProxy extends CommonProxy {
         e.enqueueWork(()->{
             ItemBlockRenderTypes.setRenderLayer(FIRE_BLOCK.get(), ShimmerRenderTypes.bloom());
             ItemBlockRenderTypes.setRenderLayer(CAMPFIRE_BLOCK.get(), renderType -> renderType == ShimmerRenderTypes.bloom() || renderType == RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(FIRE_CONTAINER_BLOCK.get(), renderType -> renderType == RenderType.translucent() || renderType == RenderType.solid());
             LightManager.INSTANCE.registerBlockLight(FIRE_BLOCK.get(), state -> {
                 ColoredFireBlock.FireColor color = state.getValue(FIRE_COLOR);
                 return new ColorPointLight.Template(color.radius, color.colorVale);
