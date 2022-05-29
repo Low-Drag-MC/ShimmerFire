@@ -1,10 +1,14 @@
 package com.lowdragmc.shimmerfire.client.renderer;
 
+import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
+import com.lowdragmc.shimmer.client.shader.RenderUtils;
+import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.blockentity.ColoredCampfireBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -14,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.EmptyModelData;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -45,6 +50,18 @@ public class ColoredCampfireRenderer implements BlockEntityRenderer<ColoredCampf
             pPoseStack.popPose();
          }
       }
+
+      pPoseStack.pushPose();
+      pPoseStack.scale(0.6f,0.8f,0.6f);
+      pPoseStack.translate(.3f,0.4,.3f);
+
+      PoseStack finalStack = RenderUtils.copyPoseStack(pPoseStack);
+      pPoseStack.popPose();
+      PostProcessing.WARP.postEntity(multiBufferSource -> {
+         BlockRenderDispatcher brd = Minecraft.getInstance().getBlockRenderer();
+         brd.renderSingleBlock(CommonProxy.FIRE_BLOCK.get().defaultBlockState(), finalStack, multiBufferSource, pPackedLight, pPackedOverlay, EmptyModelData.INSTANCE);
+      });
+
 
    }
 }
