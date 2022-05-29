@@ -9,14 +9,12 @@ import com.lowdragmc.shimmerfire.client.particle.SparkParticle;
 import com.lowdragmc.shimmerfire.client.renderer.ColoredCampfireRenderer;
 import com.lowdragmc.shimmerfire.client.renderer.FireSpiritRenderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.client.model.MultiLayerModel;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -46,18 +44,18 @@ public class ClientProxy extends CommonProxy {
             ItemBlockRenderTypes.setRenderLayer(FIRE_BLOCK.get(), ShimmerRenderTypes.bloom());
             ItemBlockRenderTypes.setRenderLayer(CAMPFIRE_BLOCK.get(), renderType -> renderType == ShimmerRenderTypes.bloom() || renderType == RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(FIRE_CONTAINER_BLOCK.get(), renderType -> renderType == RenderType.translucent() || renderType == RenderType.solid());
-            LightManager.INSTANCE.registerBlockLight(FIRE_BLOCK.get(), state -> {
+            LightManager.INSTANCE.registerBlockLight(FIRE_BLOCK.get(), (state, pos) -> {
                 ColoredFireBlock.FireColor color = state.getValue(FIRE_COLOR);
                 return new ColorPointLight.Template(color.radius, color.colorVale);
             });
-            LightManager.INSTANCE.registerBlockLight(CAMPFIRE_BLOCK.get(), state -> {
+            LightManager.INSTANCE.registerBlockLight(CAMPFIRE_BLOCK.get(), (state, pos) -> {
                 if (state.getValue(CampfireBlock.LIT)) {
                     ColoredFireBlock.FireColor color = state.getValue(FIRE_COLOR);
                     return new ColorPointLight.Template(color.radius, color.colorVale);
                 }
                 return null;
             });
-            LightManager.INSTANCE.registerBlockLight(Blocks.SOUL_LANTERN, state -> new ColorPointLight.Template(8, 0xff74F1F5));
+            LightManager.INSTANCE.registerBlockLight(Blocks.SOUL_LANTERN, (state, pos) -> new ColorPointLight.Template(8, 0xff74F1F5));
         });
     }
 

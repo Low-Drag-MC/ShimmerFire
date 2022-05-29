@@ -1,7 +1,6 @@
 package com.lowdragmc.shimmerfire;
 
 
-import com.lowdragmc.shimmer.ShimmerMod;
 import com.lowdragmc.shimmerfire.block.ColoredCampfireBlock;
 import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
 import com.lowdragmc.shimmerfire.block.FireContainerBlock;
@@ -18,7 +17,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.client.model.MultiLayerModel;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
