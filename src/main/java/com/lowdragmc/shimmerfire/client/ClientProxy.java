@@ -41,8 +41,8 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void clientSetup(FMLClientSetupEvent e) {
         e.enqueueWork(()->{
-            ItemBlockRenderTypes.setRenderLayer(FIRE_BLOCK.get(), ShimmerRenderTypes.bloom());
-            ItemBlockRenderTypes.setRenderLayer(CAMPFIRE_BLOCK.get(), renderType -> renderType == ShimmerRenderTypes.bloom() || renderType == RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(FIRE_BLOCK.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(CAMPFIRE_BLOCK.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(FIRE_CONTAINER_BLOCK.get(), renderType -> renderType == RenderType.translucent() || renderType == RenderType.solid());
             LightManager.INSTANCE.registerBlockLight(FIRE_BLOCK.get(), (state, pos) -> {
                 ColoredFireBlock.FireColor color = state.getValue(FIRE_COLOR);

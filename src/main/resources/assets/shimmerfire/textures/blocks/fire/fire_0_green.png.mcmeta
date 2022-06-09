@@ -1,4 +1,7 @@
 {
+  "shimmer": {
+      "bloom": true
+  },
   "animation": {
     "frames": [
       16,

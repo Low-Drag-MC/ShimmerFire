@@ -1,6 +1,5 @@
 package com.lowdragmc.shimmerfire.client.renderer;
 
-import com.lowdragmc.shimmer.client.ShimmerRenderTypes;
 import com.lowdragmc.shimmer.client.light.ColorPointLight;
 import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
 import com.lowdragmc.shimmer.client.shader.RenderUtils;
@@ -13,6 +12,8 @@ import com.mojang.math.Vector3f;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -80,8 +81,8 @@ public class FireSpiritRenderer extends EntityRenderer<FireSpiritEntity> {
         final Level level = entity.getLevel();
 
         PostProcessing.BLOOM_UNITY.postEntity(bufferSource -> {
-            net.minecraftforge.client.ForgeHooksClient.setRenderType(ShimmerRenderTypes.bloom());
-            VertexConsumer consumer = bufferSource.getBuffer(ShimmerRenderTypes.bloom());
+            net.minecraftforge.client.ForgeHooksClient.setRenderType(RenderType.cutout());
+            VertexConsumer consumer = bufferSource.getBuffer(Sheets.cutoutBlockSheet());
             renderModel(consumer, finalStack1, blockstate, level, blockpos, finalLight);
             renderModel(consumer, finalStack2, blockstate, level, blockpos, finalLight);
             net.minecraftforge.client.ForgeHooksClient.setRenderType(null);

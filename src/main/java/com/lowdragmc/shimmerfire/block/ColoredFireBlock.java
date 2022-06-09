@@ -44,10 +44,10 @@ public class ColoredFireBlock extends FireBlock {
     }
 
     public enum FireColor implements StringRepresentable {
-        ORANGE("orange", 0xFFFFA500, 10),
-        CYAN("cyan", 0xff00FFFF, 10),
-        GREEN("green", 0xff008000, 10),
-        PURPLE("purple", 0xff800080, 10);
+        ORANGE("orange", 0xFFFFA500, 9),
+        CYAN("cyan", 0xff00FFFF, 9),
+        GREEN("green", 0xff008000, 9),
+        PURPLE("purple", 0xff800080, 9);
 
         public final String colorName;
         public final int colorVale;
