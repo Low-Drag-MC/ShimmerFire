@@ -7,6 +7,7 @@ import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
 import com.lowdragmc.shimmerfire.client.particle.SparkParticle;
 import com.lowdragmc.shimmerfire.client.renderer.ColoredCampfireRenderer;
+import com.lowdragmc.shimmerfire.client.renderer.FireContainerRenderer;
 import com.lowdragmc.shimmerfire.client.renderer.FireSpiritRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -35,6 +36,7 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(COLORED_CAMPFIRE.get(), ColoredCampfireRenderer::new);
+        event.registerBlockEntityRenderer(FIRE_CONTAINER.get(), FireContainerRenderer::new);
         event.registerEntityRenderer(FIRE_SPIRIT.get(), FireSpiritRenderer::new);
     }
 

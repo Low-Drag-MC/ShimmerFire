@@ -6,7 +6,26 @@
 		"0": "shimmerfire:blocks/fire_container",
 		"particle": "shimmerfire:blocks/fire_container"
 	},
-	"display": {},
+	"display": {
+		"thirdperson_righthand": {
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"ground": {
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [8, -45, 0],
+			"translation": [0, -3.25, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"fixed": {
+			"translation": [0, -3, -1.75],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	},
 	"groups": [
 		{
 			"name": "translucent",
@@ -61,7 +80,7 @@
 									"name": "plantsurface",
 									"origin": [-0.5, 9, -0.5],
 									"color": 7,
-									"children": [8]
+									"children": []
 								}
 							]
 						}
@@ -71,7 +90,7 @@
 					"name": "groundplatform",
 					"origin": [0, 0, 0],
 					"color": 8,
-					"children": [9]
+					"children": [8]
 				}
 			]
 		}
@@ -135,19 +154,6 @@
 						"south": {"uv": [8.25, 6, 9.75, 6.25], "texture": "#0"},
 						"west": {"uv": [9.75, 6, 11.25, 6.25], "texture": "#0"},
 						"up": {"uv": [8.25, 6, 6.75, 4.5], "texture": "#0"}
-					}
-				},
-				{
-					"name": "plantsurface",
-					"from": [3.5, 8, 3.5],
-					"to": [12.5, 11, 12.5],
-					"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0]},
-					"faces": {
-						"north": {"uv": [6, 1.125, 7.125, 1.5], "texture": "#0"},
-						"east": {"uv": [7.125, 1.125, 8.25, 1.5], "texture": "#0"},
-						"south": {"uv": [8.25, 1.125, 9.375, 1.5], "texture": "#0"},
-						"west": {"uv": [9.375, 1.125, 10.5, 1.5], "texture": "#0"},
-						"up": {"uv": [8.25, 1.125, 7.125, 0], "texture": "#0"}
 					}
 				},
 				{

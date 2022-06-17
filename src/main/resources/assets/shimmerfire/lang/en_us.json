@@ -1,0 +1,6 @@
+{
+  "shimmerfire.binding.select": "a fire port selected",
+  "shimmerfire.binding.error": "have to select a fire port",
+  "shimmerfire.binding.bind": "bind two ports",
+  "shimmerfire.binding.unbind": "unbind two ports"
+}

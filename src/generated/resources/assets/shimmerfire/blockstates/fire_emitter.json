@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "shimmerfire:block/fire_emitter",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "shimmerfire:block/fire_emitter"
+    },
+    "facing=north": {
+      "model": "shimmerfire:block/fire_emitter",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "shimmerfire:block/fire_emitter",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "shimmerfire:block/fire_emitter",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "shimmerfire:block/fire_emitter",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

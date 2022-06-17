@@ -3,10 +3,14 @@ package com.lowdragmc.shimmerfire.data;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
+import com.lowdragmc.shimmerfire.block.FireContainerBlock;
+import com.lowdragmc.shimmerfire.block.FirePortBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.models.model.ModelLocationUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -44,12 +48,28 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
         createColoredCampfire();
         createColoredFire();
         createFireContainer();
+        createFirePort(CommonProxy.FIRE_EMITTER_BLOCK.get(), "block/fire_emitter");
+        createFirePort(CommonProxy.FIRE_RECEIVER_BLOCK.get(), "block/fire_receiver");
     }
 
     private void createFireContainer() {
         getVariantBuilder(CommonProxy.FIRE_CONTAINER_BLOCK.get()).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_container")))
+                .rotationY(((int) state.getValue(FireContainerBlock.FACING).toYRot() + 180) % 360)
                 .build());
+        simpleBlockItem(CommonProxy.FIRE_CONTAINER_BLOCK.get(), models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_container")));
+    }
+
+    private void createFirePort(FirePortBlock block, String model) {
+        getVariantBuilder(block).forAllStates(state -> {
+            Direction dir = state.getValue(FirePortBlock.FACING);
+            return ConfiguredModel.builder()
+                    .modelFile(models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, model)))
+                    .rotationX(dir == Direction.DOWN ? 180 : dir.getAxis().isHorizontal() ? 90 : 0)
+                    .rotationY(dir.getAxis().isVertical() ? 0 : (((int) dir.toYRot()) + 180) % 360)
+                    .build();
+        });
+        simpleBlockItem(block, models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, model)));
     }
 
     private void createColoredCampfire() {
@@ -69,6 +89,7 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
                     .rotationY((int) state.getValue(FACING).toYRot())
                     .build();
         }, SIGNAL_FIRE, WATERLOGGED);
+        simpleBlockItem(CommonProxy.CAMPFIRE_BLOCK.get(), offModel);
     }
 
 

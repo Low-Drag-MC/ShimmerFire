@@ -41,7 +41,7 @@ import static net.minecraft.world.level.block.CampfireBlock.WATERLOGGED;
 public class ColoredFlintItem extends FlintAndSteelItem {
     public final ColoredFireBlock.FireColor color;
     public ColoredFlintItem(ColoredFireBlock.FireColor color) {
-        super(new Item.Properties().durability(64).tab(CreativeModeTab.TAB_TOOLS));
+        super(new Item.Properties().durability(64).tab(CommonProxy.TAB_ITEMS));
         setRegistryName(new ResourceLocation(ShimmerFireMod.MODID, "flint_fire_" + color.colorName));
         this.color = color;
     }
