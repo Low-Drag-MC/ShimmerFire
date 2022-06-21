@@ -2,5 +2,11 @@
   "shimmerfire.binding.select": "a fire port selected",
   "shimmerfire.binding.error": "have to select a fire port",
   "shimmerfire.binding.bind": "bind two ports",
-  "shimmerfire.binding.unbind": "unbind two ports"
+  "shimmerfire.binding.unbind": "unbind two ports",
+  "shimmerfire.raw_fire.destroy": "§6Destroy§r",
+  "shimmerfire.raw_fire.rot": "§5Rot§r",
+  "shimmerfire.raw_fire.life": "§2Life§r",
+  "shimmerfire.raw_fire.arcane": "§bArcane§r",
+  "shimmerfire.fire_jar.hover.empty": "Empty",
+  "shimmerfire.fire_jar.hover.fire": "Fire seat: "
 }

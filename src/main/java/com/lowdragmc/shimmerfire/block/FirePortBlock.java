@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -80,4 +81,12 @@ public class FirePortBlock extends BaseEntityBlock {
         return SHAPE_BY_DIRECTION.get(pState.getValue(FACING));
     }
 
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+        if (blockEntity instanceof FirePortBlockEntity firePort) {
+            firePort.destroy();
+        }
+        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+    }
 }

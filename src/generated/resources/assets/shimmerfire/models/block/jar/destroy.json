@@ -1,0 +1,20 @@
+{
+  "parent": "shimmerfire:block/fire_jar",
+  "textures": {
+    "fire": "shimmerfire:blocks/fire/fire_0_destroy",
+    "fire2": "shimmerfire:blocks/fire/fire_1_destroy"
+  },
+  "loader": "forge:multi-layer",
+  "layers": {
+    "translucent": {
+      "parent": "shimmerfire:block/fire_jar_translucent"
+    },
+    "cutout": {
+      "parent": "shimmerfire:block/fire_jar_cutout",
+      "textures": {
+        "fire": "shimmerfire:blocks/fire/fire_0_destroy",
+        "fire2": "shimmerfire:blocks/fire/fire_1_destroy"
+      }
+    }
+  }
+}

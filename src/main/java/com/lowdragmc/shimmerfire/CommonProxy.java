@@ -1,6 +1,7 @@
 package com.lowdragmc.shimmerfire;
 
 import com.lowdragmc.lowdraglib.ItemGroup.LDItemGroup;
+import com.lowdragmc.shimmerfire.api.RawFire;
 import com.lowdragmc.shimmerfire.block.*;
 import com.lowdragmc.shimmerfire.blockentity.ColoredCampfireBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.FireContainerBlockEntity;
@@ -8,6 +9,7 @@ import com.lowdragmc.shimmerfire.blockentity.FirePortBlockEntity;
 import com.lowdragmc.shimmerfire.entity.FireSpiritEntity;
 import com.lowdragmc.shimmerfire.item.BindingWand;
 import com.lowdragmc.shimmerfire.item.ColoredFlintItem;
+import com.lowdragmc.shimmerfire.item.FireJarItem;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.entity.EntityType;
@@ -44,6 +46,7 @@ public class CommonProxy {
     // blocks
     public static final RegistryObject<ColoredFireBlock> FIRE_BLOCK = BLOCKS.register("colored_fire", ColoredFireBlock::new);
     public static final RegistryObject<ColoredCampfireBlock> CAMPFIRE_BLOCK = BLOCKS.register("colored_campfire", ColoredCampfireBlock::new);
+    public static final RegistryObject<FireJarBlock> FIRE_JAR_BLOCK = BLOCKS.register("fire_jar", FireJarBlock::new);
     public static final RegistryObject<FireContainerBlock> FIRE_CONTAINER_BLOCK = BLOCKS.register("fire_container", FireContainerBlock::new);
     public static final RegistryObject<FireEmitterBlock> FIRE_EMITTER_BLOCK = BLOCKS.register("fire_emitter", FireEmitterBlock::new);
     public static final RegistryObject<FireReceiverBlock> FIRE_RECEIVER_BLOCK = BLOCKS.register("fire_receiver", FireReceiverBlock::new);
@@ -57,7 +60,8 @@ public class CommonProxy {
     public static final RegistryObject<SimpleParticleType> FIRE_SPARK = PARTICLE_TYPES.register("fire_spark", () -> new SimpleParticleType(false));
     // Items
     public static final CreativeModeTab TAB_ITEMS = new LDItemGroup(ShimmerFireMod.MODID, "all", () -> new ItemStack(FIRE_EMITTER_BLOCK.get()));
-    public static final RegistryObject<BindingWand> BINDING_WAND = ITEMS.register("binding_wand", BindingWand::new);
+    public static final RegistryObject<BindingWand> BINDING_WAND_ITEM = ITEMS.register("binding_wand", BindingWand::new);
+    public static final RegistryObject<FireJarItem> FIRE_JAR_ITEM = ITEMS.register("fire_jar", ()->new FireJarItem(FIRE_JAR_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)));
 
     public CommonProxy() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -82,8 +86,8 @@ public class CommonProxy {
         registry.register(new BlockItem(FIRE_CONTAINER_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)).setRegistryName(FIRE_CONTAINER_BLOCK.get().getRegistryName()));
         registry.register(new BlockItem(FIRE_EMITTER_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)).setRegistryName(FIRE_EMITTER_BLOCK.get().getRegistryName()));
         registry.register(new BlockItem(FIRE_RECEIVER_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)).setRegistryName(FIRE_RECEIVER_BLOCK.get().getRegistryName()));
-        for (ColoredFireBlock.FireColor color : ColoredFireBlock.FireColor.values()) {
-            registry.register(new ColoredFlintItem(color));
+        for (RawFire fire : RawFire.values()) {
+            registry.register(new ColoredFlintItem(fire));
         }
     }
 }

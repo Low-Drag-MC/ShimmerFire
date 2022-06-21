@@ -1,0 +1,34 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "shimmerfire:fire": 0.0
+      },
+      "model": "shimmerfire:block/fire_empty_jar"
+    },
+    {
+      "predicate": {
+        "shimmerfire:fire": 1.0
+      },
+      "model": "shimmerfire:block/jar/destroy"
+    },
+    {
+      "predicate": {
+        "shimmerfire:fire": 2.0
+      },
+      "model": "shimmerfire:block/jar/arcane"
+    },
+    {
+      "predicate": {
+        "shimmerfire:fire": 3.0
+      },
+      "model": "shimmerfire:block/jar/life"
+    },
+    {
+      "predicate": {
+        "shimmerfire:fire": 4.0
+      },
+      "model": "shimmerfire:block/jar/rot"
+    }
+  ]
+}

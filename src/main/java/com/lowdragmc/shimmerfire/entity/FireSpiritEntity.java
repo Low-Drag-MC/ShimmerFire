@@ -3,7 +3,7 @@ package com.lowdragmc.shimmerfire.entity;
 import com.lowdragmc.shimmer.client.light.ColorPointLight;
 import com.lowdragmc.shimmer.client.light.LightManager;
 import com.lowdragmc.shimmerfire.CommonProxy;
-import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
+import com.lowdragmc.shimmerfire.api.RawFire;
 import com.mojang.math.Vector3f;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
@@ -67,7 +67,7 @@ public class FireSpiritEntity extends AmbientCreature {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_ID_FLAGS, (byte)0);
-        this.entityData.define(FIRE_COLOR, ColoredFireBlock.FireColor.ORANGE.ordinal());
+        this.entityData.define(FIRE_COLOR, RawFire.DESTROY.ordinal());
     }
 
     /**
@@ -147,12 +147,12 @@ public class FireSpiritEntity extends AmbientCreature {
         }
     }
 
-    public void setColor(ColoredFireBlock.FireColor color) {
+    public void setColor(RawFire color) {
         this.entityData.set(FIRE_COLOR, color.ordinal());
     }
 
-    public ColoredFireBlock.FireColor getColor() {
-        return ColoredFireBlock.FireColor.values()[this.entityData.get(FIRE_COLOR)];
+    public RawFire getColor() {
+        return RawFire.values()[this.entityData.get(FIRE_COLOR)];
     }
 
     /**
@@ -286,7 +286,7 @@ public class FireSpiritEntity extends AmbientCreature {
     @Nullable
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @org.jetbrains.annotations.Nullable SpawnGroupData pSpawnData, @org.jetbrains.annotations.Nullable CompoundTag pDataTag) {
-        setColor(ColoredFireBlock.FireColor.values()[random.nextInt(ColoredFireBlock.FireColor.values().length)]);
+        setColor(RawFire.values()[random.nextInt(RawFire.values().length)]);
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
 

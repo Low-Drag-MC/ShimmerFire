@@ -136,9 +136,9 @@ dependencies {
 
     implementation fg.deobf("blank:cannonfire-forge-1.18:0.1.4")
 
-    implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:1.18.2-0.5")
+    implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:1.18.2-0.5.1")
     implementation fg.deobf("com.lowdragmc.multiblocked:Multiblocked:1.18.2-0.8.1")
-    implementation fg.deobf("com.lowdragmc.shimmer:Shimmer-forge-1.18.2:0.0.5")
+    implementation fg.deobf("com.lowdragmc.shimmer:Shimmer-forge-1.18.2:0.1.0")
 
     if (System.getProperty('idea.sync.active') != 'true') {
         annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'

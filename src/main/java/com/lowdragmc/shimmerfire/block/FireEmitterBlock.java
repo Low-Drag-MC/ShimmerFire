@@ -5,19 +5,21 @@ import com.lowdragmc.shimmerfire.blockentity.ColoredCampfireBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.FirePortBlockEntity;
 import com.lowdragmc.shimmerfire.utils.ShapeUtils;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
 
 /**
  * @author KilaBash
@@ -51,7 +53,7 @@ public class FireEmitterBlock extends FirePortBlock {
     @ParametersAreNonnullByDefault
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         if (!pLevel.isClientSide) {
-            return createTickerHelper(pBlockEntityType, CommonProxy.FIRE_PORT.get(), FirePortBlockEntity::emitTick);
+            return createTickerHelper(pBlockEntityType, CommonProxy.FIRE_PORT.get(), (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.emitTick());
         }
         return null;
     }

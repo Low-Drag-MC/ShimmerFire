@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "empty=false,fire=destroy": {
+      "model": "shimmerfire:block/jar/destroy"
+    },
+    "empty=true,fire=destroy": {
+      "model": "shimmerfire:block/fire_empty_jar"
+    },
+    "empty=false,fire=arcane": {
+      "model": "shimmerfire:block/jar/arcane"
+    },
+    "empty=true,fire=arcane": {
+      "model": "shimmerfire:block/fire_empty_jar"
+    },
+    "empty=false,fire=life": {
+      "model": "shimmerfire:block/jar/life"
+    },
+    "empty=true,fire=life": {
+      "model": "shimmerfire:block/fire_empty_jar"
+    },
+    "empty=false,fire=rot": {
+      "model": "shimmerfire:block/jar/rot"
+    },
+    "empty=true,fire=rot": {
+      "model": "shimmerfire:block/fire_empty_jar"
+    }
+  }
+}

@@ -5,6 +5,7 @@ import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
 import com.lowdragmc.shimmer.client.shader.RenderUtils;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
+import com.lowdragmc.shimmerfire.api.RawFire;
 import com.lowdragmc.shimmerfire.entity.FireSpiritEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -57,8 +58,8 @@ public class FireSpiritRenderer extends EntityRenderer<FireSpiritEntity> {
 
     @Override
     public void render(FireSpiritEntity entity, float pEntityYaw, float partialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
-        ColoredFireBlock.FireColor fireColor = entity.getColor();
-        BlockState blockstate = CommonProxy.CAMPFIRE_BLOCK.get().defaultBlockState().setValue(ColoredFireBlock.FIRE_COLOR, fireColor);
+        RawFire fireColor = entity.getColor();
+        BlockState blockstate = CommonProxy.CAMPFIRE_BLOCK.get().defaultBlockState().setValue(ColoredFireBlock.FIRE, fireColor);
         pMatrixStack.pushPose();
         BlockPos blockpos = new BlockPos(entity.getX(), entity.getBoundingBox().maxY, entity.getZ());
 

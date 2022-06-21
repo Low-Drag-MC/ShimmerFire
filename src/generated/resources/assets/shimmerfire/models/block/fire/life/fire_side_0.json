@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_fire_side",
+  "textures": {
+    "fire": "shimmerfire:blocks/fire/fire_0_life"
+  }
+}

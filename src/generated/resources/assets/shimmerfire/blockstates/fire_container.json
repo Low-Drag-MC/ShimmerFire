@@ -1,32 +1,17 @@
 {
   "variants": {
-    "facing=north,half=upper": {
+    "facing=north": {
       "model": "shimmerfire:block/fire_container"
     },
-    "facing=south,half=upper": {
+    "facing=south": {
       "model": "shimmerfire:block/fire_container",
       "y": 180
     },
-    "facing=west,half=upper": {
+    "facing=west": {
       "model": "shimmerfire:block/fire_container",
       "y": 270
     },
-    "facing=east,half=upper": {
-      "model": "shimmerfire:block/fire_container",
-      "y": 90
-    },
-    "facing=north,half=lower": {
-      "model": "shimmerfire:block/fire_container"
-    },
-    "facing=south,half=lower": {
-      "model": "shimmerfire:block/fire_container",
-      "y": 180
-    },
-    "facing=west,half=lower": {
-      "model": "shimmerfire:block/fire_container",
-      "y": 270
-    },
-    "facing=east,half=lower": {
+    "facing=east": {
       "model": "shimmerfire:block/fire_container",
       "y": 90
     }

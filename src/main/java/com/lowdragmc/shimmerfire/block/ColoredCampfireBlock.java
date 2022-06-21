@@ -1,6 +1,7 @@
 package com.lowdragmc.shimmerfire.block;
 
 import com.lowdragmc.shimmerfire.CommonProxy;
+import com.lowdragmc.shimmerfire.api.RawFire;
 import com.lowdragmc.shimmerfire.blockentity.ColoredCampfireBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,7 +33,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import java.util.Optional;
 
-import static com.lowdragmc.shimmerfire.block.ColoredFireBlock.FIRE_COLOR;
+import static com.lowdragmc.shimmerfire.block.ColoredFireBlock.FIRE;
 
 /**
  * @author KilaBash
@@ -48,7 +49,7 @@ public class ColoredCampfireBlock extends CampfireBlock {
                 .setValue(SIGNAL_FIRE, Boolean.FALSE)
                 .setValue(WATERLOGGED, Boolean.FALSE)
                 .setValue(FACING, Direction.NORTH)
-                .setValue(FIRE_COLOR, ColoredFireBlock.FireColor.ORANGE));
+                .setValue(FIRE, RawFire.DESTROY));
     }
 
     @Override
@@ -57,7 +58,7 @@ public class ColoredCampfireBlock extends CampfireBlock {
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(LIT, SIGNAL_FIRE, WATERLOGGED, FACING, FIRE_COLOR);
+        pBuilder.add(LIT, SIGNAL_FIRE, WATERLOGGED, FACING, FIRE);
     }
 
     @Override

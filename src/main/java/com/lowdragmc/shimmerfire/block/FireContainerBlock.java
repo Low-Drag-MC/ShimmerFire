@@ -1,10 +1,14 @@
 package com.lowdragmc.shimmerfire.block;
 
+import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.blockentity.FireContainerBlockEntity;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -13,15 +17,15 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -56,16 +60,19 @@ public class FireContainerBlock extends BaseEntityBlock {
     );
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
+    public static final BooleanProperty CHARGING = BooleanProperty.create("charging");
 
     public FireContainerBlock() {
         super(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.PODZOL).strength(3.0F)
                 .sound(SoundType.METAL).noOcclusion());
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(FACING, Direction.NORTH).setValue(HALF, DoubleBlockHalf.LOWER));
+                .setValue(FACING, Direction.NORTH)
+                .setValue(HALF, DoubleBlockHalf.LOWER)
+                .setValue(CHARGING, false));
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(FACING, HALF);
+        pBuilder.add(FACING, HALF, CHARGING);
     }
 
     @Nullable
@@ -91,14 +98,32 @@ public class FireContainerBlock extends BaseEntityBlock {
 
     public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pFacingPos) {
         DoubleBlockHalf doubleblockhalf = pState.getValue(HALF);
-
+        BlockState blockState;
         if (pFacing.getAxis() == Direction.Axis.Y && doubleblockhalf == DoubleBlockHalf.LOWER == (pFacing == Direction.UP)) {
-            return pFacingState.is(this) && pFacingState.getValue(HALF) != doubleblockhalf ?
+            blockState = pFacingState.is(this) && pFacingState.getValue(HALF) != doubleblockhalf ?
                     pState.setValue(FACING, pFacingState.getValue(FACING)) :
                     Blocks.AIR.defaultBlockState();
         } else {
-            return doubleblockhalf == DoubleBlockHalf.LOWER && pFacing == Direction.DOWN && !pState.canSurvive(pLevel, pCurrentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
+            blockState = doubleblockhalf == DoubleBlockHalf.LOWER && pFacing == Direction.DOWN && !pState.canSurvive(pLevel, pCurrentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
         }
+        if (blockState.getBlock() != CommonProxy.FIRE_CONTAINER_BLOCK.get()) return blockState;
+        if (pFacing == Direction.DOWN && doubleblockhalf == DoubleBlockHalf.LOWER && canCharge(pFacingState)) {
+            blockState = blockState.setValue(CHARGING, true);
+        } else {
+            blockState = blockState.setValue(CHARGING, false);
+        }
+        return blockState;
+    }
+
+    public boolean canCharge(BlockState blockState) {
+        if (blockState.hasProperty(BlockStateProperties.LIT) && blockState.getValue(BlockStateProperties.LIT)) {
+            return true;
+        } else if (blockState.getBlock() instanceof BaseFireBlock) {
+            return true;
+        } else if (blockState.getFluidState().getType().getAttributes().getTemperature() > 1300) {
+            return true;
+        }
+        return false;
     }
 
     public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
@@ -115,4 +140,20 @@ public class FireContainerBlock extends BaseEntityBlock {
         return pState.getValue(HALF) == DoubleBlockHalf.LOWER ? RenderShape.MODEL : RenderShape.INVISIBLE;
     }
 
+    @Override
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        if (pLevel.getBlockEntity(pPos) instanceof FireContainerBlockEntity fireContainerBlockEntity) {
+            return fireContainerBlockEntity.use(pPlayer, pHand);
+        }
+        return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+        if (pState.getValue(CHARGING)) {
+            return createTickerHelper(pBlockEntityType, CommonProxy.FIRE_CONTAINER.get(), (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.chargingTick());
+        }
+        return null;
+    }
 }

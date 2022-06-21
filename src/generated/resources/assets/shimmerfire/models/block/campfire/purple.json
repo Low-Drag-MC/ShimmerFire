@@ -1,6 +1,0 @@
-{
-  "parent": "shimmerfire:block/campfire_fire_lit",
-  "textures": {
-    "fire": "shimmerfire:blocks/campfire/campfire_fire_purple"
-  }
-}

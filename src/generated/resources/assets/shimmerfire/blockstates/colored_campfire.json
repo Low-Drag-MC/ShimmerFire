@@ -1,123 +1,123 @@
 {
   "variants": {
-    "color=orange,facing=north,lit=false": {
+    "facing=north,fire=destroy,lit=false": {
       "model": "shimmerfire:block/campfire/off",
       "y": 180
     },
-    "color=cyan,facing=north,lit=false": {
-      "model": "shimmerfire:block/campfire/off",
-      "y": 180
-    },
-    "color=green,facing=north,lit=false": {
-      "model": "shimmerfire:block/campfire/off",
-      "y": 180
-    },
-    "color=purple,facing=north,lit=false": {
-      "model": "shimmerfire:block/campfire/off",
-      "y": 180
-    },
-    "color=orange,facing=south,lit=false": {
+    "facing=south,fire=destroy,lit=false": {
       "model": "shimmerfire:block/campfire/off"
     },
-    "color=cyan,facing=south,lit=false": {
+    "facing=west,fire=destroy,lit=false": {
+      "model": "shimmerfire:block/campfire/off",
+      "y": 90
+    },
+    "facing=east,fire=destroy,lit=false": {
+      "model": "shimmerfire:block/campfire/off",
+      "y": 270
+    },
+    "facing=north,fire=arcane,lit=false": {
+      "model": "shimmerfire:block/campfire/off",
+      "y": 180
+    },
+    "facing=south,fire=arcane,lit=false": {
       "model": "shimmerfire:block/campfire/off"
     },
-    "color=green,facing=south,lit=false": {
+    "facing=west,fire=arcane,lit=false": {
+      "model": "shimmerfire:block/campfire/off",
+      "y": 90
+    },
+    "facing=east,fire=arcane,lit=false": {
+      "model": "shimmerfire:block/campfire/off",
+      "y": 270
+    },
+    "facing=north,fire=life,lit=false": {
+      "model": "shimmerfire:block/campfire/off",
+      "y": 180
+    },
+    "facing=south,fire=life,lit=false": {
       "model": "shimmerfire:block/campfire/off"
     },
-    "color=purple,facing=south,lit=false": {
+    "facing=west,fire=life,lit=false": {
+      "model": "shimmerfire:block/campfire/off",
+      "y": 90
+    },
+    "facing=east,fire=life,lit=false": {
+      "model": "shimmerfire:block/campfire/off",
+      "y": 270
+    },
+    "facing=north,fire=rot,lit=false": {
+      "model": "shimmerfire:block/campfire/off",
+      "y": 180
+    },
+    "facing=south,fire=rot,lit=false": {
       "model": "shimmerfire:block/campfire/off"
     },
-    "color=orange,facing=west,lit=false": {
+    "facing=west,fire=rot,lit=false": {
       "model": "shimmerfire:block/campfire/off",
       "y": 90
     },
-    "color=cyan,facing=west,lit=false": {
-      "model": "shimmerfire:block/campfire/off",
-      "y": 90
-    },
-    "color=green,facing=west,lit=false": {
-      "model": "shimmerfire:block/campfire/off",
-      "y": 90
-    },
-    "color=purple,facing=west,lit=false": {
-      "model": "shimmerfire:block/campfire/off",
-      "y": 90
-    },
-    "color=orange,facing=east,lit=false": {
+    "facing=east,fire=rot,lit=false": {
       "model": "shimmerfire:block/campfire/off",
       "y": 270
     },
-    "color=cyan,facing=east,lit=false": {
-      "model": "shimmerfire:block/campfire/off",
-      "y": 270
-    },
-    "color=green,facing=east,lit=false": {
-      "model": "shimmerfire:block/campfire/off",
-      "y": 270
-    },
-    "color=purple,facing=east,lit=false": {
-      "model": "shimmerfire:block/campfire/off",
-      "y": 270
-    },
-    "color=orange,facing=north,lit=true": {
-      "model": "shimmerfire:block/campfire/orange",
+    "facing=north,fire=destroy,lit=true": {
+      "model": "shimmerfire:block/campfire/destroy",
       "y": 180
     },
-    "color=cyan,facing=north,lit=true": {
-      "model": "shimmerfire:block/campfire/cyan",
-      "y": 180
+    "facing=south,fire=destroy,lit=true": {
+      "model": "shimmerfire:block/campfire/destroy"
     },
-    "color=green,facing=north,lit=true": {
-      "model": "shimmerfire:block/campfire/green",
-      "y": 180
-    },
-    "color=purple,facing=north,lit=true": {
-      "model": "shimmerfire:block/campfire/purple",
-      "y": 180
-    },
-    "color=orange,facing=south,lit=true": {
-      "model": "shimmerfire:block/campfire/orange"
-    },
-    "color=cyan,facing=south,lit=true": {
-      "model": "shimmerfire:block/campfire/cyan"
-    },
-    "color=green,facing=south,lit=true": {
-      "model": "shimmerfire:block/campfire/green"
-    },
-    "color=purple,facing=south,lit=true": {
-      "model": "shimmerfire:block/campfire/purple"
-    },
-    "color=orange,facing=west,lit=true": {
-      "model": "shimmerfire:block/campfire/orange",
+    "facing=west,fire=destroy,lit=true": {
+      "model": "shimmerfire:block/campfire/destroy",
       "y": 90
     },
-    "color=cyan,facing=west,lit=true": {
-      "model": "shimmerfire:block/campfire/cyan",
-      "y": 90
-    },
-    "color=green,facing=west,lit=true": {
-      "model": "shimmerfire:block/campfire/green",
-      "y": 90
-    },
-    "color=purple,facing=west,lit=true": {
-      "model": "shimmerfire:block/campfire/purple",
-      "y": 90
-    },
-    "color=orange,facing=east,lit=true": {
-      "model": "shimmerfire:block/campfire/orange",
+    "facing=east,fire=destroy,lit=true": {
+      "model": "shimmerfire:block/campfire/destroy",
       "y": 270
     },
-    "color=cyan,facing=east,lit=true": {
-      "model": "shimmerfire:block/campfire/cyan",
+    "facing=north,fire=arcane,lit=true": {
+      "model": "shimmerfire:block/campfire/arcane",
+      "y": 180
+    },
+    "facing=south,fire=arcane,lit=true": {
+      "model": "shimmerfire:block/campfire/arcane"
+    },
+    "facing=west,fire=arcane,lit=true": {
+      "model": "shimmerfire:block/campfire/arcane",
+      "y": 90
+    },
+    "facing=east,fire=arcane,lit=true": {
+      "model": "shimmerfire:block/campfire/arcane",
       "y": 270
     },
-    "color=green,facing=east,lit=true": {
-      "model": "shimmerfire:block/campfire/green",
+    "facing=north,fire=life,lit=true": {
+      "model": "shimmerfire:block/campfire/life",
+      "y": 180
+    },
+    "facing=south,fire=life,lit=true": {
+      "model": "shimmerfire:block/campfire/life"
+    },
+    "facing=west,fire=life,lit=true": {
+      "model": "shimmerfire:block/campfire/life",
+      "y": 90
+    },
+    "facing=east,fire=life,lit=true": {
+      "model": "shimmerfire:block/campfire/life",
       "y": 270
     },
-    "color=purple,facing=east,lit=true": {
-      "model": "shimmerfire:block/campfire/purple",
+    "facing=north,fire=rot,lit=true": {
+      "model": "shimmerfire:block/campfire/rot",
+      "y": 180
+    },
+    "facing=south,fire=rot,lit=true": {
+      "model": "shimmerfire:block/campfire/rot"
+    },
+    "facing=west,fire=rot,lit=true": {
+      "model": "shimmerfire:block/campfire/rot",
+      "y": 90
+    },
+    "facing=east,fire=rot,lit=true": {
+      "model": "shimmerfire:block/campfire/rot",
       "y": 270
     }
   }

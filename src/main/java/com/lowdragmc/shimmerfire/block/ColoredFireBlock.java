@@ -1,7 +1,7 @@
 package com.lowdragmc.shimmerfire.block;
 
+import com.lowdragmc.shimmerfire.api.RawFire;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FireBlock;
@@ -12,15 +12,13 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 
-import javax.annotation.Nonnull;
-
 /**
  * @author KilaBash
  * @date 2022/5/5
  * @implNote ColoredFireBlock
  */
 public class ColoredFireBlock extends FireBlock {
-    public static final EnumProperty<FireColor> FIRE_COLOR = EnumProperty.create("color", FireColor.class, FireColor.values());
+    public static final EnumProperty<RawFire> FIRE = EnumProperty.create("fire", RawFire.class, RawFire.values());
 
     public ColoredFireBlock() {
         super(Properties.of(Material.FIRE, MaterialColor.FIRE).noCollission().instabreak().sound(SoundType.WOOL));
@@ -31,11 +29,11 @@ public class ColoredFireBlock extends FireBlock {
                 .setValue(SOUTH, Boolean.FALSE)
                 .setValue(WEST, Boolean.FALSE)
                 .setValue(UP, Boolean.FALSE)
-                .setValue(FIRE_COLOR, FireColor.ORANGE));
+                .setValue(FIRE, RawFire.DESTROY));
 
     }
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(AGE, NORTH, EAST, SOUTH, WEST, UP, FIRE_COLOR);
+        pBuilder.add(AGE, NORTH, EAST, SOUTH, WEST, UP, FIRE);
     }
 
     @Override
@@ -43,26 +41,4 @@ public class ColoredFireBlock extends FireBlock {
         return 4;
     }
 
-    public enum FireColor implements StringRepresentable {
-        ORANGE("orange", 0xFFFFA500, 9),
-        CYAN("cyan", 0xff00FFFF, 9),
-        GREEN("green", 0xff008000, 9),
-        PURPLE("purple", 0xff800080, 9);
-
-        public final String colorName;
-        public final int colorVale;
-        public final float radius;
-
-        FireColor(String colorName, int colorVale, float radius){
-            this.colorName = colorName;
-            this.colorVale = colorVale;
-            this.radius = radius;
-        }
-
-        @Override
-        @Nonnull
-        public String getSerializedName() {
-            return colorName;
-        }
-    }
 }

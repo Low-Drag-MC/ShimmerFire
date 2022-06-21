@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_fire_up",
+  "textures": {
+    "fire": "shimmerfire:blocks/fire/fire_0_arcane"
+  }
+}
