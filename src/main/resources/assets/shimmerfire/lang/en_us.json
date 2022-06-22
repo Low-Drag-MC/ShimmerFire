@@ -8,5 +8,7 @@
   "shimmerfire.raw_fire.life": "§2Life§r",
   "shimmerfire.raw_fire.arcane": "§bArcane§r",
   "shimmerfire.fire_jar.hover.empty": "Empty",
-  "shimmerfire.fire_jar.hover.fire": "Fire seat: "
+  "shimmerfire.fire_jar.hover.fire": "Fire seat: ",
+  "shimmerfire.color": "color",
+  "gui.slide_show.bloom": "use shimmer bloom"
 }

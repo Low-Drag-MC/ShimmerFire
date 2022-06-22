@@ -1,8 +1,12 @@
 package com.lowdragmc.shimmerfire;
 
 import com.lowdragmc.lowdraglib.ItemGroup.LDItemGroup;
+import com.lowdragmc.shimmerfire.api.Capabilities;
 import com.lowdragmc.shimmerfire.api.RawFire;
 import com.lowdragmc.shimmerfire.block.*;
+import com.lowdragmc.shimmerfire.block.decorated.ColoredBloomBlock;
+import com.lowdragmc.shimmerfire.block.decorated.ColoredDecorationBlock;
+import com.lowdragmc.shimmerfire.block.decorated.DecorationBlock;
 import com.lowdragmc.shimmerfire.blockentity.ColoredCampfireBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.FireContainerBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.FirePortBlockEntity;
@@ -21,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -50,6 +55,7 @@ public class CommonProxy {
     public static final RegistryObject<FireContainerBlock> FIRE_CONTAINER_BLOCK = BLOCKS.register("fire_container", FireContainerBlock::new);
     public static final RegistryObject<FireEmitterBlock> FIRE_EMITTER_BLOCK = BLOCKS.register("fire_emitter", FireEmitterBlock::new);
     public static final RegistryObject<FireReceiverBlock> FIRE_RECEIVER_BLOCK = BLOCKS.register("fire_receiver", FireReceiverBlock::new);
+    public static final RegistryObject<ColoredDecorationBlock> COLORED_BLOOM_BLOCK = BLOCKS.register("colored_bloom_block", ColoredDecorationBlock::new);
     // block entities
     public static final RegistryObject<BlockEntityType<ColoredCampfireBlockEntity>> COLORED_CAMPFIRE = BLOCK_ENTITIES.register("campfire", () -> BlockEntityType.Builder.of(ColoredCampfireBlockEntity::new, CAMPFIRE_BLOCK.get()).build(null));
     public static final RegistryObject<BlockEntityType<FireContainerBlockEntity>> FIRE_CONTAINER = BLOCK_ENTITIES.register("fire_container", () -> BlockEntityType.Builder.of(FireContainerBlockEntity::new, FIRE_CONTAINER_BLOCK.get()).build(null));
@@ -82,12 +88,23 @@ public class CommonProxy {
     public void registerItems(RegistryEvent.Register<Item> event) {
         IForgeRegistry<Item> registry = event.getRegistry();
         registry.register(new ForgeSpawnEggItem(FIRE_SPIRIT, 4996656, 986895, (new Item.Properties()).tab(CreativeModeTab.TAB_MISC)).setRegistryName(ShimmerFireMod.MODID, "fire_spirit_spawn_egg"));
-        registry.register(new BlockItem(CAMPFIRE_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)).setRegistryName(CAMPFIRE_BLOCK.get().getRegistryName()));
-        registry.register(new BlockItem(FIRE_CONTAINER_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)).setRegistryName(FIRE_CONTAINER_BLOCK.get().getRegistryName()));
-        registry.register(new BlockItem(FIRE_EMITTER_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)).setRegistryName(FIRE_EMITTER_BLOCK.get().getRegistryName()));
-        registry.register(new BlockItem(FIRE_RECEIVER_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)).setRegistryName(FIRE_RECEIVER_BLOCK.get().getRegistryName()));
         for (RawFire fire : RawFire.values()) {
             registry.register(new ColoredFlintItem(fire));
         }
+        registerSimpleItem(registry, CAMPFIRE_BLOCK.get());
+        registerSimpleItem(registry, FIRE_CONTAINER_BLOCK.get());
+        registerSimpleItem(registry, FIRE_EMITTER_BLOCK.get());
+        registerSimpleItem(registry, FIRE_RECEIVER_BLOCK.get());
+        registerSimpleItem(registry, COLORED_BLOOM_BLOCK.get());
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void registerSimpleItem(IForgeRegistry<Item> registry, Block block) {
+        registry.register(new BlockItem(block, new Item.Properties().tab(TAB_ITEMS)).setRegistryName(block.getRegistryName()));
+    }
+
+    @SubscribeEvent
+    public void registerCapabilities(RegisterCapabilitiesEvent event) {
+        Capabilities.register(event);
     }
 }

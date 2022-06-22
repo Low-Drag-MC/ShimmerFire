@@ -12,7 +12,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.models.model.ModelLocationUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.client.model.generators.loaders.MultiLayerModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -57,6 +59,14 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
         createFirePort(CommonProxy.FIRE_RECEIVER_BLOCK.get(), "block/fire_receiver");
 
         createFlintModels();
+        createDecorationBlock(CommonProxy.COLORED_BLOOM_BLOCK.get());
+    }
+
+    private void createDecorationBlock(Block block) {
+        ResourceLocation model = new ResourceLocation(ShimmerFireMod.MODID, "block/" + block.getRegistryName().getPath());
+        Property<?>[] properties = block.getStateDefinition().getProperties().toArray(Property<?>[]::new);
+        getVariantBuilder(block).forAllStatesExcept(blockState -> ConfiguredModel.builder().modelFile(models().getExistingFile(model)).build(), properties);
+        simpleBlockItem(block, models().getExistingFile(model));
     }
 
     private void createFlintModels() {

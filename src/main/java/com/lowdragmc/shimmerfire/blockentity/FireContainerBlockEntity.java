@@ -3,6 +3,7 @@ package com.lowdragmc.shimmerfire.blockentity;
 import com.lowdragmc.lowdraglib.client.particle.impl.TextureParticle;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
+import com.lowdragmc.shimmerfire.api.Capabilities;
 import com.lowdragmc.shimmerfire.api.IFireContainer;
 import com.lowdragmc.shimmerfire.api.RawFire;
 import com.lowdragmc.shimmerfire.block.FireContainerBlock;
@@ -13,6 +14,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -25,6 +27,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -163,6 +167,23 @@ public class FireContainerBlockEntity extends SyncedBlockEntity implements IFire
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
+    }
+
+    @NotNull
+    @Override
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if (cap == Capabilities.FIRE_CONTAINER_CAPABILITY) {
+            if (isCore()) {
+                if (side == Direction.DOWN) {
+                    return Capabilities.FIRE_CONTAINER_CAPABILITY.orEmpty(cap, LazyOptional.of(() -> this));
+                }
+            } else {
+                if (side == Direction.UP) {
+                    return Capabilities.FIRE_CONTAINER_CAPABILITY.orEmpty(cap, LazyOptional.of(() -> this));
+                }
+            }
+        }
+        return super.getCapability(cap, side);
     }
 
     public void chargingTick() {

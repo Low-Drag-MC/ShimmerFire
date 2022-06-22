@@ -32,7 +32,6 @@ public class FireJarItem extends BlockItem {
     }
 
 
-
     @Override
     public void fillItemCategory(CreativeModeTab pGroup, NonNullList<ItemStack> pItems) {
         if (this.allowdedIn(pGroup)) {

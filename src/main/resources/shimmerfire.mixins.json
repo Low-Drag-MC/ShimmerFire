@@ -5,8 +5,11 @@
   "refmap": "shimmerfire.refmap.json",
   "minVersion": "0.8",
   "client": [
+    "sideshow.ProjectorScreenMixin"
   ],
   "mixins": [
-    "SoulLanternMixin"
+    "SoulLanternMixin",
+    "sideshow.ProjectorBlockEntityMixin",
+    "sideshow.ProjectorRendererMixin"
   ]
 }

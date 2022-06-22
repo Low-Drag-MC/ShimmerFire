@@ -6,6 +6,7 @@ import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.api.RawFire;
 import com.lowdragmc.shimmerfire.block.FireJarBlock;
+import com.lowdragmc.shimmerfire.block.decorated.ColoredDecorationBlock;
 import com.lowdragmc.shimmerfire.client.particle.SparkParticle;
 import com.lowdragmc.shimmerfire.client.renderer.ColoredCampfireRenderer;
 import com.lowdragmc.shimmerfire.client.renderer.FireContainerRenderer;
@@ -17,6 +18,7 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -73,6 +75,13 @@ public class ClientProxy extends CommonProxy {
                     new ResourceLocation(ShimmerFireMod.MODID, "fire"),
                     (itemStack, clientWorld, entity, seed) -> itemStack.getDamageValue());
         });
+    }
+
+    @SubscribeEvent
+    public void registerColorHandle(ColorHandlerEvent.Item event) {
+        event.getBlockColors().register((state, level, pos, tintIndex) -> state.getValue(ColoredDecorationBlock.COLOR).color, CommonProxy.COLORED_BLOOM_BLOCK.get());
+
+        event.getItemColors().register((stack, tintIndex) -> ColoredDecorationBlock.Color.values()[stack.getDamageValue()].color, CommonProxy.COLORED_BLOOM_BLOCK.get().asItem());
     }
 
 }

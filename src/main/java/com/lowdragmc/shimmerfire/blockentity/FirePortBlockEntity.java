@@ -2,6 +2,7 @@ package com.lowdragmc.shimmerfire.blockentity;
 
 import com.lowdragmc.lowdraglib.LDLMod;
 import com.lowdragmc.shimmerfire.CommonProxy;
+import com.lowdragmc.shimmerfire.api.Capabilities;
 import com.lowdragmc.shimmerfire.api.IFireContainer;
 import com.lowdragmc.shimmerfire.api.RawFire;
 import com.lowdragmc.shimmerfire.block.*;
@@ -55,8 +56,9 @@ public class FirePortBlockEntity extends SyncedBlockEntity {
 
     @Nullable
     public IFireContainer getContainer() {
-        if (level.getBlockEntity(getBlockPos().relative(getFace().getOpposite())) instanceof IFireContainer fireContainer) {
-            return fireContainer;
+        BlockEntity blockEntity = level.getBlockEntity(getBlockPos().relative(getFace().getOpposite()));
+        if (blockEntity != null) {
+            return blockEntity.getCapability(Capabilities.FIRE_CONTAINER_CAPABILITY, getFace()).orElse(null);
         }
         return null;
     }

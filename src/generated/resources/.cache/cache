@@ -1,3 +1,4 @@
+8eb6f72aae0d0bc46a6d63637282e157845ab3e4 assets/shimmerfire/blockstates/colored_bloom_block.json
 d4f6426ecd4a94b059e59d6bc30812d174dac4a6 assets/shimmerfire/blockstates/colored_campfire.json
 8f94c84d5bfdd98f4aa9dacb84e24654b3a84913 assets/shimmerfire/blockstates/colored_fire.json
 2a8a1c7a783faf66c666d54c5fcf18938fa5f608 assets/shimmerfire/blockstates/fire_container.json
@@ -53,6 +54,7 @@ f2dc76981adfe5e5ea35bb1c21302096af547a14 assets/shimmerfire/models/block/fire/ro
 16482726ff3584959917161b086bc4f57fd2d832 assets/shimmerfire/models/block/jar/destroy.json
 647a28921566507c63a8da703192a959664ad0cb assets/shimmerfire/models/block/jar/life.json
 0a1972f70779eaf8ae93abe3cb0ce47c0a44b5d8 assets/shimmerfire/models/block/jar/rot.json
+40431d41f52f46aab39411a6df1993c0381f7c38 assets/shimmerfire/models/item/colored_bloom_block.json
 a5671211066ee75f626f43daae1730926579968b assets/shimmerfire/models/item/colored_campfire.json
 5a97123f6e66f9a715493903f3526d7832630fa4 assets/shimmerfire/models/item/fire_container.json
 67386068ebd7a4d7ed46828439ce9f4f1b77aed1 assets/shimmerfire/models/item/fire_emitter.json
