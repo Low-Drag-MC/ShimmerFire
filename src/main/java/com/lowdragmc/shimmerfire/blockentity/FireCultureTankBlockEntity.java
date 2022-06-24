@@ -4,24 +4,21 @@ import com.lowdragmc.lowdraglib.client.particle.impl.TextureParticle;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.api.Capabilities;
-import com.lowdragmc.shimmerfire.api.IFireContainer;
 import com.lowdragmc.shimmerfire.api.RawFire;
-import com.lowdragmc.shimmerfire.block.FireContainerBlock;
+import com.lowdragmc.shimmerfire.block.CreativeCultureTankBlock;
+import com.lowdragmc.shimmerfire.block.FireCultureTankBlock;
 import com.lowdragmc.shimmerfire.item.FireJarItem;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
@@ -42,45 +39,33 @@ import java.util.Random;
  */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class FireContainerBlockEntity extends SyncedBlockEntity implements IFireContainer {
-    private FireContainerBlockEntity core;
-    private int stored;
-    private RawFire rawFire;
+public class FireCultureTankBlockEntity extends FireContainer {
+    private FireCultureTankBlockEntity core;
+    private final boolean isCreative;
 
-    public FireContainerBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(CommonProxy.FIRE_CONTAINER.get(), pWorldPosition, pBlockState);
+    public FireCultureTankBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
+        super(CommonProxy.FIRE_CULTURE_TANK.get(), pWorldPosition, pBlockState);
+        isCreative = pBlockState.getBlock() instanceof CreativeCultureTankBlock;
     }
 
     public boolean isCore() {
-        return getBlockState().getValue(FireContainerBlock.HALF) == DoubleBlockHalf.LOWER;
+        return getBlockState().getValue(FireCultureTankBlock.HALF) == DoubleBlockHalf.LOWER;
     }
 
     @Nullable
-    public FireContainerBlockEntity getCore() {
+    public FireCultureTankBlockEntity getCore() {
         if (core != null) return core;
         if (isCore()) return core = this;
         BlockEntity blockEntity = getLevel().getBlockEntity(getBlockPos().below());
-        if (blockEntity instanceof FireContainerBlockEntity) {
-            return core = (FireContainerBlockEntity) blockEntity;
+        if (blockEntity instanceof FireCultureTankBlockEntity) {
+            return core = (FireCultureTankBlockEntity) blockEntity;
         }
         getLevel().removeBlock(getBlockPos(), false);
         return null;
     }
 
-    @Override
-    protected void write(CompoundTag tag, boolean clientPacket) {
-        if (rawFire != null) {
-            tag.putString("f", rawFire.name());
-            tag.putInt("s", stored);
-        }
-    }
-
-    @Override
-    protected void read(CompoundTag tag, boolean clientPacket) {
-        if (tag.contains("f")) {
-            rawFire = RawFire.valueOf(tag.getString("f"));
-            stored = tag.getInt("s");
-        }
+    public boolean isCreative() {
+        return isCreative;
     }
 
     @Override
@@ -88,11 +73,13 @@ public class FireContainerBlockEntity extends SyncedBlockEntity implements IFire
         if (!isCore() && getCore() != null) {
             return getCore().getStored();
         }
-        return rawFire == null ? 0 : stored;
+        if (isCreative) return Integer.MAX_VALUE;
+        return super.getStored();
     }
 
     @Override
     public int getCapacity() {
+        if (isCreative) return Integer.MAX_VALUE;
         return 5000;
     }
 
@@ -101,14 +88,8 @@ public class FireContainerBlockEntity extends SyncedBlockEntity implements IFire
         if (!isCore() && getCore() != null) {
             return getCore().extract(fire, heat, simulate);
         }
-        if (rawFire == null) return 0;
-        if (fire != null && getFireType() != fire) return 0;
-        int extracted = Math.min(heat, stored);
-        if (!simulate) {
-            stored -= extracted;
-            notifyUpdate();
-        }
-        return extracted;
+        if (isCreative) return heat;
+        return super.extract(fire, heat, simulate);
     }
 
     @Override
@@ -116,16 +97,9 @@ public class FireContainerBlockEntity extends SyncedBlockEntity implements IFire
         if (!isCore() && getCore() != null) {
             return getCore().insert(fire, heat, simulate);
         }
+        if (isCreative) return heat;
         if (rawFire == null) return 0;
-        if (fire != null && fire != getFireType()) {
-            heat /= 2;
-        }
-        int inserted = Math.min(getCapacity(), stored + heat) - stored;
-        if (!simulate) {
-            stored += inserted;
-            notifyUpdate();
-        }
-        return (fire != null && fire != getFireType()) ? inserted * 2 : inserted;
+        return super.insert(fire, heat, simulate);
     }
 
     @Override
@@ -134,7 +108,7 @@ public class FireContainerBlockEntity extends SyncedBlockEntity implements IFire
         if (!isCore() && getCore() != null) {
             return getCore().getFireType();
         }
-        return rawFire;
+        return super.getFireType();
     }
 
     @Override
@@ -143,8 +117,7 @@ public class FireContainerBlockEntity extends SyncedBlockEntity implements IFire
             getCore().setFireType(fire);
             return;
         }
-        this.rawFire = fire;
-        notifyUpdate();
+        super.setFireType(fire);
     }
 
     public InteractionResult use(Player pPlayer, InteractionHand pHand) {
@@ -154,9 +127,14 @@ public class FireContainerBlockEntity extends SyncedBlockEntity implements IFire
             if (getFireType() == null) {
                 if (fire != null && !level.isClientSide) {
                     setFireType(fire);
+                    insert(fire, 1, false);
                 }
             } else {
-                if (fire == null && getStored() >= 2000) {
+                if (fire != null && getCore() != null && getCore().isCreative()) {
+                    if (!level.isClientSide) {
+                        setFireType(fire);
+                    }
+                } else if (fire == null && getStored() > 2000) {
                     if (!level.isClientSide) {
                         extract(null, 2000, false);
                         notifyUpdate();

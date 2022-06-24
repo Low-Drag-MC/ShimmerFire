@@ -1,20 +1,14 @@
 package com.lowdragmc.shimmerfire.client.renderer;
 
-import com.lowdragmc.lowdraglib.client.particle.impl.TextureParticle;
 import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
 import com.lowdragmc.shimmer.client.shader.RenderUtils;
 import com.lowdragmc.shimmer.core.IBakedQuad;
 import com.lowdragmc.shimmerfire.CommonProxy;
-import com.lowdragmc.shimmerfire.ShimmerFireMod;
-import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
 import com.lowdragmc.shimmerfire.api.RawFire;
-import com.lowdragmc.shimmerfire.blockentity.FireContainerBlockEntity;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
+import com.lowdragmc.shimmerfire.blockentity.FireCultureTankBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -22,13 +16,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.EmptyModelData;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.EnumMap;
@@ -37,7 +28,7 @@ import java.util.Map;
 import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
-public class FireContainerRenderer implements BlockEntityRenderer<FireContainerBlockEntity> {
+public class FireContainerRenderer implements BlockEntityRenderer<FireCultureTankBlockEntity> {
    private final BlockEntityRendererProvider.Context context;
 
    private final static Map<RawFire, List<BakedQuad>> FIRE_QUAD_CACHE = new EnumMap<>(RawFire.class);
@@ -47,7 +38,7 @@ public class FireContainerRenderer implements BlockEntityRenderer<FireContainerB
    }
 
    @ParametersAreNonnullByDefault
-   public void render(FireContainerBlockEntity fireContainer, float partialTick, PoseStack poseStack, MultiBufferSource pBufferSource, int packedLight, int packedOverlay) {
+   public void render(FireCultureTankBlockEntity fireContainer, float partialTick, PoseStack poseStack, MultiBufferSource pBufferSource, int packedLight, int packedOverlay) {
       if (!fireContainer.isCore()) return;
       RawFire fire = fireContainer.getFireType();
       if (fire == null) return;

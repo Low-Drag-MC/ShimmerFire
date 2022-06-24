@@ -1,7 +1,7 @@
 package com.lowdragmc.shimmerfire.block;
 
 import com.lowdragmc.shimmerfire.CommonProxy;
-import com.lowdragmc.shimmerfire.blockentity.FireContainerBlockEntity;
+import com.lowdragmc.shimmerfire.blockentity.FireCultureTankBlockEntity;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -41,7 +41,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class FireContainerBlock extends BaseEntityBlock {
+public class FireCultureTankBlock extends BaseEntityBlock {
     protected static final VoxelShape SHAPE_LOWER = Shapes.or(
             Block.box(0, 0, 0, 16, 1, 16),
             Block.box(1, 1, 1, 15, 6, 15),
@@ -62,7 +62,7 @@ public class FireContainerBlock extends BaseEntityBlock {
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
     public static final BooleanProperty CHARGING = BooleanProperty.create("charging");
 
-    public FireContainerBlock() {
+    public FireCultureTankBlock() {
         super(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.PODZOL).strength(3.0F)
                 .sound(SoundType.METAL).noOcclusion());
         this.registerDefaultState(this.stateDefinition.any()
@@ -78,7 +78,7 @@ public class FireContainerBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new FireContainerBlockEntity(pPos, pState);
+        return new FireCultureTankBlockEntity(pPos, pState);
     }
 
     @Nullable
@@ -106,7 +106,7 @@ public class FireContainerBlock extends BaseEntityBlock {
         } else {
             blockState = doubleblockhalf == DoubleBlockHalf.LOWER && pFacing == Direction.DOWN && !pState.canSurvive(pLevel, pCurrentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
         }
-        if (blockState.getBlock() != CommonProxy.FIRE_CONTAINER_BLOCK.get()) return blockState;
+        if (!(blockState.getBlock() instanceof FireCultureTankBlock)) return blockState;
         if (pFacing == Direction.DOWN && doubleblockhalf == DoubleBlockHalf.LOWER && canCharge(pFacingState)) {
             blockState = blockState.setValue(CHARGING, true);
         } else {
@@ -142,8 +142,8 @@ public class FireContainerBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (pLevel.getBlockEntity(pPos) instanceof FireContainerBlockEntity fireContainerBlockEntity) {
-            return fireContainerBlockEntity.use(pPlayer, pHand);
+        if (pLevel.getBlockEntity(pPos) instanceof FireCultureTankBlockEntity fireCultureTankBlockEntity) {
+            return fireCultureTankBlockEntity.use(pPlayer, pHand);
         }
         return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
     }
@@ -152,7 +152,7 @@ public class FireContainerBlock extends BaseEntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         if (pState.getValue(CHARGING)) {
-            return createTickerHelper(pBlockEntityType, CommonProxy.FIRE_CONTAINER.get(), (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.chargingTick());
+            return createTickerHelper(pBlockEntityType, CommonProxy.FIRE_CULTURE_TANK.get(), (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.chargingTick());
         }
         return null;
     }

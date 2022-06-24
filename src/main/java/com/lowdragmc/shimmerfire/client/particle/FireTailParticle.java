@@ -40,19 +40,24 @@ public class FireTailParticle extends TrailParticle {
     private final FireSpiritParticle headParticle;
 
     public FireTailParticle(ClientLevel level, BlockPos from, Direction fromFace, BlockPos to, Direction toFace, int dur, RawFire color) {
-        super(level, from.getX() + 0.5, from.getY() + 0.5, from.getZ() + 0.5);
+        this(level, new Vector3(from).add(0.5), new Vector3(to).add(0.5).add(toFace.getStepX() * -0.4, toFace.getStepY() * -0.4, toFace.getStepZ() * -0.4), fromFace, toFace, dur, color);
+    }
+
+    public FireTailParticle(ClientLevel level, Vector3 from, Vector3 destination, Direction fromFace, Direction toFace, int dur, RawFire color) {
+        super(level, from.x, from.y, from.z + 0.5);
         this.color = color;
         setLifetime(dur + 15);
         setLight(0xf000f0);
-        Vector3 destination = new Vector3(to).add(0.5).add(toFace.getStepX() * -0.4, toFace.getStepY() * -0.4, toFace.getStepZ() * -0.4);
-        points = new CubicBezierCurve3(new Vector3(from).add(0.5),
-                new Vector3(fromFace.getStepX(), fromFace.getStepY(), fromFace.getStepZ()).multiply(3).add(new Vector3(from).add(0.5)),
-                new Vector3(toFace.getStepX(), toFace.getStepY(), toFace.getStepZ()).multiply(3).add(new Vector3(to).add(0.5)),
+        points = new CubicBezierCurve3(new Vector3(from),
+                new Vector3(fromFace.getStepX(), fromFace.getStepY(), fromFace.getStepZ()).multiply(3).add(new Vector3(from)),
+                new Vector3(toFace.getStepX(), toFace.getStepY(), toFace.getStepZ()).multiply(3).add(destination),
                 destination).getPoints(dur);
         maxTail = 15;
         width = 0.3f;
-        headParticle = new FireSpiritParticle(level, from.getX() + 0.5, from.getY() + 0.5, from.getZ() + 0.5);
+        headParticle = new FireSpiritParticle(level, from.x, from.y, from.z);
         headParticle.setLifetime(dur);
+        headParticle.scale(0.12f);
+        headParticle.setGlint(true);
         headParticle.setColor((color.colorVale >> 16 & 0xff)/256f,(color.colorVale >> 8 & 0xff)/256f,(color.colorVale & 0xff)/256f);
     }
 
@@ -109,7 +114,7 @@ public class FireTailParticle extends TrailParticle {
 
         @Override
         public void end(@Nonnull Tesselator tesselator) {
-
+            RenderSystem.depthMask(true);
         }
     });
 

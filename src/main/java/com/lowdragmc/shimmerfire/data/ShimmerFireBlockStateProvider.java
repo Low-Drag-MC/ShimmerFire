@@ -2,7 +2,7 @@ package com.lowdragmc.shimmerfire.data;
 
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
-import com.lowdragmc.shimmerfire.block.FireContainerBlock;
+import com.lowdragmc.shimmerfire.block.FireCultureTankBlock;
 import com.lowdragmc.shimmerfire.block.FireJarBlock;
 import com.lowdragmc.shimmerfire.block.FirePortBlock;
 import com.lowdragmc.shimmerfire.api.RawFire;
@@ -59,10 +59,11 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
         createFirePort(CommonProxy.FIRE_RECEIVER_BLOCK.get(), "block/fire_receiver");
 
         createFlintModels();
-        createDecorationBlock(CommonProxy.COLORED_BLOOM_BLOCK.get());
+        createSimpleBlock(CommonProxy.FIRE_PEDESTAL_BLOCK.get());
+        createSimpleBlock(CommonProxy.COLORED_BLOOM_BLOCK.get());
     }
 
-    private void createDecorationBlock(Block block) {
+    private void createSimpleBlock(Block block) {
         ResourceLocation model = new ResourceLocation(ShimmerFireMod.MODID, "block/" + block.getRegistryName().getPath());
         Property<?>[] properties = block.getStateDefinition().getProperties().toArray(Property<?>[]::new);
         getVariantBuilder(block).forAllStatesExcept(blockState -> ConfiguredModel.builder().modelFile(models().getExistingFile(model)).build(), properties);
@@ -77,11 +78,18 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
     }
 
     private void createFireContainer() {
-        getVariantBuilder(CommonProxy.FIRE_CONTAINER_BLOCK.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
+        getVariantBuilder(CommonProxy.FIRE_CULTURE_TANK_BLOCK.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
                 .modelFile(models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_container")))
-                .rotationY(((int) state.getValue(FireContainerBlock.FACING).toYRot() + 180) % 360)
-                .build(), FireContainerBlock.HALF, FireContainerBlock.CHARGING);
-        simpleBlockItem(CommonProxy.FIRE_CONTAINER_BLOCK.get(), models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_container")));
+                .rotationY(((int) state.getValue(FireCultureTankBlock.FACING).toYRot() + 180) % 360)
+                .build(), FireCultureTankBlock.HALF, FireCultureTankBlock.CHARGING);
+        simpleBlockItem(CommonProxy.FIRE_CULTURE_TANK_BLOCK.get(), models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_container")));
+
+        getVariantBuilder(CommonProxy.CREATIVE_FIRE_CULTURE_TANK_BLOCK.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
+                .modelFile(models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_container")))
+                .rotationY(((int) state.getValue(FireCultureTankBlock.FACING).toYRot() + 180) % 360)
+                .build(), FireCultureTankBlock.HALF, FireCultureTankBlock.CHARGING);
+        simpleBlockItem(CommonProxy.CREATIVE_FIRE_CULTURE_TANK_BLOCK.get(), models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_container")));
+
     }
 
     private void createFirePort(FirePortBlock block, String model) {
