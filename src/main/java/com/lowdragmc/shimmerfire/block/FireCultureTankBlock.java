@@ -107,10 +107,8 @@ public class FireCultureTankBlock extends BaseEntityBlock {
             blockState = doubleblockhalf == DoubleBlockHalf.LOWER && pFacing == Direction.DOWN && !pState.canSurvive(pLevel, pCurrentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
         }
         if (!(blockState.getBlock() instanceof FireCultureTankBlock)) return blockState;
-        if (pFacing == Direction.DOWN && doubleblockhalf == DoubleBlockHalf.LOWER && canCharge(pFacingState)) {
-            blockState = blockState.setValue(CHARGING, true);
-        } else {
-            blockState = blockState.setValue(CHARGING, false);
+        if (pFacing == Direction.DOWN && doubleblockhalf == DoubleBlockHalf.LOWER) {
+            blockState = blockState.setValue(CHARGING, canCharge(pFacingState));
         }
         return blockState;
     }
@@ -134,10 +132,6 @@ public class FireCultureTankBlock extends BaseEntityBlock {
 
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return pState.getValue(HALF) == DoubleBlockHalf.UPPER ? SHAPE_UPPER : SHAPE_LOWER;
-    }
-
-    public RenderShape getRenderShape(BlockState pState) {
-        return pState.getValue(HALF) == DoubleBlockHalf.LOWER ? RenderShape.MODEL : RenderShape.INVISIBLE;
     }
 
     @Override

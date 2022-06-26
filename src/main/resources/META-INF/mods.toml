@@ -14,7 +14,7 @@ displayURL="https://github.com/Low-Drag-MC/ShimmerFire"
 # A text field displayed in the mod UI
 credits="Thanks for this example mod goes to Java" #optional
 # A text field displayed in the mod UI
-authors="KilaBash" #optional
+authors="KilaBash, zomb676, Mosquitozzi" #optional
 description='''ShimemrFire, a Teacon22 demo mod.'''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.shimmerfire]] #optional
@@ -38,3 +38,17 @@ description='''ShimemrFire, a Teacon22 demo mod.'''
     versionRange="[0.9,)"
     ordering="BEFORE"
     side="BOTH"
+[[dependencies.shimmerfire]]
+    modId="geckolib3"
+    mandatory=true
+    # This version range declares a minimum of the current minecraft version up to but not including the next major version
+    versionRange="[3.0.18,)"
+    ordering="NONE"
+    side="CLIENT"
+[[dependencies.shimmerfire]]
+    modId="shimmer"
+    mandatory=true
+    # This version range declares a minimum of the current minecraft version up to but not including the next major version
+    versionRange="[0.1.2,)"
+    ordering="NONE"
+    side="CLIENT"

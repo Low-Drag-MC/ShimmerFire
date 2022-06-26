@@ -1,20 +1,16 @@
 package com.lowdragmc.shimmerfire.client;
 
-import com.lowdragmc.shimmer.ShimmerConstants;
-import com.lowdragmc.shimmer.client.ShimmerRenderTypes;
 import com.lowdragmc.shimmer.client.light.ColorPointLight;
 import com.lowdragmc.shimmer.client.light.LightManager;
-import com.lowdragmc.shimmer.client.shader.RenderUtils;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.api.RawFire;
 import com.lowdragmc.shimmerfire.block.FireJarBlock;
-import com.lowdragmc.shimmerfire.block.FirePedestalBlock;
 import com.lowdragmc.shimmerfire.block.decorated.ColoredDecorationBlock;
 import com.lowdragmc.shimmerfire.blockentity.FirePedestalBlockEntity;
 import com.lowdragmc.shimmerfire.client.particle.SparkParticle;
 import com.lowdragmc.shimmerfire.client.renderer.ColoredCampfireRenderer;
-import com.lowdragmc.shimmerfire.client.renderer.FireContainerRenderer;
+import com.lowdragmc.shimmerfire.client.renderer.FireCultureTankRenderer;
 import com.lowdragmc.shimmerfire.client.renderer.FireSpiritRenderer;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
@@ -50,7 +46,7 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(COLORED_CAMPFIRE.get(), ColoredCampfireRenderer::new);
-        event.registerBlockEntityRenderer(FIRE_CULTURE_TANK.get(), FireContainerRenderer::new);
+        event.registerBlockEntityRenderer(FIRE_CULTURE_TANK.get(), FireCultureTankRenderer::new);
         event.registerEntityRenderer(FIRE_SPIRIT.get(), FireSpiritRenderer::new);
     }
 

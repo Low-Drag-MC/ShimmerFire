@@ -22,15 +22,25 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
+
+import static com.lowdragmc.shimmerfire.block.FireCultureTankBlock.CHARGING;
 
 /**
  * @author KilaBash
@@ -39,7 +49,7 @@ import java.util.Random;
  */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class FireCultureTankBlockEntity extends FireContainer {
+public class FireCultureTankBlockEntity extends FireContainer implements IAnimatable {
     private FireCultureTankBlockEntity core;
     private final boolean isCreative;
 
@@ -120,6 +130,10 @@ public class FireCultureTankBlockEntity extends FireContainer {
         super.setFireType(fire);
     }
 
+    private boolean isCharging() {
+        return getBlockState().getValue(CHARGING);
+    }
+
     public InteractionResult use(Player pPlayer, InteractionHand pHand) {
         ItemStack itemStack = pPlayer.getItemInHand(pHand);
         if (FireJarItem.isJarItem(itemStack)) {
@@ -180,6 +194,7 @@ public class FireCultureTankBlockEntity extends FireContainer {
         if (level instanceof ClientLevel clientLevel) {
             RawFire fire = getFireType();
             BlockPos pos = getBlockPos();
+            if (fire == null) return;
             Random random = clientLevel.random;
             for (int i = 0; i < 3; i++) {
                 TextureParticle particle = new TextureParticle(clientLevel, pos.getX() + random.nextFloat(), pos.getY() + 0.5 + random.nextFloat(), pos.getZ() + random.nextFloat()) {
@@ -198,12 +213,52 @@ public class FireCultureTankBlockEntity extends FireContainer {
                 };
 
                 particle.scale(0.02f);
-                particle.setFullLight(0xf000f0);
+                particle.setLight(0xf000f0);
                 particle.setTexture(new ResourceLocation(ShimmerFireMod.MODID, "textures/particle/fire_spark_2.png"));
                 particle.setLifetime(random.nextInt(40) + 20);
                 particle.setColor((fire.colorVale >> 16 & 0xff)/256f,(fire.colorVale >> 8 & 0xff)/256f,(fire.colorVale & 0xff)/256f);
                 particle.addParticle();
             }
         }
+    }
+
+    @Override
+    public AABB getRenderBoundingBox() {
+        return new AABB(getBlockPos(), getBlockPos().offset(1, 2, 1));
+    }
+
+    private final AnimationFactory factory = new AnimationFactory(this);
+
+    private PlayState predicate(AnimationEvent<FireCultureTankBlockEntity> event) {
+        if (isCore()) {
+            AnimationController controller = event.getController();
+            if (getFireType() == null) {
+                controller.setAnimation(new AnimationBuilder().addAnimation("empty"));
+                controller.transitionLengthTicks = 20;
+            } else {
+                if (isCharging()) {
+                    controller.setAnimation(new AnimationBuilder().addAnimation("charging"));
+                    controller.transitionLengthTicks = 20;
+                } else {
+                    controller.setAnimation(new AnimationBuilder().addAnimation("idle"));
+                    controller.transitionLengthTicks = 20;
+                }
+            }
+            return PlayState.CONTINUE;
+        } else {
+            return PlayState.STOP;
+        }
+    }
+
+    @Override
+    public void registerControllers(AnimationData data) {
+        AnimationController<FireCultureTankBlockEntity> controller = new AnimationController<>(this, "controller", 0, this::predicate);
+        controller.transitionLengthTicks = 20;
+        data.addAnimationController(controller);
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
     }
 }

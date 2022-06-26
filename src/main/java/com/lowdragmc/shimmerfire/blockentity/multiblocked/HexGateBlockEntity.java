@@ -242,8 +242,8 @@ public class HexGateBlockEntity extends ControllerTileEntity {
         BlockPos pos = getBlockPos();
         Direction dir = getFrontFacing().getClockWise();
         return new AABB(
-                pos.relative(dir, 4).relative(Direction.UP, 4),
-                pos.relative(dir.getOpposite(), 4).relative(Direction.UP, -4).relative(getFrontFacing(), 3));
+                pos.relative(dir, 5).relative(Direction.UP, 5),
+                pos.relative(dir.getOpposite(), 5).relative(Direction.DOWN, 5).relative(getFrontFacing(), isIdle() ? 2 : 20));
     }
 
     public final static ControllerDefinition HEX_GATE_DEFINITION = new ControllerDefinition(new ResourceLocation(ShimmerFireMod.MODID, "hex_gate_controller"), HexGateBlockEntity::new);
