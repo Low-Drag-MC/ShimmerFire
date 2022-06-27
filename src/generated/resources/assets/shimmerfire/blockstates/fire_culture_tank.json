@@ -1,19 +1,16 @@
 {
   "variants": {
     "facing=north": {
-      "model": "shimmerfire:block/fire_container"
+      "model": "shimmerfire:block/fire_culture_tank"
     },
     "facing=south": {
-      "model": "shimmerfire:block/fire_container",
-      "y": 180
+      "model": "shimmerfire:block/fire_culture_tank"
     },
     "facing=west": {
-      "model": "shimmerfire:block/fire_container",
-      "y": 270
+      "model": "shimmerfire:block/fire_culture_tank"
     },
     "facing=east": {
-      "model": "shimmerfire:block/fire_container",
-      "y": 90
+      "model": "shimmerfire:block/fire_culture_tank"
     }
   }
 }

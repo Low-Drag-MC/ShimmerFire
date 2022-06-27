@@ -6,6 +6,7 @@ import com.lowdragmc.shimmerfire.block.FireCultureTankBlock;
 import com.lowdragmc.shimmerfire.block.FireJarBlock;
 import com.lowdragmc.shimmerfire.block.FirePortBlock;
 import com.lowdragmc.shimmerfire.api.RawFire;
+import com.lowdragmc.shimmerfire.block.decorated.ColoredDecorationBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
@@ -15,12 +16,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.client.model.generators.loaders.MultiLayerModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -60,11 +63,16 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
 
         createFlintModels();
         createSimpleBlock(CommonProxy.FIRE_PEDESTAL_BLOCK.get());
-        createSimpleBlock(CommonProxy.COLORED_BLOOM_BLOCK.get());
+        for (RegistryObject<ColoredDecorationBlock> coloredBloomBlock : CommonProxy.COLORED_BLOOM_BLOCKS) {
+            createSimpleBlock(coloredBloomBlock.get(), new ResourceLocation(ShimmerFireMod.MODID, "block/colored_bloom_block"));
+        }
     }
 
     private void createSimpleBlock(Block block) {
-        ResourceLocation model = new ResourceLocation(ShimmerFireMod.MODID, "block/" + block.getRegistryName().getPath());
+        createSimpleBlock(block, new ResourceLocation(ShimmerFireMod.MODID, "block/" + block.getRegistryName().getPath()));
+    }
+
+    private void createSimpleBlock(Block block, ResourceLocation model) {
         Property<?>[] properties = block.getStateDefinition().getProperties().toArray(Property<?>[]::new);
         getVariantBuilder(block).forAllStatesExcept(blockState -> ConfiguredModel.builder().modelFile(models().getExistingFile(model)).build(), properties);
         simpleBlockItem(block, models().getExistingFile(model));
@@ -79,16 +87,11 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
 
     private void createFireContainer() {
         getVariantBuilder(CommonProxy.FIRE_CULTURE_TANK_BLOCK.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
-                .modelFile(models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_container")))
-                .rotationY(((int) state.getValue(FireCultureTankBlock.FACING).toYRot() + 180) % 360)
+                .modelFile(models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_culture_tank")))
                 .build(), FireCultureTankBlock.HALF, FireCultureTankBlock.CHARGING);
-        simpleBlockItem(CommonProxy.FIRE_CULTURE_TANK_BLOCK.get(), models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_container")));
-
         getVariantBuilder(CommonProxy.CREATIVE_FIRE_CULTURE_TANK_BLOCK.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
-                .modelFile(models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_container")))
-                .rotationY(((int) state.getValue(FireCultureTankBlock.FACING).toYRot() + 180) % 360)
+                .modelFile(models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_culture_tank")))
                 .build(), FireCultureTankBlock.HALF, FireCultureTankBlock.CHARGING);
-        simpleBlockItem(CommonProxy.CREATIVE_FIRE_CULTURE_TANK_BLOCK.get(), models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_container")));
 
     }
 

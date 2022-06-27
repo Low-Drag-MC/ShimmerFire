@@ -28,6 +28,7 @@ import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.registries.RegistryObject;
 
 import static com.lowdragmc.shimmerfire.block.ColoredFireBlock.FIRE;
 
@@ -96,8 +97,10 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void registerColorHandle(ColorHandlerEvent.Item event) {
-        event.getBlockColors().register((state, level, pos, tintIndex) -> state.getValue(ColoredDecorationBlock.COLOR).color, CommonProxy.COLORED_BLOOM_BLOCK.get());
-        event.getItemColors().register((stack, tintIndex) -> ColoredDecorationBlock.Color.values()[stack.getDamageValue()].color, CommonProxy.COLORED_BLOOM_BLOCK.get().asItem());
+        for (RegistryObject<ColoredDecorationBlock> coloredBloomBlock : CommonProxy.COLORED_BLOOM_BLOCKS) {
+            event.getBlockColors().register((state, level, pos, tintIndex) -> coloredBloomBlock.get().color.color, coloredBloomBlock.get());
+            event.getItemColors().register((stack, tintIndex) -> coloredBloomBlock.get().color.color, coloredBloomBlock.get().asItem());
+        }
 
         event.getBlockColors().register((state, level, pos, tintIndex) -> {
             if (level != null && pos != null && level.getBlockEntity(pos) instanceof FirePedestalBlockEntity entity) {

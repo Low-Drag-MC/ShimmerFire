@@ -13,7 +13,9 @@ import com.lowdragmc.shimmerfire.blockentity.multiblocked.HexGateBlockEntity;
 import com.lowdragmc.shimmerfire.entity.FireSpiritEntity;
 import com.lowdragmc.shimmerfire.item.BindingWand;
 import com.lowdragmc.shimmerfire.item.ColoredFlintItem;
+import com.lowdragmc.shimmerfire.item.GeoBlockItem;
 import com.lowdragmc.shimmerfire.item.FireJarItem;
+import net.minecraft.Util;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.entity.EntityType;
@@ -36,6 +38,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Arrays;
+
 
 /**
  * @author KilaBash
@@ -57,7 +61,9 @@ public class CommonProxy {
     public static final RegistryObject<FirePedestalBlock> FIRE_PEDESTAL_BLOCK = BLOCKS.register("fire_pedestal", FirePedestalBlock::new);
     public static final RegistryObject<FireEmitterBlock> FIRE_EMITTER_BLOCK = BLOCKS.register("fire_emitter", FireEmitterBlock::new);
     public static final RegistryObject<FireReceiverBlock> FIRE_RECEIVER_BLOCK = BLOCKS.register("fire_receiver", FireReceiverBlock::new);
-    public static final RegistryObject<ColoredDecorationBlock> COLORED_BLOOM_BLOCK = BLOCKS.register("colored_bloom_block", ColoredDecorationBlock::new);
+    public static final RegistryObject<ColoredDecorationBlock>[] COLORED_BLOOM_BLOCKS = Util.make(() -> Arrays.stream(ColoredDecorationBlock.Color.values())
+            .map(color -> BLOCKS.register("colored_bloom_block_" + color.name, () -> new ColoredDecorationBlock(color)))
+            .toArray(RegistryObject[]::new));
     // block entities
     public static final RegistryObject<BlockEntityType<ColoredCampfireBlockEntity>> COLORED_CAMPFIRE = BLOCK_ENTITIES.register("campfire", () -> BlockEntityType.Builder.of(ColoredCampfireBlockEntity::new, CAMPFIRE_BLOCK.get()).build(null));
     public static final RegistryObject<BlockEntityType<FireCultureTankBlockEntity>> FIRE_CULTURE_TANK = BLOCK_ENTITIES.register("fire_culture_tank", () -> BlockEntityType.Builder.of(FireCultureTankBlockEntity::new, FIRE_CULTURE_TANK_BLOCK.get(), CREATIVE_FIRE_CULTURE_TANK_BLOCK.get()).build(null));
@@ -95,17 +101,19 @@ public class CommonProxy {
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> event) {
         IForgeRegistry<Item> registry = event.getRegistry();
-        registry.register(new ForgeSpawnEggItem(FIRE_SPIRIT, 4996656, 986895, (new Item.Properties()).tab(CreativeModeTab.TAB_MISC)).setRegistryName(ShimmerFireMod.MODID, "fire_spirit_spawn_egg"));
+        registry.register(new ForgeSpawnEggItem(FIRE_SPIRIT, 4996656, 986895, new Item.Properties().tab(CreativeModeTab.TAB_MISC)).setRegistryName(ShimmerFireMod.MODID, "fire_spirit_spawn_egg"));
         for (RawFire fire : RawFire.values()) {
             registry.register(new ColoredFlintItem(fire));
         }
+        registry.register(new GeoBlockItem(FIRE_CULTURE_TANK_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)).setModel("culture_tank"));
+        registry.register(new GeoBlockItem(CREATIVE_FIRE_CULTURE_TANK_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)).setModel("culture_tank"));
         registerSimpleItem(registry, CAMPFIRE_BLOCK.get());
-        registerSimpleItem(registry, FIRE_CULTURE_TANK_BLOCK.get());
-        registerSimpleItem(registry, CREATIVE_FIRE_CULTURE_TANK_BLOCK.get());
         registerSimpleItem(registry, FIRE_PEDESTAL_BLOCK.get());
         registerSimpleItem(registry, FIRE_EMITTER_BLOCK.get());
         registerSimpleItem(registry, FIRE_RECEIVER_BLOCK.get());
-        registerSimpleItem(registry, COLORED_BLOOM_BLOCK.get());
+        for (RegistryObject<ColoredDecorationBlock> block : COLORED_BLOOM_BLOCKS) {
+            registerSimpleItem(registry, block.get());
+        }
     }
 
     @SuppressWarnings("ConstantConditions")

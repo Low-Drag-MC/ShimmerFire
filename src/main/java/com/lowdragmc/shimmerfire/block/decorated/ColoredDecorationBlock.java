@@ -1,25 +1,18 @@
 package com.lowdragmc.shimmerfire.block.decorated;
 
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 /**
@@ -27,44 +20,23 @@ import java.util.List;
  * @date 2022/6/22
  * @implNote DecorationBlock
  */
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ColoredDecorationBlock extends DecorationBlock {
 
-    public static final EnumProperty<Color> COLOR = EnumProperty.create("color", Color.class);
+    public final Color color;
 
-    public ColoredDecorationBlock() {
-        this.registerDefaultState(this.stateDefinition.any().setValue(COLOR, Color.WHITE));
-    }
+    // I want to use the blockstate, but the framedblock only support the defaultstate.
+//    public static final EnumProperty<Color> COLOR = EnumProperty.create("color", Color.class);
 
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(COLOR);
-    }
-
-    @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
-        ItemStack itemStack = new ItemStack(this);
-        itemStack.setDamageValue(state.getValue(COLOR).ordinal());
-        return itemStack;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab pTab, NonNullList<ItemStack> pItems) {
-        for (Color color : Color.values()) {
-            ItemStack itemStack = new ItemStack(this);
-            itemStack.setDamageValue(color.ordinal());
-            pItems.add(itemStack);
-        }
+    public ColoredDecorationBlock(Color color) {
+        this.color = color;
     }
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable BlockGetter pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
         super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
-        pTooltip.add(new TranslatableComponent("shimmerfire.color").append(" %s".formatted(Color.values()[pStack.getDamageValue()].name)));
-    }
-
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return defaultBlockState().setValue(COLOR, Color.values()[pContext.getItemInHand().getDamageValue()]);
+        pTooltip.add(new TranslatableComponent("shimmerfire.color").append(" %s".formatted(color.name)));
     }
 
     public enum Color implements StringRepresentable {
