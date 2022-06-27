@@ -1,0 +1,26 @@
+{
+  "replace": false,
+  "values": [
+    "shimmerfire:fire_jar",
+    "shimmerfire:fire_culture_tank",
+    "shimmerfire:creative_fire_culture_tank",
+    "shimmerfire:fire_pedestal",
+    "shimmerfire:fire_emitter",
+    "shimmerfire:fire_receiver",
+    "shimmerfire:colored_bloom_block_white",
+    "shimmerfire:colored_bloom_block_orange",
+    "shimmerfire:colored_bloom_block_magenta",
+    "shimmerfire:colored_bloom_block_light_blue",
+    "shimmerfire:colored_bloom_block_yellow",
+    "shimmerfire:colored_bloom_block_lime",
+    "shimmerfire:colored_bloom_block_pink",
+    "shimmerfire:colored_bloom_block_gray",
+    "shimmerfire:colored_bloom_block_light_gray",
+    "shimmerfire:colored_bloom_block_cyan",
+    "shimmerfire:colored_bloom_block_purple",
+    "shimmerfire:colored_bloom_block_blue",
+    "shimmerfire:colored_bloom_block_brown",
+    "shimmerfire:colored_bloom_block_green",
+    "shimmerfire:colored_bloom_block_red"
+  ]
+}
