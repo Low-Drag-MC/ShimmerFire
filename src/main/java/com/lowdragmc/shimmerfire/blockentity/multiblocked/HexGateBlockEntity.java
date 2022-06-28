@@ -1,16 +1,14 @@
 package com.lowdragmc.shimmerfire.blockentity.multiblocked;
 
-import com.lowdragmc.lowdraglib.client.particle.impl.TextureBeamParticle;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.utils.Vector3;
-import com.lowdragmc.multiblocked.Multiblocked;
 import com.lowdragmc.multiblocked.api.definition.ControllerDefinition;
 import com.lowdragmc.multiblocked.api.pattern.FactoryBlockPattern;
 import com.lowdragmc.multiblocked.api.pattern.Predicates;
 import com.lowdragmc.multiblocked.api.pattern.util.RelativeDirection;
 import com.lowdragmc.multiblocked.api.registry.MbdComponents;
 import com.lowdragmc.multiblocked.api.tile.ControllerTileEntity;
-import com.lowdragmc.multiblocked.client.renderer.impl.MBDIModelRenderer;
+import com.lowdragmc.multiblocked.client.renderer.impl.MBDBlockStateRenderer;
 import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.WorldData;
@@ -20,22 +18,26 @@ import com.lowdragmc.shimmerfire.client.particle.ColouredBeamParticle;
 import com.lowdragmc.shimmerfire.client.particle.FireSpiritParticle;
 import com.lowdragmc.shimmerfire.client.particle.FireTailParticle;
 import com.lowdragmc.shimmerfire.client.renderer.HexGateRenderer;
+import com.lowdragmc.shimmerfire.gui.HexGateWidget;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -47,18 +49,81 @@ import java.util.List;
  */
 public class HexGateBlockEntity extends ControllerTileEntity {
 
-    private static final int COLD_START_ENERGY = 100000;
+    private static final int COLD_START_ENERGY = 50000;
 
     @OnlyIn(Dist.CLIENT)
     public FireSpiritParticle fireParticle;
 
+    public int preLeft;
+    public int workingStage;
+    @Nonnull
+    public String gateName;
+    @Nullable
+    public BlockPos destination;
+
     public HexGateBlockEntity(ControllerDefinition definition, BlockPos pos, BlockState state) {
         super(definition, pos, state);
+        gateName = "(%s)".formatted(pos.toShortString());
     }
 
-    public int preLeft;
+    protected void writeGateInfo(FriendlyByteBuf buffer) {
+        buffer.writeUtf(gateName);
+        buffer.writeBoolean(destination != null);
+        if (destination != null) {
+            buffer.writeBlockPos(destination);
+        }
+    }
 
-    public int workingStage;
+    protected void readGateInfo(FriendlyByteBuf buffer) {
+        gateName = buffer.readUtf();
+        destination = null;
+        if (buffer.readBoolean()) {
+            destination = buffer.readBlockPos();
+        }
+    }
+
+    @Override
+    public void writeInitialSyncData(FriendlyByteBuf buf) {
+        super.writeInitialSyncData(buf);
+        writeGateInfo(buf);
+    }
+
+    @Override
+    public void receiveInitialSyncData(FriendlyByteBuf buf) {
+        super.receiveInitialSyncData(buf);
+        readGateInfo(buf);
+    }
+
+    @Override
+    public void load(@NotNull CompoundTag compound) {
+        super.load(compound);
+        gateName = compound.contains("gateName") ? compound.getString("gateName") : gateName;
+        destination = null;
+        if (compound.contains("destination")) {
+            destination = NbtUtils.readBlockPos(compound.getCompound("destination"));
+        }
+    }
+
+    @Override
+    public void saveAdditional(@NotNull CompoundTag compound) {
+        super.saveAdditional(compound);
+        compound.putString("gateName", gateName);
+        if (destination != null) {
+            compound.put("destination", NbtUtils.writeBlockPos(destination));
+        }
+    }
+
+    public void setGateInfo(String gateName, BlockPos destination) {
+        if (!isRemote()) {
+            this.gateName = gateName;
+            this.destination = destination;
+            markAsDirty();
+            writeCustomData(21, this::writeGateInfo);
+            if (isFormed()) {
+                WorldData.getOrCreate(level).addGate(this);
+            }
+        }
+    }
 
     @Override
     public void updateFormed() {
@@ -97,6 +162,27 @@ public class HexGateBlockEntity extends ControllerTileEntity {
             }
         } else if (isPostWorking()) {
             workingStage++;
+            if (workingStage == 10 && destination != null && getLevel().getBlockEntity(destination) instanceof HexGateBlockEntity destHexGate) {
+                Direction front = getFrontFacing();
+                BlockPos from = getBlockPos().relative(front, 2);
+                List<Entity> entities = level.getEntities(null, new AABB(
+                        Vec3.atCenterOf(from.above().relative(front.getClockWise())),
+                        Vec3.atCenterOf(from.below().relative(front.getCounterClockWise()).relative(front, 256)))
+                );
+                float rotate = 0;
+                Direction toFront = destHexGate.getFrontFacing();
+                while (toFront != front) {
+                    toFront = toFront.getCounterClockWise();
+                    rotate += Math.PI / 2;
+                }
+                for (Entity entity : entities) {
+                    if (entity.isAlive()) {
+                        Vector3 vec = new Vector3(entity.position()).subtract(new Vector3(getBlockPos()).add(0.5));
+                        vec.rotate(-rotate, Vector3.Y);
+                        entity.moveTo(new Vector3(destHexGate.getBlockPos()).add(0.5).add(vec).vec3());
+                    }
+                }
+            }
             if (workingStage == 59) {
                 workingStage = 0;
                 setStatus("idle");
@@ -128,7 +214,9 @@ public class HexGateBlockEntity extends ControllerTileEntity {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void receiveCustomData(int dataId, FriendlyByteBuf buf) {
-        if (dataId == 20) {
+        if (dataId == 21) {
+            readGateInfo(buf);
+        } else if (dataId == 20) {
             workingStage = buf.readVarInt();
         } else if (dataId == 19) {
             BlockPos to = getBlockPos().relative(getFrontFacing(), 3);
@@ -152,9 +240,10 @@ public class HexGateBlockEntity extends ControllerTileEntity {
                 BlockPos from = getBlockPos().relative(getFrontFacing(), 2);
                 ColouredBeamParticle beamParticle = new ColouredBeamParticle(clientLevel,
                         new Vector3(from).add(0.5),
-                        new Vector3(from.relative(getFrontFacing(), 40)).add(0.5));
+                        new Vector3(from.relative(getFrontFacing(), 256)).add(0.5));
+                beamParticle.setTexture(new ResourceLocation(ShimmerFireMod.MODID, "textures/particle/laser.png"));
                 beamParticle.setLifetime(50);
-                beamParticle.setAlpha(0.6f);
+                beamParticle.setEmit(0.3F);
                 beamParticle.setColor(
                         (RawFire.ARCANE.colorVale >> 16 & 0xff)/256f,
                         (RawFire.ARCANE.colorVale >> 8 & 0xff)/256f,
@@ -220,20 +309,38 @@ public class HexGateBlockEntity extends ControllerTileEntity {
     public void onStructureFormed() {
         super.onStructureFormed();
         recipeLogic = null;
+        WorldData.getOrCreate(level).addGate(this);
+    }
+
+    @Override
+    public void onStructureInvalid() {
+        super.onStructureInvalid();
+        WorldData.getOrCreate(level).removeGate(this);
     }
 
     @Override
     public ModularUI createUI(Player entityPlayer) {
-       return null;
+        if (isFormed()) {
+            return new ModularUI(200, 200, this, entityPlayer).widget(new HexGateWidget(this));
+        } else {
+            return super.createUI(entityPlayer);
+        }
     }
 
-
     @Override
-    public InteractionResult use(Player player, InteractionHand hand, BlockHitResult hit) {
+    public void onNeighborChange() {
+        super.onNeighborChange();
         if (!isRemote() && isFormed() && isIdle() && workingStage >= 0) {
-            workingStage = -1;
+            if (level != null && level.hasNeighborSignal(getBlockPos())) {
+                if (destination != null ) {
+                    if (getLevel().getBlockEntity(destination) instanceof HexGateBlockEntity) {
+                        workingStage = -1;
+                    } else {
+                        setGateInfo(gateName, null);
+                    }
+                }
+            }
         }
-        return super.use(player, hand, hit);
     }
 
     @NotNull
@@ -267,9 +374,9 @@ public class HexGateBlockEntity extends ControllerTileEntity {
                 .where('C', Predicates.blocks(Blocks.POLISHED_BLACKSTONE).disableRenderFormed())
                 .build();
 
-        HEX_GATE_DEFINITION.baseRenderer = new MBDIModelRenderer(new ResourceLocation(Multiblocked.MODID,"block/blueprint_table_controller"));
+        HEX_GATE_DEFINITION.baseRenderer = new MBDBlockStateRenderer(Blocks.RAW_GOLD_BLOCK.defaultBlockState());
         HEX_GATE_DEFINITION.formedRenderer = new HexGateRenderer();
-        HEX_GATE_DEFINITION.properties.isOpaque = false;
+        HEX_GATE_DEFINITION.properties.tabGroup = "shimmerfire.all";
 
         MbdComponents.registerComponent(HEX_GATE_DEFINITION);
     }

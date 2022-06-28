@@ -4,9 +4,13 @@ import com.google.common.collect.Table;
 import com.google.common.collect.Tables;
 import com.lowdragmc.lowdraglib.utils.DummyWorld;
 import com.lowdragmc.shimmerfire.blockentity.FirePedestalBlockEntity;
+import com.lowdragmc.shimmerfire.blockentity.multiblocked.HexGateBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -15,10 +19,7 @@ import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nonnull;
 import java.lang.ref.WeakReference;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author KilaBash
@@ -28,6 +29,7 @@ import java.util.List;
 public class WorldData extends SavedData {
 
     public final Table<ChunkPos, BlockPos, FirePedestalBlockEntity> LOADED_PEDESTAL = Tables.newCustomTable(new HashMap<>(), HashMap::new);
+    public final Map<BlockPos, String> LOADED_HEX_GATE = new HashMap<>();
 
     private static final WorldData DUMMY = new WorldData(){
         @Override
@@ -37,6 +39,16 @@ public class WorldData extends SavedData {
 
         @Override
         public void removePedestal(FirePedestalBlockEntity pedestal) {
+        }
+
+        @Override
+        public void addGate(HexGateBlockEntity hexGateBlockEntity) {
+
+        }
+
+        @Override
+        public void removeGate(HexGateBlockEntity hexGateBlockEntity) {
+
         }
 
         @Override
@@ -66,11 +78,25 @@ public class WorldData extends SavedData {
 
     public WorldData(CompoundTag nbt) {
         this();
+        if (nbt.contains("gates")) {
+            ListTag list = nbt.getList("gates", Tag.TAG_COMPOUND);
+            for (Tag tag : list) {
+                CompoundTag compoundTag = (CompoundTag) tag;
+                LOADED_HEX_GATE.put(NbtUtils.readBlockPos(compoundTag), compoundTag.getString("name"));
+            }
+        }
     }
 
     @Nonnull
     @Override
     public CompoundTag save(@Nonnull CompoundTag compound) {
+        ListTag list = new ListTag();
+        LOADED_HEX_GATE.forEach((pos, name) -> {
+            CompoundTag tag = NbtUtils.writeBlockPos(pos);
+            tag.putString("name", name);
+            list.add(tag);
+        });
+        compound.put("gates", list);
         return compound;
     }
 
@@ -97,5 +123,15 @@ public class WorldData extends SavedData {
                     }
         }));
         return found;
+    }
+
+    public void removeGate(HexGateBlockEntity hexGateBlockEntity) {
+        LOADED_HEX_GATE.remove(hexGateBlockEntity.getBlockPos());
+        setDirty();
+    }
+
+    public void addGate(HexGateBlockEntity hexGateBlockEntity) {
+        LOADED_HEX_GATE.put(hexGateBlockEntity.getBlockPos(), hexGateBlockEntity.gateName);
+        setDirty();
     }
 }

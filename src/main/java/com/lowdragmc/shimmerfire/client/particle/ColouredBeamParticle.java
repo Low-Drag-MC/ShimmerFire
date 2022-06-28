@@ -42,7 +42,7 @@ public class ColouredBeamParticle extends TextureBeamParticle {
         poseStack.pushPose();
         poseStack.translate(x, y, z);
         float offset = - emit * (getAge() + partialTicks);
-        this.renderRawBeam1(poseStack, pBuffer, from, end.copy().subtract(from), cameraPos, getU0(partialTicks) + offset, getU1(partialTicks) + offset, getV0(partialTicks), getV1(partialTicks), getWidth(partialTicks), getLightColor(partialTicks));
+        this.renderRawBeam1(poseStack, pBuffer, from, end.copy().subtract(from), cameraPos, getU0(partialTicks) + offset, getV0(partialTicks), getU1(partialTicks) + offset, getV1(partialTicks), getWidth(partialTicks), getLightColor(partialTicks));
         poseStack.popPose();
     }
 

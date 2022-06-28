@@ -136,7 +136,7 @@ dependencies {
     implementation fg.deobf("blank:slideshow-forge-1.18:0.6.2")
 
     implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:1.18.2-0.6.1")
-    implementation fg.deobf("com.lowdragmc.multiblocked:Multiblocked:1.18.2-0.9.2")
+    implementation fg.deobf("com.lowdragmc.multiblocked:Multiblocked:1.18.2-0.9.3")
     implementation fg.deobf("com.lowdragmc.shimmer:Shimmer-forge-1.18.2:0.1.2")
 
     //geckolib
