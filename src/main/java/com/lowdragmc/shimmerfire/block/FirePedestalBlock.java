@@ -8,7 +8,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -34,11 +33,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class FirePedestalBlock extends BaseEntityBlock {
 
     public static final VoxelShape SHAPE = Shapes.or(
-            Block.box(0, 0, 0, 16, 4, 16),
-            Block.box(2, 12, 2, 14, 13.5, 14),
-            Block.box(2, 14.5, 2, 14, 16, 14),
-            Block.box(3, 4, 3, 13, 12, 13),
-            Block.box(3, 13.5, 3, 13, 14.5, 13),
+            Block.box(0, 0, 0, 16, 3, 16),
+            Block.box(3, 3, 3, 13, 16, 13),
             Block.box(5, 5, 13, 11, 11, 16),
             Block.box(13, 5, 5, 16, 11, 11),
             Block.box(5, 5, 0, 11, 11, 3),
@@ -48,10 +44,6 @@ public class FirePedestalBlock extends BaseEntityBlock {
     public FirePedestalBlock() {
         super(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.PODZOL).strength(3.0F)
                 .sound(SoundType.METAL).noOcclusion());
-    }
-
-    public RenderShape getRenderShape(BlockState pState) {
-        return RenderShape.MODEL;
     }
 
     @Override

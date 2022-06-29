@@ -43,20 +43,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class FireCultureTankBlock extends BaseEntityBlock {
     protected static final VoxelShape SHAPE_LOWER = Shapes.or(
-            Block.box(0, 0, 0, 16, 1, 16),
-            Block.box(1, 1, 1, 15, 6, 15),
-            Block.box(2, 6, 2, 14, 8, 14),
-            Block.box(3, 8, 3, 13, 27, 13),
-            Block.box(2, 27, 2, 14, 29, 14),
-            Block.box(1, 29, 1, 15, 32, 15)
+            Block.box(0, 0, 0, 16, 4, 16),
+            Block.box(2, 4, 2, 14, 28, 14),
+            Block.box(0, 28, 0, 16, 32, 16)
     );
     protected static final VoxelShape SHAPE_UPPER = Shapes.or(
-            Block.box(0, 0 - 16, 0, 16, 1 - 16, 16),
-            Block.box(1, 1 - 16, 1, 15, 6 - 16, 15),
-            Block.box(2, 6 - 16, 2, 14, 8 - 16, 14),
-            Block.box(3, 8 - 16, 3, 13, 27 - 16, 13),
-            Block.box(2, 27 - 16, 2, 14, 29 - 16, 14),
-            Block.box(1, 29 - 16, 1, 15, 32 - 16, 15)
+            Block.box(0, 0 - 16, 0, 16, 4 - 16, 16),
+            Block.box(2, 4 - 16, 2, 14, 28 - 16, 14),
+            Block.box(0, 28 - 16, 0, 16, 32 - 16, 16)
     );
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;

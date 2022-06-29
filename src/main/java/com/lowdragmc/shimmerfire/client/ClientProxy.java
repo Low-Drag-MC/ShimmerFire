@@ -11,6 +11,7 @@ import com.lowdragmc.shimmerfire.blockentity.FirePedestalBlockEntity;
 import com.lowdragmc.shimmerfire.client.particle.SparkParticle;
 import com.lowdragmc.shimmerfire.client.renderer.ColoredCampfireRenderer;
 import com.lowdragmc.shimmerfire.client.renderer.FireCultureTankRenderer;
+import com.lowdragmc.shimmerfire.client.renderer.FirePedestalRenderer;
 import com.lowdragmc.shimmerfire.client.renderer.FireSpiritRenderer;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
@@ -48,6 +49,7 @@ public class ClientProxy extends CommonProxy {
     public void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(COLORED_CAMPFIRE.get(), ColoredCampfireRenderer::new);
         event.registerBlockEntityRenderer(FIRE_CULTURE_TANK.get(), FireCultureTankRenderer::new);
+        event.registerBlockEntityRenderer(FIRE_PEDESTAL.get(), FirePedestalRenderer::new);
         event.registerEntityRenderer(FIRE_SPIRIT.get(), FireSpiritRenderer::new);
     }
 

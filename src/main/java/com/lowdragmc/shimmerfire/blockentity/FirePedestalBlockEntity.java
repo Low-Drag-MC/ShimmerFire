@@ -12,6 +12,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
 
@@ -20,7 +27,7 @@ import javax.annotation.Nonnull;
  * @date 2022/6/23
  * @implNote FirePedestalBlockEntity
  */
-public class FirePedestalBlockEntity extends FireContainer {
+public class FirePedestalBlockEntity extends FireContainer implements IAnimatable {
 
     @OnlyIn(Dist.CLIENT)
     public FireSpiritParticle fireParticle;
@@ -79,6 +86,7 @@ public class FirePedestalBlockEntity extends FireContainer {
                 });
                 fireParticle.setLight(0xf000f0);
                 fireParticle.setLifetime(-1);
+                fireParticle.setCull(false);
                 PostProcessing.BLOOM_UNREAL.postParticle(fireParticle);
             } else if (fireParticle != null && fire == null) {
                 fireParticle.remove();
@@ -93,5 +101,30 @@ public class FirePedestalBlockEntity extends FireContainer {
                         (fire.colorVale & 0xff)/256f);
             }
         }
+    }
+
+    private final AnimationFactory factory = new AnimationFactory(this);
+
+    private PlayState predicate(AnimationEvent<FirePedestalBlockEntity> event) {
+        AnimationController controller = event.getController();
+        if (getFireType() != null) {
+            controller.setAnimation(new AnimationBuilder().addAnimation("working"));
+        } else {
+            controller.setAnimation(new AnimationBuilder().addAnimation("idle"));
+        }
+        return PlayState.CONTINUE;
+
+    }
+
+    @Override
+    public void registerControllers(AnimationData data) {
+        AnimationController<FirePedestalBlockEntity> controller = new AnimationController<>(this, "controller", 0, this::predicate);
+        controller.transitionLengthTicks = 20;
+        data.addAnimationController(controller);
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
     }
 }

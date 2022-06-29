@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.client.model.generators.loaders.MultiLayerModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -62,7 +61,7 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
         createFirePort(CommonProxy.FIRE_RECEIVER_BLOCK.get(), "block/fire_receiver");
 
         createFlintModels();
-        createSimpleBlock(CommonProxy.FIRE_PEDESTAL_BLOCK.get());
+        getVariantBuilder(CommonProxy.FIRE_PEDESTAL_BLOCK.get()).forAllStates(blockState -> ConfiguredModel.builder().modelFile(models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/" + CommonProxy.FIRE_PEDESTAL_BLOCK.get().getRegistryName().getPath()))).build());
         for (RegistryObject<ColoredDecorationBlock> coloredBloomBlock : CommonProxy.COLORED_BLOOM_BLOCKS) {
             createSimpleBlock(coloredBloomBlock.get(), new ResourceLocation(ShimmerFireMod.MODID, "block/colored_bloom_block"));
         }

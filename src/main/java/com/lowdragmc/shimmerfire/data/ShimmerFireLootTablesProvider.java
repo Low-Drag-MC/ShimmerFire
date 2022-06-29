@@ -57,7 +57,7 @@ public class ShimmerFireLootTablesProvider extends LootTableProvider {
         }
 
         protected Iterable<Block> getKnownBlocks() {
-            return CommonProxy.BLOCKS.getEntries().stream().map(RegistryObject::get).toList();
+            return CommonProxy.BLOCKS.getEntries().stream().filter(obj -> obj.get() != CommonProxy.FIRE_BLOCK.get()).map(RegistryObject::get).toList();
         }
 
         protected void addTables() {
@@ -69,8 +69,4 @@ public class ShimmerFireLootTablesProvider extends LootTableProvider {
         }
     }
 
-    @Override
-    public String getName() {
-        return "Shimmer Loot";
-    }
 }
