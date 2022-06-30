@@ -4,6 +4,9 @@ import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.blockentity.FirePedestalBlockEntity;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -16,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -64,5 +68,13 @@ public class FirePedestalBlock extends BaseEntityBlock {
             return createTickerHelper(pBlockEntityType, CommonProxy.FIRE_PEDESTAL.get(), (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.clientTick());
         }
         return null;
+    }
+
+    @Override
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        if (pLevel.getBlockEntity(pPos) instanceof FirePedestalBlockEntity firePedestal) {
+            return firePedestal.use(pPlayer, pHand);
+        }
+        return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
     }
 }

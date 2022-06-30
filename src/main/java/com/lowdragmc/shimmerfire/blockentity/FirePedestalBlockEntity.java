@@ -7,10 +7,20 @@ import com.lowdragmc.shimmerfire.api.RawFire;
 import com.lowdragmc.shimmerfire.client.particle.FireSpiritParticle;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -29,6 +39,13 @@ import javax.annotation.Nonnull;
  */
 public class FirePedestalBlockEntity extends FireContainer implements IAnimatable {
 
+    private final ItemStackHandler handler = new ItemStackHandler(1) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            notifyUpdate();
+        }
+    };
+
     @OnlyIn(Dist.CLIENT)
     public FireSpiritParticle fireParticle;
 
@@ -46,6 +63,24 @@ public class FirePedestalBlockEntity extends FireContainer implements IAnimatabl
     public void setRemoved() {
         super.setRemoved();
         WorldData.getOrCreate(level).removePedestal(this);
+    }
+
+    public ItemStack getItemStack() {
+        return handler.getStackInSlot(0);
+    }
+
+    public void setItemStack(ItemStack itemStack) {
+        if (!level.isClientSide) {
+            handler.setStackInSlot(0, itemStack);
+        }
+    }
+
+    @Override
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.orEmpty(cap, LazyOptional.of(() -> handler));
+        }
+        return super.getCapability(cap, side);
     }
 
     @Override
@@ -69,6 +104,15 @@ public class FirePedestalBlockEntity extends FireContainer implements IAnimatabl
         if (lastFire != rawFire) {
             scheduleChunkForRenderUpdate();
         }
+        if (tag.contains("item")) {
+            handler.deserializeNBT(tag.getCompound("item"));
+        }
+    }
+
+    @Override
+    protected void write(CompoundTag tag, boolean clientPacket) {
+        super.write(tag, clientPacket);
+        tag.put("item", handler.serializeNBT());
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -126,5 +170,27 @@ public class FirePedestalBlockEntity extends FireContainer implements IAnimatabl
     @Override
     public AnimationFactory getFactory() {
         return factory;
+    }
+
+    public InteractionResult use(Player player, InteractionHand hand) {
+        if (player.isCrouching()) return InteractionResult.PASS;
+        ItemStack itemStack = player.getItemInHand(hand);
+        ItemStack stored = getItemStack();
+        if (itemStack.isEmpty() && !stored.isEmpty()){
+            if (!level.isClientSide) {
+                player.addItem(stored);
+                setItemStack(ItemStack.EMPTY);
+            }
+            return InteractionResult.SUCCESS;
+        } else if (!itemStack.isEmpty() && stored.isEmpty()) {
+            if (!level.isClientSide) {
+                ItemStack copy = itemStack.copy();
+                copy.setCount(1);
+                setItemStack(copy);
+            }
+            itemStack.shrink(1);
+            return InteractionResult.SUCCESS;
+        }
+        return InteractionResult.PASS;
     }
 }
