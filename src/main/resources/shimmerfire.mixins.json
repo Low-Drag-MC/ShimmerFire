@@ -9,7 +9,6 @@
   ],
   "mixins": [
     "SoulLanternMixin",
-    "framedblocks.FramedBlockColorMixin",
     "sideshow.ProjectorBlockEntityMixin",
     "sideshow.ProjectorRendererMixin"
   ]

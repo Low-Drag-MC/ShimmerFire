@@ -15,7 +15,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
-import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nonnull;
 import java.lang.ref.WeakReference;
@@ -115,7 +114,7 @@ public class WorldData extends SavedData {
         ChunkPos sMax = new ChunkPos(pos.relative(Direction.SOUTH, radius));
         ChunkPos eMax = new ChunkPos(pos.relative(Direction.EAST, radius));
         ChunkPos wMax = new ChunkPos(pos.relative(Direction.WEST, radius));
-        List<FirePedestalBlockEntity> found = Lists.newArrayList();
+        List<FirePedestalBlockEntity> found = new ArrayList<>();
         ChunkPos.rangeClosed(new ChunkPos(wMax.x, nMax.z), new ChunkPos(eMax.x, sMax.z)).forEach(chunkPos ->
                 LOADED_PEDESTAL.row(chunkPos).forEach((pos1, entity) -> {
                     if (pos.closerThan(pos1, radius)) {
