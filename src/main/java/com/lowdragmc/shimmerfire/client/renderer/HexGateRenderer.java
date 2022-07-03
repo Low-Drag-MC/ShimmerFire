@@ -1,6 +1,5 @@
 package com.lowdragmc.shimmerfire.client.renderer;
 
-import com.lowdragmc.multiblocked.api.tile.ComponentTileEntity;
 import com.lowdragmc.multiblocked.client.renderer.impl.GeoComponentRenderer;
 import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;

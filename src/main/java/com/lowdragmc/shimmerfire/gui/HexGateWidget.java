@@ -88,7 +88,9 @@ public class HexGateWidget extends WidgetGroup {
 
             if (pos.equals(init)) {
                 initSelectable.set(selectable);
-                selectable.onSelected();
+                if (isRemote()) {
+                    selectable.onSelected();
+                }
                 first.set(true);
                 selected = pos;
             }
