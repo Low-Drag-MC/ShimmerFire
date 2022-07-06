@@ -9,6 +9,7 @@ import com.lowdragmc.shimmerfire.blockentity.ColoredCampfireBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.FireCultureTankBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.FirePedestalBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.FirePortBlockEntity;
+import com.lowdragmc.shimmerfire.blockentity.multiblocked.FireBaptismBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.multiblocked.HexGateBlockEntity;
 import com.lowdragmc.shimmerfire.entity.FireSpiritEntity;
 import com.lowdragmc.shimmerfire.item.BindingWand;
@@ -96,6 +97,7 @@ public class CommonProxy {
     @SubscribeEvent
     public void registerBlocks(RegistryEvent.Register<Block> event) {
         HexGateBlockEntity.registerHexGate();
+        FireBaptismBlockEntity.registerFireBaptism();
     }
 
     @SubscribeEvent

@@ -17,6 +17,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -139,6 +140,13 @@ public class FireCultureTankBlockEntity extends FireContainer implements IAnimat
         if (FireJarItem.isJarItem(itemStack)) {
             RawFire fire = FireJarItem.getFireType(itemStack);
             if (getFireType() == null) {
+                if (!pPlayer.isCreative()) {
+                    itemStack = itemStack.split(1);
+                    FireJarItem.setFireType(itemStack, null);
+                    if (!pPlayer.addItem(itemStack)) {
+                        level.addFreshEntity(new ItemEntity(level, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), itemStack));
+                    }
+                }
                 if (fire != null && !level.isClientSide) {
                     setFireType(fire);
                     insert(fire, 1, false);

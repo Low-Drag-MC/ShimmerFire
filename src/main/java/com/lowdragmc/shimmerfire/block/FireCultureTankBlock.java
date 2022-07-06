@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -32,7 +33,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author KilaBash
@@ -143,5 +145,13 @@ public class FireCultureTankBlock extends BaseEntityBlock {
             return createTickerHelper(pBlockEntityType, CommonProxy.FIRE_CULTURE_TANK.get(), (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.chargingTick());
         }
         return null;
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState pState, LootContext.Builder pBuilder) {
+        if (pState.getValue(HALF) == DoubleBlockHalf.UPPER) {
+            return Collections.emptyList();
+        }
+        return super.getDrops(pState, pBuilder);
     }
 }

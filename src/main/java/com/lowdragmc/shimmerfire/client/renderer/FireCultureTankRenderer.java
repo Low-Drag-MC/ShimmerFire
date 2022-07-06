@@ -10,6 +10,7 @@ import com.lowdragmc.shimmerfire.block.ColoredFireBlock;
 import com.lowdragmc.shimmerfire.blockentity.FireCultureTankBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -32,7 +33,6 @@ import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
 public class FireCultureTankRenderer extends GeoBlockRenderer<FireCultureTankBlockEntity> {
-   private final BlockEntityRendererProvider.Context context;
 
    private final static Map<RawFire, List<BakedQuad>> FIRE_QUAD_CACHE = new EnumMap<>(RawFire.class);
 
@@ -50,7 +50,6 @@ public class FireCultureTankRenderer extends GeoBlockRenderer<FireCultureTankBlo
             return new ResourceLocation(ShimmerFireMod.MODID, "textures/blocks/culture_tank.png");
          }
       });
-      context = pContext;
    }
 
    @Override
@@ -94,11 +93,11 @@ public class FireCultureTankRenderer extends GeoBlockRenderer<FireCultureTankBlo
       }
    }
 
-   private List<BakedQuad> getQuads(RawFire fire) {
+   public static List<BakedQuad> getQuads(RawFire fire) {
       return FIRE_QUAD_CACHE.computeIfAbsent(fire, c -> {
          net.minecraftforge.client.ForgeHooksClient.setRenderType(RenderType.cutout());
          BlockState blockState = CommonProxy.CAMPFIRE_BLOCK.get().defaultBlockState().setValue(ColoredFireBlock.FIRE, c);
-         BakedModel model = context.getBlockRenderDispatcher().getBlockModel(blockState);
+         BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState);
          List<BakedQuad> quads = model.getQuads(blockState, null, new Random(), EmptyModelData.INSTANCE);
          net.minecraftforge.client.ForgeHooksClient.setRenderType(null);
          return quads.stream().filter(quad -> ((IBakedQuad)quad).isBloom()).toList();

@@ -131,7 +131,7 @@ public class HexGateBlockEntity extends ControllerTileEntity {
             if (getTimer() % 10 == 0) {
                 int lastLeft = preLeft;
                 List<BlockPos> emitters = new ArrayList<>();
-                for (FirePedestalBlockEntity pedestal : WorldData.getOrCreate(level).getAroundPedestals(getBlockPos(), 32)) {
+                for (FirePedestalBlockEntity pedestal : WorldData.getOrCreate(level).getAroundPedestals(getBlockPos(), 16)) {
                     int extracted = pedestal.extractInner(RawFire.ARCANE, Math.min(500, preLeft), false);
                     if (extracted > 0) {
                         preLeft -= extracted;
@@ -202,6 +202,7 @@ public class HexGateBlockEntity extends ControllerTileEntity {
     }
 
     public void emitClient(Collection<BlockPos> poses) {
+        if (poses.size() == 0) return;
         writeCustomData(19, buffer -> {
             buffer.writeVarInt(poses.size());
             for (BlockPos pos : poses) {

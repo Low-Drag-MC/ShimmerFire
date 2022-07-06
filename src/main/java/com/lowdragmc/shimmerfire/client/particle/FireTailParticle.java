@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +39,7 @@ public class FireTailParticle extends TrailParticle {
     private final List<Vector3> points;
     private final RawFire color;
     private final FireSpiritParticle headParticle;
+    private Entity entity;
 
     public FireTailParticle(ClientLevel level, BlockPos from, Direction fromFace, BlockPos to, Direction toFace, int dur, RawFire color) {
         this(level, new Vector3(from).add(0.5), new Vector3(to).add(0.5).add(toFace.getStepX() * -0.4, toFace.getStepY() * -0.4, toFace.getStepZ() * -0.4), fromFace, toFace, dur, color);
@@ -61,11 +63,20 @@ public class FireTailParticle extends TrailParticle {
         headParticle.setColor((color.colorVale >> 16 & 0xff)/256f,(color.colorVale >> 8 & 0xff)/256f,(color.colorVale & 0xff)/256f);
     }
 
+    public FireTailParticle setEntity(Entity entity) {
+        this.entity = entity;
+        return this;
+    }
+
     @Override
     protected void update() {
         headParticle.tick();
         if (getAge() > 0 && getAge() < points.size()) {
             Vector3 point = points.get(age);
+            setPos(point.x, point.y, point.z);
+            headParticle.setPos(point.x, point.y, point.z);
+        } else if (entity != null) {
+            Vector3 point = new Vector3(entity.position()).add(0, entity.getBbHeight() / 2, 0);
             setPos(point.x, point.y, point.z);
             headParticle.setPos(point.x, point.y, point.z);
         }
