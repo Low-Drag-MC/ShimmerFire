@@ -16,14 +16,14 @@
   "block.shimmerfire.fire_pedestal": "Fire Pedestal",
   "block.shimmerfire.fire_emitter": "Fire Emitter",
   "block.shimmerfire.fire_receiver": "Fire Receiver",
-  "block.shimmerfire.binding_wand": "Binding Tool",
   "block.shimmerfire.fire_jar": "Fire Jar",
   "block.shimmerfire.fire_culture_tank": "Fire Culture Tank",
   "block.shimmerfire.creative_fire_culture_tank": "Creative Fire Culture Tank",
   "block.shimmerfire.hex_gate_controller": "HexGate Controller",
   "block.shimmerfire.fire_baptism": "Fire baptism",
+  "item.shimmerfire.binding_wand": "Binding Tool",
   "item.shimmerfire.flint_fire_destroy": "Fire Flint (§6Destroy§r)",
-  "item.shimmerfire.flint_fire_roty": "Fire Flint (§5Rot§r)",
+  "item.shimmerfire.flint_fire_rot": "Fire Flint (§5Rot§r)",
   "item.shimmerfire.flint_fire_life": "Fire Flint (§2Life§r)",
   "item.shimmerfire.flint_fire_arcane": "Fire Flint (§bArcane§r)"
 }

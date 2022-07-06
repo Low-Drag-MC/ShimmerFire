@@ -121,7 +121,7 @@ public class FireBaptismBlockEntity extends ControllerTileEntity {
             List<BlockPos> poses = new ArrayList<>();
             BlockPos.betweenClosedStream(range).forEach(pos->{
                 BlockState blockState = level.getBlockState(pos);
-                if (blockState.getBlock() instanceof CropBlock crop && serverLevel.random.nextFloat() < 0.3f) {
+                if (blockState.getBlock() instanceof CropBlock crop && !crop.isMaxAge(blockState) && serverLevel.random.nextFloat() < 0.3f) {
                     for (int i = 0; i < 10; i++) {
                         crop.randomTick(blockState, serverLevel, pos, serverLevel.random);
                     }
@@ -236,11 +236,10 @@ public class FireBaptismBlockEntity extends ControllerTileEntity {
     @NotNull
     @Override
     public AABB getRenderBoundingBox() {
-        BlockPos pos = getBlockPos();
-        Direction dir = getFrontFacing().getClockWise();
         return new AABB(
-                pos.relative(dir, 5).relative(Direction.UP, 5),
-                pos.relative(dir.getOpposite(), 5).relative(Direction.DOWN, 5).relative(getFrontFacing(), isIdle() ? 2 : 20));
+                getBlockPos().relative(Direction.NORTH, 8).relative(Direction.EAST, 8),
+                getBlockPos().relative(Direction.SOUTH, 8).relative(Direction.WEST, 8).below(8)
+        );
     }
 
     public final static ControllerDefinition FIRE_BAPTISM_DEFINITION = new ControllerDefinition(new ResourceLocation(ShimmerFireMod.MODID, "fire_baptism"), FireBaptismBlockEntity::new);

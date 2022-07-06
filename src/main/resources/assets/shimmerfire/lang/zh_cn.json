@@ -16,14 +16,14 @@
   "block.shimmerfire.fire_pedestal": "火焰基座",
   "block.shimmerfire.fire_emitter": "火焰发射器",
   "block.shimmerfire.fire_receiver": "火焰接收器",
-  "block.shimmerfire.binding_wand": "绑定工具",
   "block.shimmerfire.fire_jar": "火焰瓶",
   "block.shimmerfire.fire_culture_tank": "火焰培养罐",
   "block.shimmerfire.creative_fire_culture_tank": "创造火焰培养罐",
   "block.shimmerfire.hex_gate_controller": "海克斯飞门控制器",
   "block.shimmerfire.fire_baptism": "火焰洗礼器",
+  "item.shimmerfire.binding_wand": "绑定工具",
   "item.shimmerfire.flint_fire_destroy": "打火石 (§6毁灭§r)",
-  "item.shimmerfire.flint_fire_roty": "打火石 (§5腐败§r)",
+  "item.shimmerfire.flint_fire_rot": "打火石 (§5腐败§r)",
   "item.shimmerfire.flint_fire_life": "打火石 (§2生命§r)",
   "item.shimmerfire.flint_fire_arcane": "打火石 (§b神秘§r)"
 }
