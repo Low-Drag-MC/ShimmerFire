@@ -49,6 +49,6 @@ description='''ShimemrFire, a Teacon22 demo mod.'''
     modId="shimmer"
     mandatory=true
     # This version range declares a minimum of the current minecraft version up to but not including the next major version
-    versionRange="[0.1.2,)"
+    versionRange="[0.1.6,)"
     ordering="NONE"
     side="CLIENT"

@@ -1,11 +1,9 @@
 package com.lowdragmc.shimmerfire.core.mixins.sideshow;
 
-import com.lowdragmc.shimmer.ShimmerMod;
 import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
 import com.lowdragmc.shimmer.client.shader.RenderUtils;
-import com.lowdragmc.shimmerfire.core.IBloomProjector;
+import com.lowdragmc.shimmerfire.core.IShimmerEffectProjector;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,11 +43,11 @@ public abstract class ProjectorRendererMixin {
                               boolean flipped,
                               float width,
                               float height) {
-        if (((IBloomProjector)(Object)tile).isBloom()) {
+        String effect = ((IShimmerEffectProjector)(Object)tile).getEffect();
+        PostProcessing postProcessing = effect == null ? null : PostProcessing.getPost(effect);
+        if (postProcessing != null) {
             PoseStack.Pose last = RenderUtils.copyPoseStack(pStack).last();
-            PostProcessing.BLOOM_UNREAL.postEntity(bufferSource -> {
-                slide.render(bufferSource, last.pose(), last.normal(), width, height, color, 15728880, OverlayTexture.NO_OVERLAY, flipped || tile.mDoubleSided, !flipped || tile.mDoubleSided);
-            });
+            postProcessing.postEntity(bufferSource -> slide.render(bufferSource, last.pose(), last.normal(), width, height, color, 15728880, OverlayTexture.NO_OVERLAY, flipped || tile.mDoubleSided, !flipped || tile.mDoubleSided));
             pStack.popPose();
             ci.cancel();
         }

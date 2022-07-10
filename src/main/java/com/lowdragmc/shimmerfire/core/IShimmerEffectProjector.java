@@ -5,7 +5,7 @@ package com.lowdragmc.shimmerfire.core;
  * @date 2022/6/23
  * @implNote IBloomProjector
  */
-public interface IBloomProjector {
-    boolean isBloom();
-    void setBloom(boolean bloom);
+public interface IShimmerEffectProjector {
+    String getEffect();
+    void setEffect(String effect);
 }
