@@ -354,7 +354,7 @@ public class HexGateBlockEntity extends ControllerTileEntity {
                 pos.relative(dir.getOpposite(), 5).relative(Direction.DOWN, 5).relative(getFrontFacing(), isIdle() ? 2 : 20));
     }
 
-    public final static ControllerDefinition HEX_GATE_DEFINITION = new ControllerDefinition(new ResourceLocation(ShimmerFireMod.MODID, "hex_gate_controller"), HexGateBlockEntity::new);
+    public final static ControllerDefinition HEX_GATE_DEFINITION = new ControllerDefinition(new ResourceLocation(ShimmerFireMod.MODID, "hex_gate_controller"), HexGateBlockEntity.class);
 
     public static void registerHexGate() {
 
