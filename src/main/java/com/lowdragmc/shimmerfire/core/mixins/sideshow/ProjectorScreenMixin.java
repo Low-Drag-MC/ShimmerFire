@@ -33,7 +33,7 @@ public abstract class ProjectorScreenMixin extends AbstractContainerScreen {
 
     String effect;
 
-    @Shadow @Final private ProjectorBlockEntity mEntity;
+    @Shadow(remap = false) @Final private ProjectorBlockEntity mEntity;
 
     public ProjectorScreenMixin(AbstractContainerMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);

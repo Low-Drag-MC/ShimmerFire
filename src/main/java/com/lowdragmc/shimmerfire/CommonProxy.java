@@ -5,17 +5,11 @@ import com.lowdragmc.shimmerfire.api.Capabilities;
 import com.lowdragmc.shimmerfire.api.RawFire;
 import com.lowdragmc.shimmerfire.block.*;
 import com.lowdragmc.shimmerfire.block.decorated.ColoredDecorationBlock;
-import com.lowdragmc.shimmerfire.blockentity.ColoredCampfireBlockEntity;
-import com.lowdragmc.shimmerfire.blockentity.FireCultureTankBlockEntity;
-import com.lowdragmc.shimmerfire.blockentity.FirePedestalBlockEntity;
-import com.lowdragmc.shimmerfire.blockentity.FirePortBlockEntity;
+import com.lowdragmc.shimmerfire.blockentity.*;
 import com.lowdragmc.shimmerfire.blockentity.multiblocked.FireBaptismBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.multiblocked.HexGateBlockEntity;
 import com.lowdragmc.shimmerfire.entity.FireSpiritEntity;
-import com.lowdragmc.shimmerfire.item.BindingWand;
-import com.lowdragmc.shimmerfire.item.ColoredFlintItem;
-import com.lowdragmc.shimmerfire.item.GeoBlockItem;
-import com.lowdragmc.shimmerfire.item.FireJarItem;
+import com.lowdragmc.shimmerfire.item.*;
 import net.minecraft.Util;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -65,11 +59,17 @@ public class CommonProxy {
     public static final RegistryObject<ColoredDecorationBlock>[] COLORED_BLOOM_BLOCKS = Util.make(() -> Arrays.stream(ColoredDecorationBlock.Color.values())
             .map(color -> BLOCKS.register("colored_bloom_block_" + color.name, () -> new ColoredDecorationBlock(color)))
             .toArray(RegistryObject[]::new));
+    public static final RegistryObject<ColorfulFireBlock> COLORFUL_FIRE_BLOCK = BLOCKS.register("colorful_fire",ColorfulFireBlock::new);
+    public static final RegistryObject<ColorfulCampfireBlock> COLORFUL_CAMPFIRE_BLOCK = BLOCKS.register("colorful_campfire",ColorfulCampfireBlock::new);
+    public static final RegistryObject<MimicDissolveBlock> MIMIC_DISSOLVE_BLOCK = BLOCKS.register("mimic_dissolve",MimicDissolveBlock::new);
     // block entities
     public static final RegistryObject<BlockEntityType<ColoredCampfireBlockEntity>> COLORED_CAMPFIRE = BLOCK_ENTITIES.register("campfire", () -> BlockEntityType.Builder.of(ColoredCampfireBlockEntity::new, CAMPFIRE_BLOCK.get()).build(null));
     public static final RegistryObject<BlockEntityType<FireCultureTankBlockEntity>> FIRE_CULTURE_TANK = BLOCK_ENTITIES.register("fire_culture_tank", () -> BlockEntityType.Builder.of(FireCultureTankBlockEntity::new, FIRE_CULTURE_TANK_BLOCK.get(), CREATIVE_FIRE_CULTURE_TANK_BLOCK.get()).build(null));
     public static final RegistryObject<BlockEntityType<FirePedestalBlockEntity>> FIRE_PEDESTAL = BLOCK_ENTITIES.register("fire_pedestal", () -> BlockEntityType.Builder.of(FirePedestalBlockEntity::new, FIRE_PEDESTAL_BLOCK.get()).build(null));
     public static final RegistryObject<BlockEntityType<FirePortBlockEntity>> FIRE_PORT = BLOCK_ENTITIES.register("fire_port", () -> BlockEntityType.Builder.of(FirePortBlockEntity::new, FIRE_EMITTER_BLOCK.get(), FIRE_RECEIVER_BLOCK.get()).build(null));
+    public static final RegistryObject<BlockEntityType<ColorfulFireBlockEntity>> COLORFUL_FIRE = BLOCK_ENTITIES.register("colorful_fire",() -> BlockEntityType.Builder.of(ColorfulFireBlockEntity::new,COLORFUL_FIRE_BLOCK.get()).build(null));
+    public static final RegistryObject<BlockEntityType<ColorfulCampfireBlockEntity>> COLORFUL_CAMPFIRE = BLOCK_ENTITIES.register("colorful_campfire_fire",() -> BlockEntityType.Builder.of(ColorfulCampfireBlockEntity::new,COLORFUL_CAMPFIRE_BLOCK.get()).build(null));
+    public static final RegistryObject<BlockEntityType<MimicDissolveBlockEntity>> MIMIC_DISSOLVE = BLOCK_ENTITIES.register("mimic_dissolve",()->BlockEntityType.Builder.of(MimicDissolveBlockEntity::new,MIMIC_DISSOLVE_BLOCK.get()).build(null));
     // entities
     public static final RegistryObject<EntityType<FireSpiritEntity>> FIRE_SPIRIT = ENTITIES.register("fire_spirit", () -> EntityType.Builder.of(FireSpiritEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.9F).build("fire_spirit"));
     // particles
@@ -116,6 +116,9 @@ public class CommonProxy {
         for (RegistryObject<ColoredDecorationBlock> block : COLORED_BLOOM_BLOCKS) {
             registerSimpleItem(registry, block.get());
         }
+        registerSimpleItem(registry,MIMIC_DISSOLVE_BLOCK.get());
+        registry.register(new ColorfulFlintItem());
+        registerSimpleItem(registry,COLORFUL_CAMPFIRE_BLOCK.get());
     }
 
     @SuppressWarnings("ConstantConditions")

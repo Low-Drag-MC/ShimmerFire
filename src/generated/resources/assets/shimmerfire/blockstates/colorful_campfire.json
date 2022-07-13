@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,lit=false": {
+      "model": "shimmerfire:block/campfire/off",
+      "y": 180
+    },
+    "facing=south,lit=false": {
+      "model": "shimmerfire:block/campfire/off"
+    },
+    "facing=west,lit=false": {
+      "model": "shimmerfire:block/campfire/off",
+      "y": 90
+    },
+    "facing=east,lit=false": {
+      "model": "shimmerfire:block/campfire/off",
+      "y": 270
+    },
+    "facing=north,lit=true": {
+      "model": "shimmerfire:block/campfire/colorful",
+      "y": 180
+    },
+    "facing=south,lit=true": {
+      "model": "shimmerfire:block/campfire/colorful"
+    },
+    "facing=west,lit=true": {
+      "model": "shimmerfire:block/campfire/colorful",
+      "y": 90
+    },
+    "facing=east,lit=true": {
+      "model": "shimmerfire:block/campfire/colorful",
+      "y": 270
+    }
+  }
+}

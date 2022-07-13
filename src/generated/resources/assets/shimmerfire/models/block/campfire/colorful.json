@@ -1,0 +1,6 @@
+{
+  "parent": "shimmerfire:block/colorful_campfire_fire_lit",
+  "textures": {
+    "fire": "shimmerfire:blocks/colorful_fire/campfire_fire"
+  }
+}

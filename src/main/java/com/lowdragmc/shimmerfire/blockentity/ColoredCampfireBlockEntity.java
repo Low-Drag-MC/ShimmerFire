@@ -19,6 +19,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
@@ -31,9 +32,13 @@ import java.util.Random;
  * @implNote ColoredCampfireBlockEntity copy from {@link net.minecraft.world.level.block.entity.CampfireBlockEntity}
  */
 public class ColoredCampfireBlockEntity extends BlockEntity implements Clearable {
-    private final NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
-    private final int[] cookingProgress = new int[4];
-    private final int[] cookingTime = new int[4];
+    protected final NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
+    protected final int[] cookingProgress = new int[4];
+    protected final int[] cookingTime = new int[4];
+
+    public <T extends ColoredCampfireBlockEntity> ColoredCampfireBlockEntity(BlockEntityType<T> type,BlockPos pWorldPosition, BlockState pBlockState) {
+        super(type, pWorldPosition, pBlockState);
+    }
 
     public ColoredCampfireBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
         super(CommonProxy.COLORED_CAMPFIRE.get(), pWorldPosition, pBlockState);
@@ -149,6 +154,7 @@ public class ColoredCampfireBlockEntity extends BlockEntity implements Clearable
      * Get an NBT compound to sync to the client with SPacketChunkData, used for initial loading of the chunk or when
      * many blocks change at once. This compound comes back to you clientside in
      */
+    @Override
     @Nonnull
     public CompoundTag getUpdateTag() {
         CompoundTag compoundtag = new CompoundTag();
@@ -175,7 +181,7 @@ public class ColoredCampfireBlockEntity extends BlockEntity implements Clearable
         return false;
     }
 
-    private void markUpdated() {
+    protected void markUpdated() {
         this.setChanged();
         this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
     }
@@ -188,6 +194,5 @@ public class ColoredCampfireBlockEntity extends BlockEntity implements Clearable
         if (this.level != null) {
             this.markUpdated();
         }
-
     }
 }

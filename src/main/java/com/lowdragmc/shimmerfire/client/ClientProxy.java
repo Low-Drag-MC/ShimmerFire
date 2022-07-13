@@ -6,14 +6,15 @@ import com.lowdragmc.shimmer.client.shader.ShaderInjection;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.api.RawFire;
+import com.lowdragmc.shimmerfire.block.ColorfulCampfireBlock;
+import com.lowdragmc.shimmerfire.block.ColorfulFireBlock;
 import com.lowdragmc.shimmerfire.block.FireJarBlock;
 import com.lowdragmc.shimmerfire.block.decorated.ColoredDecorationBlock;
+import com.lowdragmc.shimmerfire.blockentity.ColorfulCampfireBlockEntity;
+import com.lowdragmc.shimmerfire.blockentity.ColorfulFireBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.FirePedestalBlockEntity;
 import com.lowdragmc.shimmerfire.client.particle.SparkParticle;
-import com.lowdragmc.shimmerfire.client.renderer.ColoredCampfireRenderer;
-import com.lowdragmc.shimmerfire.client.renderer.FireCultureTankRenderer;
-import com.lowdragmc.shimmerfire.client.renderer.FirePedestalRenderer;
-import com.lowdragmc.shimmerfire.client.renderer.FireSpiritRenderer;
+import com.lowdragmc.shimmerfire.client.renderer.*;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -24,6 +25,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
@@ -62,8 +64,10 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(COLORED_CAMPFIRE.get(), ColoredCampfireRenderer::new);
+        event.registerBlockEntityRenderer(COLORFUL_CAMPFIRE.get(), ColoredCampfireRenderer::new);
         event.registerBlockEntityRenderer(FIRE_CULTURE_TANK.get(), FireCultureTankRenderer::new);
         event.registerBlockEntityRenderer(FIRE_PEDESTAL.get(), FirePedestalRenderer::new);
+        event.registerBlockEntityRenderer(MIMIC_DISSOLVE.get(), MimicDissolveRender::new);
         event.registerEntityRenderer(FIRE_SPIRIT.get(), FireSpiritRenderer::new);
     }
 
@@ -71,7 +75,14 @@ public class ClientProxy extends CommonProxy {
     public void shaderRegistry(RegisterShadersEvent event) {
         ResourceManager resourceManager = event.getResourceManager();
         try {
-            event.registerShader(new ShaderInstance(resourceManager, new ResourceLocation(ShimmerFireMod.MODID, "rendertype_cutout_no_cull"), DefaultVertexFormat.NEW_ENTITY), shaderInstance -> RenderTypes.EmissiveCutoutNoCullRenderType.emissiveCutoutNoCullShader = shaderInstance);
+            event.registerShader(new ShaderInstance(resourceManager,
+                    new ResourceLocation(ShimmerFireMod.MODID, "rendertype_cutout_no_cull"),
+                    DefaultVertexFormat.NEW_ENTITY),
+                    shaderInstance -> RenderTypes.EmissiveCutoutNoCullRenderType.emissiveCutoutNoCullShader = shaderInstance);
+            event.registerShader(new ShaderInstance(resourceManager,
+                    new ResourceLocation(ShimmerFireMod.MODID,"rendertype_mimic_dissolve_solid"),
+                    RenderTypes.MimicDissolveRenderType.DissolveVertexFormat),
+                    shaderInstance -> RenderTypes.MimicDissolveRenderType.SOLID_MIMIC_DISSOLVE_SHADER = shaderInstance);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -81,7 +92,9 @@ public class ClientProxy extends CommonProxy {
     public void clientSetup(FMLClientSetupEvent e) {
         e.enqueueWork(()->{
             ItemBlockRenderTypes.setRenderLayer(FIRE_BLOCK.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(COLORFUL_FIRE_BLOCK.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(CAMPFIRE_BLOCK.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(COLORFUL_CAMPFIRE_BLOCK.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(FIRE_PEDESTAL_BLOCK.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(FIRE_CULTURE_TANK_BLOCK.get(), renderType -> renderType == RenderType.translucent() || renderType == RenderType.solid());
             ItemBlockRenderTypes.setRenderLayer(CREATIVE_FIRE_CULTURE_TANK_BLOCK.get(), renderType -> renderType == RenderType.translucent() || renderType == RenderType.solid());
@@ -90,10 +103,20 @@ public class ClientProxy extends CommonProxy {
                 RawFire fire = state.getValue(FIRE);
                 return new ColorPointLight.Template(fire.radius, fire.colorVale);
             });
+            LightManager.INSTANCE.registerBlockLight(COLORFUL_FIRE_BLOCK.get(),(state,pos)->
+                    ColorfulFireBlock.getColorPointLight(Minecraft.getInstance().level, pos)
+            );
             LightManager.INSTANCE.registerBlockLight(CAMPFIRE_BLOCK.get(), (state, pos) -> {
                 if (state.getValue(CampfireBlock.LIT)) {
                     RawFire fire = state.getValue(FIRE);
                     return new ColorPointLight.Template(fire.radius, fire.colorVale);
+                }
+                return null;
+            });
+
+            LightManager.INSTANCE.registerBlockLight(COLORFUL_CAMPFIRE_BLOCK.get(),(state,pos)->{
+                if (state.getValue(CampfireBlock.LIT)){
+                    return ColorfulCampfireBlock.getColorPointLight(Minecraft.getInstance().level, pos);
                 }
                 return null;
             });
@@ -127,5 +150,26 @@ public class ClientProxy extends CommonProxy {
         }, CommonProxy.FIRE_PEDESTAL_BLOCK.get());
 
     }
+
+    @SubscribeEvent
+    public void registerColorHandle(ColorHandlerEvent.Block event) {
+        event.getBlockColors().register((pState, pLevel, pPos, pTintIndex) -> {
+            BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+            if (blockEntity!=null){
+                return ((ColorfulFireBlockEntity)blockEntity).getColor();
+            }else {
+                return RawFire.DESTROY.colorVale;
+            }
+        }, CommonProxy.COLORFUL_FIRE_BLOCK.get());
+        event.getBlockColors().register((pState, pLevel, pPos, pTintIndex) -> {
+            BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+            if (blockEntity!=null){
+                return ((ColorfulCampfireBlockEntity)blockEntity).getColor();
+            }else {
+                return RawFire.DESTROY.colorVale;
+            }
+        }, CommonProxy.COLORFUL_CAMPFIRE_BLOCK.get());
+    }
+
 
 }
