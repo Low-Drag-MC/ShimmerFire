@@ -2,6 +2,7 @@ package com.lowdragmc.shimmerfire.client;
 
 import com.lowdragmc.shimmer.client.light.ColorPointLight;
 import com.lowdragmc.shimmer.client.light.LightManager;
+import com.lowdragmc.shimmer.client.shader.ShaderInjection;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.api.RawFire;
@@ -39,6 +40,19 @@ import static com.lowdragmc.shimmerfire.block.ColoredFireBlock.FIRE;
  * @implNote com.lowdragmc.shimmer.client.ClientProxy
  */
 public class ClientProxy extends CommonProxy {
+
+    public ClientProxy() {
+        super();
+        ShaderInjection.registerFSHInjection("ldlib:particle", s -> {
+            s = s.replace("fragColor = linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);", """
+                        if (color.a < 0.1) {
+                                discard;
+                            }
+                            fragColor = linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);
+                    """);
+            return s;
+        });
+    }
 
     @SubscribeEvent
     public void onParticleFactoryRegister(ParticleFactoryRegisterEvent event) {

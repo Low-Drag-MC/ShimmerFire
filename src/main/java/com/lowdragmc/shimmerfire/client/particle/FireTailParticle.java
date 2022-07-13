@@ -16,6 +16,7 @@ import net.minecraft.Util;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -92,6 +93,7 @@ public class FireTailParticle extends TrailParticle {
         var builder = tesselator.getBuilder();
 
         headParticle.getRenderType().begin(builder, null);
+        RenderSystem.depthMask(false);
         headParticle.render(builder, camera, partialTicks);
         headParticle.getRenderType().end(tesselator);
         RenderSystem.setShaderTexture(0, texture);
@@ -118,7 +120,7 @@ public class FireTailParticle extends TrailParticle {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
             RenderSystem.depthMask(true);
-            RenderSystem.setShader(Shaders::getParticleShader);
+            RenderSystem.setShader(GameRenderer::getParticleShader);
             RenderSystem.setShaderTexture(0, target.getColorTextureId());
             RenderSystem.enableCull();
         }

@@ -13,6 +13,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -109,8 +110,8 @@ public class FireSpiritParticle extends TextureParticle {
         TextureManager textureManager) {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
-            RenderSystem.depthMask(false);
-            RenderSystem.setShader(Shaders::getParticleShader);
+            RenderSystem.depthMask(true);
+            RenderSystem.setShader(GameRenderer::getParticleShader);
             RenderSystem.setShaderTexture(0, TEXTURE);
             RenderSystem.enableCull();
             bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
