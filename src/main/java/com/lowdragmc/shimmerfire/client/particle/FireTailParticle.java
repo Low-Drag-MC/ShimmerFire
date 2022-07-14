@@ -112,6 +112,7 @@ public class FireTailParticle extends TrailParticle {
     protected static final Function<RawFire, ParticleRenderType> TYPE = Util.memoize(color -> new ParticleRenderType(){
         @Override
         public void begin(@NotNull BufferBuilder bufferBuilder, @NotNull TextureManager textureManager) {
+            ShaderManager.getTempTarget().clear(false);
             RenderTarget target = ShaderManager.getInstance().renderFullImageInFramebuffer(ShaderManager.getTempTarget(), Shaders.load(Shader.ShaderType.FRAGMENT, new ResourceLocation(ShimmerFireMod.MODID, "fire_trail")), uniformCache -> {
                 uniformCache.glUniform4F("color1", (color.colorVale >> 16 & 0xff)/256f,(color.colorVale >> 8 & 0xff)/256f,(color.colorVale & 0xff)/256f, 1);
                 uniformCache.glUniform4F("color2", 1,1,1, 1);

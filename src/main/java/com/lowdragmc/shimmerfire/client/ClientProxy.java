@@ -45,10 +45,7 @@ public class ClientProxy extends CommonProxy {
         super();
         ShaderInjection.registerFSHInjection("ldlib:particle", s -> {
             s = s.replace("fragColor = linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);", """
-                        if (color.a < 0.1) {
-                                discard;
-                            }
-                            fragColor = linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);
+                        fragColor = linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);
                     """);
             return s;
         });
