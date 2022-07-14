@@ -85,6 +85,7 @@ public class RenderTypes {
                         .setLightmapState(LIGHTMAP)
                         .setShaderState(RENDERTYPE_MIMIC_DISSOLVE_SHADER)
                         .setTextureState(TEXTURE)
+                        .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                         .createCompositeState(true));
 
         public MimicDissolveRenderType(String pName, VertexFormat pFormat, VertexFormat.Mode pMode, int pBufferSize, boolean pAffectsCrumbling, boolean pSortOnUpload, Runnable pSetupState, Runnable pClearState) {
