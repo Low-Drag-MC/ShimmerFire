@@ -16,7 +16,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -93,7 +92,7 @@ public class MimicDissolveBlock extends BaseEntityBlock {
 
     @Override
     public @NotNull InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (pPlayer.isCreative() && pPlayer.getItemInHand(pHand).getItem() instanceof BlockItem blockItem) {
+        if (pPlayer.isCreative() && pPlayer.getItemInHand(pHand).getItem() instanceof BlockItem blockItem && !pPlayer.isCrouching()) {
             if (pLevel.getBlockEntity(pPos) instanceof MimicDissolveBlockEntity blockEntity && !pState.getValue(MIMIC_SELF_DESTROY_STATE)) {
                 blockEntity.mimicBlockState = blockItem.getBlock().defaultBlockState();
                 blockEntity.resetProgress();
