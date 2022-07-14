@@ -1,0 +1,172 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "up": "false",
+        "west": "false",
+        "north": "false",
+        "east": "false",
+        "south": "false"
+      },
+      "apply": [
+        {
+          "model": "shimmerfire:block/fire/fire_floor_0"
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_floor_1"
+        }
+      ]
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "north": "true"
+          },
+          {
+            "up": "false",
+            "west": "false",
+            "north": "false",
+            "east": "false",
+            "south": "false"
+          }
+        ]
+      },
+      "apply": [
+        {
+          "model": "shimmerfire:block/fire/fire_side_0"
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_side_1"
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_side_alt_0"
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_side_alt_1"
+        }
+      ]
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "east": "true"
+          },
+          {
+            "up": "false",
+            "west": "false",
+            "north": "false",
+            "east": "false",
+            "south": "false"
+          }
+        ]
+      },
+      "apply": [
+        {
+          "model": "shimmerfire:block/fire/fire_side_0",
+          "y": 90
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_side_1",
+          "y": 90
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_side_alt_0",
+          "y": 90
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_side_alt_1",
+          "y": 90
+        }
+      ]
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "south": "true"
+          },
+          {
+            "up": "false",
+            "west": "false",
+            "north": "false",
+            "east": "false",
+            "south": "false"
+          }
+        ]
+      },
+      "apply": [
+        {
+          "model": "shimmerfire:block/fire/fire_side_0",
+          "y": 180
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_side_1",
+          "y": 180
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_side_alt_0",
+          "y": 180
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_side_alt_1",
+          "y": 180
+        }
+      ]
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "west": "true"
+          },
+          {
+            "up": "false",
+            "west": "false",
+            "north": "false",
+            "east": "false",
+            "south": "false"
+          }
+        ]
+      },
+      "apply": [
+        {
+          "model": "shimmerfire:block/fire/fire_side_0",
+          "y": 270
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_side_1",
+          "y": 270
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_side_alt_0",
+          "y": 270
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_side_alt_1",
+          "y": 270
+        }
+      ]
+    },
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": [
+        {
+          "model": "shimmerfire:block/fire/fire_up_0"
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_up_1"
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_up_alt_0"
+        },
+        {
+          "model": "shimmerfire:block/fire/fire_up_alt_1"
+        }
+      ]
+    }
+  ]
+}

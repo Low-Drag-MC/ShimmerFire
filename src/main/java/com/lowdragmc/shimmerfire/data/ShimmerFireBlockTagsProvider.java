@@ -37,8 +37,8 @@ public class ShimmerFireBlockTagsProvider extends BlockTagsProvider {
 
     @Override
     protected void addTags() {
-        this.tag(BlockTags.CAMPFIRES).add(CommonProxy.CAMPFIRE_BLOCK.get());
-        this.tag(BlockTags.MINEABLE_WITH_AXE).add(CommonProxy.CAMPFIRE_BLOCK.get());
+        this.tag(BlockTags.CAMPFIRES).add(CommonProxy.CAMPFIRE_BLOCK.get(),CommonProxy.COLORFUL_CAMPFIRE_BLOCK.get());
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(CommonProxy.CAMPFIRE_BLOCK.get(),CommonProxy.COLORFUL_CAMPFIRE_BLOCK.get());
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
                 CommonProxy.FIRE_JAR_BLOCK.get(),
                 CommonProxy.FIRE_CULTURE_TANK_BLOCK.get(),

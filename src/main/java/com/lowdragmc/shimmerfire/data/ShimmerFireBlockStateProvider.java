@@ -54,7 +54,9 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
 
     protected void registerStatesAndModels() {
         createColoredCampfire();
+        createColorfulCampfire();
         createColoredFire();
+        createColorfulFire();
         createFireContainer();
         createFireJar();
         createFirePort(CommonProxy.FIRE_EMITTER_BLOCK.get(), "block/fire_emitter");
@@ -82,6 +84,8 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
             itemModels().withExistingParent("flint_fire_" + fire.fireName, "minecraft:item/generated")
                     .texture("layer0", "minecraft:item/flint_and_steel");
         }
+        itemModels().withExistingParent("colorful_flint_fire","minecraft:item/generated")
+                .texture("layer0", "minecraft:item/flint_and_steel");
     }
 
     private void createFireContainer() {
@@ -151,7 +155,7 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
             RawFire fireColor = state.getValue(FIRE);
             ModelFile modelFile;
             if (state.getValue(BlockStateProperties.LIT)) {
-                modelFile = campfireLit(fireColor, fireModel);
+                modelFile = coloredCampfireLit(fireColor, fireModel);
             } else {
                 modelFile = offModel;
             }
@@ -164,7 +168,7 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
     }
 
 
-    private ModelFile campfireLit(RawFire fire, ResourceLocation fireModel) {
+    private ModelFile coloredCampfireLit(RawFire fire, ResourceLocation fireModel) {
         return this.models().withExistingParent("block/campfire/" + fire.fireName, fireModel)
                 .texture("fire", "shimmerfire:blocks/campfire/campfire_fire_" + fire.fireName);
     }
@@ -172,11 +176,11 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
     private void createColoredFire() {
         MultiPartBlockStateBuilder partBuilder = getMultipartBuilder(CommonProxy.FIRE_BLOCK.get());
         for (RawFire color : RawFire.values()) {
-            fireDir(partBuilder, color);
+            coloredFireDir(partBuilder, color);
         }
     }
 
-    private void fireDir(MultiPartBlockStateBuilder builder, RawFire fire) {
+    private void coloredFireDir(MultiPartBlockStateBuilder builder, RawFire fire) {
         ModelFile fire_floor_0 = models().withExistingParent(ModelProvider.BLOCK_FOLDER + "/fire/" + fire.fireName + "/fire_floor_0", "minecraft:block/template_fire_floor").texture("fire", "shimmerfire:blocks/fire/fire_0_" + fire.fireName);
         ModelFile fire_floor_1 = models().withExistingParent(ModelProvider.BLOCK_FOLDER + "/fire/" + fire.fireName + "/fire_floor_1", "minecraft:block/template_fire_floor").texture("fire", "shimmerfire:blocks/fire/fire_1_" + fire.fireName);
         ModelFile fire_side_0 = models().withExistingParent(ModelProvider.BLOCK_FOLDER + "/fire/" + fire.fireName + "/fire_side_0", "minecraft:block/template_fire_side").texture("fire", "shimmerfire:blocks/fire/fire_0_" + fire.fireName);
@@ -228,6 +232,90 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
 
                 .part().modelFile(fire_up_0).nextModel().modelFile(fire_up_1).nextModel().modelFile(fire_up_alt_0).nextModel().modelFile(fire_up_alt_1).addModel()
                 .condition(FIRE, fire).condition(UP,true)
+                .end();
+    }
+
+    private void createColorfulCampfire(){
+        ResourceLocation fireModel = new ResourceLocation(ShimmerFireMod.MODID, "block/campfire_fire_lit");
+        ModelFile offModel = (this.models().withExistingParent("block/campfire/off", ModelLocationUtils.decorateBlockModelLocation("campfire_off")))
+                .texture("particle", "minecraft:block/campfire_log");
+        getVariantBuilder(CommonProxy.COLORFUL_CAMPFIRE_BLOCK.get()).forAllStatesExcept(state -> {
+            ModelFile modelFile;
+            if (state.getValue(BlockStateProperties.LIT)) {
+                modelFile = colorfulCampfireLit(fireModel);
+            } else {
+                modelFile = offModel;
+            }
+            return ConfiguredModel.builder()
+                    .modelFile(modelFile)
+                    .rotationY((int) state.getValue(FACING).toYRot())
+                    .build();
+        }, SIGNAL_FIRE, WATERLOGGED);
+        simpleBlockItem(CommonProxy.COLORFUL_CAMPFIRE_BLOCK.get(), offModel);
+    }
+
+    private ModelFile colorfulCampfireLit(ResourceLocation fireModel) {
+        return this.models().withExistingParent("block/campfire/colorful", fireModel)
+                .texture("fire", "shimmerfire:blocks/colorful_fire/colorful_campfire_fire_lit");
+    }
+
+    private void createColorfulFire() {
+        MultiPartBlockStateBuilder partBuilder = getMultipartBuilder(CommonProxy.COLORFUL_FIRE_BLOCK.get());
+        colorfulFireDir(partBuilder);
+    }
+
+    private void colorfulFireDir(MultiPartBlockStateBuilder builder) {
+        ModelFile fire_floor_0 = models().withExistingParent(ModelProvider.BLOCK_FOLDER + "/fire/fire_floor_0", "shimmerfire:block/template_fire/template_fire_floor").texture("fire", "shimmerfire:blocks/colorful_fire/fire_0");
+        ModelFile fire_floor_1 = models().withExistingParent(ModelProvider.BLOCK_FOLDER + "/fire/fire_floor_1", "shimmerfire:block/template_fire/template_fire_floor").texture("fire", "shimmerfire:blocks/colorful_fire/fire_1");
+        ModelFile fire_side_0 = models().withExistingParent(ModelProvider.BLOCK_FOLDER + "/fire/fire_side_0", "shimmerfire:block/template_fire/template_fire_side").texture("fire", "shimmerfire:blocks/colorful_fire/fire_0");
+        ModelFile fire_side_1 = models().withExistingParent(ModelProvider.BLOCK_FOLDER + "/fire/fire_side_1", "shimmerfire:block/template_fire/template_fire_side").texture("fire", "shimmerfire:blocks/colorful_fire/fire_1");
+        ModelFile fire_side_alt_0 = models().withExistingParent(ModelProvider.BLOCK_FOLDER + "/fire/fire_side_alt_0", "shimmerfire:block/template_fire/template_fire_side_alt").texture("fire", "shimmerfire:blocks/colorful_fire/fire_0");
+        ModelFile fire_side_alt_1 = models().withExistingParent(ModelProvider.BLOCK_FOLDER + "/fire/fire_side_alt_1", "shimmerfire:block/template_fire/template_fire_side_alt").texture("fire", "shimmerfire:blocks/colorful_fire/fire_1");
+        ModelFile fire_up_0 = models().withExistingParent(ModelProvider.BLOCK_FOLDER + "/fire/fire_up_0", "shimmerfire:block/template_fire/template_fire_up").texture("fire", "shimmerfire:blocks/colorful_fire/fire_0");
+        ModelFile fire_up_1 = models().withExistingParent(ModelProvider.BLOCK_FOLDER + "/fire/fire_up_1", "shimmerfire:block/template_fire/template_fire_up").texture("fire", "shimmerfire:blocks/colorful_fire/fire_1");
+        ModelFile fire_up_alt_0 = models().withExistingParent(ModelProvider.BLOCK_FOLDER + "/fire/fire_up_alt_0", "shimmerfire:block/template_fire/template_fire_up_alt").texture("fire", "shimmerfire:blocks/colorful_fire/fire_0");
+        ModelFile fire_up_alt_1 = models().withExistingParent(ModelProvider.BLOCK_FOLDER + "/fire/fire_up_alt_1", "shimmerfire:block/template_fire/template_fire_up_alt").texture("fire", "shimmerfire:blocks/colorful_fire/fire_1");
+        builder.part().modelFile(fire_floor_0).nextModel().modelFile(fire_floor_1).addModel()
+                .condition(UP, false).condition(WEST, false).condition(NORTH, false).condition(EAST, false).condition(SOUTH, false).end()
+
+                .part().modelFile(fire_side_0).nextModel().modelFile(fire_side_1).nextModel().modelFile(fire_side_alt_0).nextModel().modelFile(fire_side_alt_1).addModel()
+                .useOr()
+                .nestedGroup()
+                .condition(NORTH,true)
+                .end()
+                .nestedGroup().condition(UP, false).condition(WEST, false).condition(NORTH, false).condition(EAST, false).condition(SOUTH, false)
+                .end()
+                .end()
+
+                .part().modelFile(fire_side_0).rotationY(90).nextModel().modelFile(fire_side_1).rotationY(90).nextModel().modelFile(fire_side_alt_0).rotationY(90).nextModel().modelFile(fire_side_alt_1).rotationY(90).addModel()
+                .useOr()
+                .nestedGroup()
+                .condition(EAST,true)
+                .end()
+                .nestedGroup().condition(UP, false).condition(WEST, false).condition(NORTH, false).condition(EAST, false).condition(SOUTH, false)
+                .end()
+                .end()
+
+                .part().modelFile(fire_side_0).rotationY(180).nextModel().modelFile(fire_side_1).rotationY(180).nextModel().modelFile(fire_side_alt_0).rotationY(180).nextModel().modelFile(fire_side_alt_1).rotationY(180).addModel()
+                .useOr()
+                .nestedGroup()
+                .condition(SOUTH,true)
+                .end()
+                .nestedGroup().condition(UP, false).condition(WEST, false).condition(NORTH, false).condition(EAST, false).condition(SOUTH, false)
+                .end()
+                .end()
+
+                .part().modelFile(fire_side_0).rotationY(270).nextModel().modelFile(fire_side_1).rotationY(270).nextModel().modelFile(fire_side_alt_0).rotationY(270).nextModel().modelFile(fire_side_alt_1).rotationY(270).addModel()
+                .useOr()
+                .nestedGroup()
+                .condition(WEST,true)
+                .end()
+                .nestedGroup().condition(UP, false).condition(WEST, false).condition(NORTH, false).condition(EAST, false).condition(SOUTH, false)
+                .end()
+                .end()
+
+                .part().modelFile(fire_up_0).nextModel().modelFile(fire_up_1).nextModel().modelFile(fire_up_alt_0).nextModel().modelFile(fire_up_alt_1).addModel()
+                .condition(UP,true)
                 .end();
     }
 

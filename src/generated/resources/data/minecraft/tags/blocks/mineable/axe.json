@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "shimmerfire:colored_campfire"
+    "shimmerfire:colored_campfire",
+    "shimmerfire:colorful_campfire"
   ]
 }

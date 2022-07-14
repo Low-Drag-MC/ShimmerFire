@@ -1,0 +1,6 @@
+{
+  "parent": "shimmerfire:block/template_fire/template_fire_up",
+  "textures": {
+    "fire": "shimmerfire:blocks/colorful_fire/fire_0"
+  }
+}
