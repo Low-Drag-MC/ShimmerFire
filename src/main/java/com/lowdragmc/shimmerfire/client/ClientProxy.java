@@ -151,20 +151,23 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void registerColorHandle(ColorHandlerEvent.Block event) {
         event.getBlockColors().register((pState, pLevel, pPos, pTintIndex) -> {
-            BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity!=null){
-                return ((ColorfulFireBlockEntity)blockEntity).getColor();
-            }else {
-                return RawFire.DESTROY.colorVale;
+            if (pLevel != null && pPos != null) {
+                BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+                if (blockEntity!=null){
+                    return ((ColorfulFireBlockEntity)blockEntity).getColor();
+
+                }
             }
+            return RawFire.DESTROY.colorVale;
         }, CommonProxy.COLORFUL_FIRE_BLOCK.get());
         event.getBlockColors().register((pState, pLevel, pPos, pTintIndex) -> {
-            BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity!=null){
-                return ((ColorfulCampfireBlockEntity)blockEntity).getColor();
-            }else {
-                return RawFire.DESTROY.colorVale;
+            if (pLevel != null && pPos != null) {
+                BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+                if (blockEntity!=null){
+                    return ((ColorfulCampfireBlockEntity)blockEntity).getColor();
+                }
             }
+            return RawFire.DESTROY.colorVale;
         }, CommonProxy.COLORFUL_CAMPFIRE_BLOCK.get());
     }
 

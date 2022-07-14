@@ -106,10 +106,7 @@ public class MimicDissolveBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        if (pState.getValue(MIMIC_SELF_DESTROY_STATE)){
-            return createTickerHelper(pBlockEntityType, CommonProxy.MIMIC_DISSOLVE.get(), (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick());
-        }
-        return null;
+        return createTickerHelper(pBlockEntityType, CommonProxy.MIMIC_DISSOLVE.get(), (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick());
     }
 
     @Nullable
