@@ -29,7 +29,7 @@ public class MimicDissolveRender implements BlockEntityRenderer<MimicDissolveBlo
 
     public static IBufferBuilder bufferBuilder = new IBufferBuilder(1024 * 100);
 
-    public static boolean needUpload = false;
+    public static ThreadLocal<Boolean> needUpload = ThreadLocal.withInitial(()->false);
 
     public MimicDissolveRender(BlockEntityRendererProvider.Context pContext) {
 
@@ -37,8 +37,8 @@ public class MimicDissolveRender implements BlockEntityRenderer<MimicDissolveBlo
 
     @Override
     public void render(MimicDissolveBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
-        needUpload = true;
-        if (!pBlockEntity.updateProgress()){
+        needUpload.set(true);
+        if (pBlockEntity.updateProgress(pPartialTick)){
             return;
         }
         float progress = pBlockEntity.getProgress();

@@ -7,16 +7,15 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class MimicDissolveBlockEntity extends SyncedBlockEntity {
 
-    public long time = System.currentTimeMillis();
+    public long timer;
     public BlockState mimicBlockState = Blocks.GRASS_BLOCK.defaultBlockState();
     private float progress = 0f;
-    private static final float animationTotalTime = 5000f;
+    private static final float animationTotalTime = 100;
 
     private static final String TIME_TAG_KEY = "time";
     private static final String MIMIC_BLOCK_STATE_KEY = "mimic_blockstate";
@@ -37,21 +36,20 @@ public class MimicDissolveBlockEntity extends SyncedBlockEntity {
      * called both from sever
      *
      * @return ture if continue rendering , else for to be removed
-     * @see MimicDissolveBlock.MimicDissolveBlockTicker#tick(Level, BlockPos, BlockState, MimicDissolveBlockEntity)
      * <p>
      * from client
      * @see com.lowdragmc.shimmerfire.client.renderer.MimicDissolveRender#render(MimicDissolveBlockEntity, float, PoseStack, MultiBufferSource, int, int)
      */
-    public boolean updateProgress() {
-        progress = (System.currentTimeMillis() - time) / animationTotalTime;
+    public boolean updateProgress(float pPartialTick) {
+        progress = (timer + pPartialTick) / animationTotalTime;
         if (progress >= 1) {
             if (isSelfDestroy()) {
-                return false;
+                return true;
             } else {
                 progress -= Math.floor(progress);
             }
         }
-        return true;
+        return false;
     }
 
     public float getProgress() {
@@ -65,13 +63,19 @@ public class MimicDissolveBlockEntity extends SyncedBlockEntity {
     @Override
     protected void read(CompoundTag tag, boolean clientPacket) {
         this.mimicBlockState = NbtUtils.readBlockState(tag.getCompound(MIMIC_BLOCK_STATE_KEY));
-        this.time = tag.getLong(TIME_TAG_KEY);
+        this.timer = tag.getLong(TIME_TAG_KEY);
     }
 
     @Override
     protected void write(CompoundTag tag, boolean clientPacket) {
         tag.put(MIMIC_BLOCK_STATE_KEY, NbtUtils.writeBlockState(mimicBlockState));
-        tag.putLong(TIME_TAG_KEY, time);
+        tag.putLong(TIME_TAG_KEY, timer);
     }
 
+    public void tick() {
+        timer++;
+        if (updateProgress(0)){
+            level.setBlock(getBlockPos(), Blocks.AIR.defaultBlockState(),3);
+        }
+    }
 }

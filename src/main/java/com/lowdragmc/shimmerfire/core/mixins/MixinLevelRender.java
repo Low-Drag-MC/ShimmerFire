@@ -25,11 +25,11 @@ public class MixinLevelRender {
     @Inject(method = "renderLevel",
         at = @At(value = "INVOKE",ordinal = 1,target = "Lnet/minecraft/client/renderer/LevelRenderer;checkPoseStack(Lcom/mojang/blaze3d/vertex/PoseStack;)V"))
     private void a(PoseStack pPoseStack, float pPartialTick, long pFinishNanoTime, boolean pRenderBlockOutline, Camera pCamera, GameRenderer pGameRenderer, LightTexture pLightTexture, Matrix4f pProjectionMatrix, CallbackInfo ci){
-        if (MimicDissolveRender.needUpload) {
+        if (MimicDissolveRender.needUpload.get()) {
             GL43.glPushDebugGroup(GL43.GL_DEBUG_SOURCE_APPLICATION,0,"mimic_dissolve_render");
             RenderTypes.MimicDissolveRenderType.MIMIC_DISSOLVE.end(MimicDissolveRender.bufferBuilder,0,0,0);
             GL43.glPopDebugGroup();
-            MimicDissolveRender.needUpload = false;
+            MimicDissolveRender.needUpload.set(false);
         }
     }
 }

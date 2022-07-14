@@ -1,7 +1,7 @@
 package com.lowdragmc.shimmerfire.block;
 
+import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.blockentity.MimicDissolveBlockEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -14,8 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -38,7 +38,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @SuppressWarnings("deprecation")
-public class MimicDissolveBlock extends Block implements EntityBlock {
+public class MimicDissolveBlock extends BaseEntityBlock {
 
     public static final BooleanProperty MIMIC_SELF_DESTROY_STATE = BooleanProperty.create("self_destroy");
 
@@ -71,8 +71,6 @@ public class MimicDissolveBlock extends Block implements EntityBlock {
     public boolean isValidSpawn(BlockState state, BlockGetter level, BlockPos pos, SpawnPlacements.Type type, EntityType<?> entityType) {
         return false;
     }
-
-
 
     @Override
     public RenderShape getRenderShape(BlockState pState) {
@@ -107,25 +105,11 @@ public class MimicDissolveBlock extends Block implements EntityBlock {
 
     @Nullable
     @Override
-    @SuppressWarnings("unchecked")
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        if (!pLevel.isClientSide && pState.getValue(MIMIC_SELF_DESTROY_STATE)){
-            return (BlockEntityTicker<T>) new MimicDissolveBlockTicker();
+        if (pState.getValue(MIMIC_SELF_DESTROY_STATE)){
+            return createTickerHelper(pBlockEntityType, CommonProxy.MIMIC_DISSOLVE.get(), (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick());
         }
         return null;
-    }
-
-    public static class MimicDissolveBlockTicker implements BlockEntityTicker<MimicDissolveBlockEntity> {
-
-        @Override
-        public void tick(Level pLevel, BlockPos pPos, BlockState pState, MimicDissolveBlockEntity pBlockEntity) {
-            if (!pBlockEntity.updateProgress()){
-                Minecraft.getInstance().tell(()->{
-                    pBlockEntity.setRemoved();
-                    pLevel.setBlock(pPos, Blocks.AIR.defaultBlockState(),3);
-                });
-            }
-        }
     }
 
     @Nullable
