@@ -134,6 +134,7 @@ dependencies {
 
     implementation fg.deobf("blank:cannonfire-forge-1.18:0.1.4")
     implementation fg.deobf("blank:slideshow-forge-1.18:0.6.2")
+    implementation fg.deobf("blank:garlic-forge-1.18:1.0.0")
 
     implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:1.18.2-0.6.4")
     implementation fg.deobf("com.lowdragmc.multiblocked:Multiblocked:1.18.2-0.9.6")

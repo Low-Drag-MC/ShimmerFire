@@ -41,9 +41,11 @@
   "block.shimmerfire.colored_bloom_block_brown": "Brown Bloom Block",
   "block.shimmerfire.colored_bloom_block_green": "Green Bloom Block",
   "block.shimmerfire.colored_bloom_block_red": "Red Bloom Block",
+  "block.shimmerfire.colorful_campfire": "Colorful campfire",
   "item.shimmerfire.binding_wand": "Binding Tool",
   "item.shimmerfire.flint_fire_destroy": "Fire Flint (§6Destroy§r)",
   "item.shimmerfire.flint_fire_rot": "Fire Flint (§5Rot§r)",
   "item.shimmerfire.flint_fire_life": "Fire Flint (§2Life§r)",
-  "item.shimmerfire.flint_fire_arcane": "Fire Flint (§bArcane§r)"
+  "item.shimmerfire.flint_fire_arcane": "Fire Flint (§bArcane§r)",
+  "item.shimmerfire.colorful_flint_fire": "Colorful Fire Flint"
 }

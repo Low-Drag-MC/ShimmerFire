@@ -1,0 +1,29 @@
+{
+  "name": "sun",
+  "progressTexture": "multiblocked:textures/gui/progress_bar_arrow.png",
+  "recipes": [
+    {
+      "uid": "d272c049-7ac8-46fb-b14b-dfdb9c4f37f6",
+      "duration": 1000,
+      "inputs": {
+        "fluid": [
+          {
+            "content": {
+              "fluid": "minecraft:lava",
+              "amount": 1000
+            },
+            "chance": 1.0
+          }
+        ]
+      },
+      "tickOutputs": {
+        "forge_energy": [
+          {
+            "content": 500,
+            "chance": 1.0
+          }
+        ]
+      }
+    }
+  ]
+}

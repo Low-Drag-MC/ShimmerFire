@@ -1,0 +1,38 @@
+{
+  "name": "alsm",
+  "progressTexture": "multiblocked:textures/gui/progress_bar_arrow.png",
+  "recipes": [
+    {
+      "uid": "44da291d-fb8b-4042-929e-5d247163b56d",
+      "duration": 240,
+      "inputs": {
+        "item": [
+          {
+            "content": {
+              "type": "multiblocked:sized",
+              "count": 2,
+              "ingredient": {
+                "item": "minecraft:redstone_torch"
+              }
+            },
+            "chance": 1.0
+          }
+        ]
+      },
+      "outputs": {
+        "item": [
+          {
+            "content": {
+              "type": "multiblocked:sized",
+              "count": 1,
+              "ingredient": {
+                "item": "minecraft:repeater"
+              }
+            },
+            "chance": 1.0
+          }
+        ]
+      }
+    }
+  ]
+}

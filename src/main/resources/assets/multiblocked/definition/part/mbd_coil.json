@@ -1,0 +1,33 @@
+{
+  "canShared": true,
+  "location": "multiblocked:coil",
+  "traits": {},
+  "allowRotate": false,
+  "showInJei": true,
+  "baseRenderer": {
+    "modelLocation": "multiblocked:coil",
+    "type": "imodel"
+  },
+  "workingRenderer": {
+    "baseTexture": "multiblocked:blocks/casing/coil",
+    "frontTexture": "multiblocked:blocks/overlay/coil_working",
+    "backTexture": "multiblocked:blocks/overlay/coil_working",
+    "leftTexture": "multiblocked:blocks/overlay/coil_working",
+    "rightTexture": "multiblocked:blocks/overlay/coil_working",
+    "upTexture": "multiblocked:blocks/overlay/coil_working",
+    "downTexture": "multiblocked:blocks/overlay/coil_working",
+    "type": "gregtech"
+  },
+  "properties": {
+    "isOpaque": true,
+    "destroyTime": 5.0,
+    "explosionResistance": 6.0,
+    "lightEmissive": 0,
+    "speedFactor": 1.0,
+    "jumpFactor": 1.0,
+    "friction": 0.6,
+    "hasCollision": true,
+    "tabGroup": "multiblocked.all",
+    "stackSize": 64
+  }
+}

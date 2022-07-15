@@ -1,0 +1,139 @@
+{
+  "consumeCatalyst": false,
+  "location": "multiblocked:art_sun_controller",
+  "traits": {},
+  "allowRotate": false,
+  "showInJei": true,
+  "baseRenderer": {
+    "modelLocation": "multiblocked:alsm",
+    "type": "imodel"
+  },
+  "formedRenderer": {
+    "modelName": "fusion_sun",
+    "type": "geo"
+  },
+  "properties": {
+    "isOpaque": false,
+    "destroyTime": 1.5,
+    "explosionResistance": 6.0,
+    "lightEmissive": 0,
+    "speedFactor": 1.0,
+    "jumpFactor": 1.0,
+    "friction": 0.6,
+    "hasCollision": true,
+    "tabGroup": "multiblocked.all",
+    "stackSize": 64
+  },
+  "basePattern": {
+    "structureDir": [
+      "BACK",
+      "UP",
+      "RIGHT"
+    ],
+    "pattern": [
+      [
+        "AAA",
+        "B B",
+        "C C",
+        "C C",
+        "   ",
+        "   ",
+        "   "
+      ],
+      [
+        "AAA",
+        "   ",
+        "   ",
+        " @ ",
+        "   ",
+        "   ",
+        " D "
+      ],
+      [
+        "AAA",
+        "B B",
+        "C C",
+        "C C",
+        "   ",
+        "   ",
+        "   "
+      ]
+    ],
+    "aisleRepetitions": [
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "predicates": {
+      "energy_out": {
+        "location": "multiblocked:energy_hatch",
+        "type": "component",
+        "disableRenderFormed": true,
+        "minCount": 1
+      },
+      "controller": {
+        "location": "multiblocked:art_sun_controller",
+        "type": "component"
+      },
+      "C": {
+        "blocks": [
+          {
+            "id": "minecraft:polished_deepslate_wall"
+          }
+        ],
+        "type": "blocks",
+        "disableRenderFormed": true
+      },
+      "fluid": {
+        "capability": "fluid",
+        "type": "capability",
+        "disableRenderFormed": true,
+        "minCount": 1
+      },
+      "any": {
+        "type": "any"
+      },
+      "sun": {
+        "location": "multiblocked:sun",
+        "type": "component"
+      },
+      "base": {
+        "location": "multiblocked:base",
+        "type": "component",
+        "disableRenderFormed": true
+      }
+    },
+    "symbolMap": {
+      "@": [
+        "controller"
+      ],
+      " ": [
+        "any"
+      ],
+      "A": [
+        "energy_out",
+        "fluid",
+        "base"
+      ],
+      "B": [
+        "base"
+      ],
+      "C": [
+        "C"
+      ],
+      "D": [
+        "sun"
+      ]
+    }
+  },
+  "recipeMap": "sun"
+}

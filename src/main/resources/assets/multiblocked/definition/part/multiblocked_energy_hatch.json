@@ -1,0 +1,36 @@
+{
+  "canShared": true,
+  "location": "multiblocked:energy_hatch",
+  "traits": {
+    "forge_energy": {
+      "cIO": 2,
+      "gIO": 2,
+      "x": 18,
+      "y": 78,
+      "width": 140,
+      "height": 12,
+      "texture": "multiblocked:textures/gui/energy_bar.png",
+      "capacity": 1000000,
+      "maxReceive": 5000,
+      "maxExtract": 5000
+    }
+  },
+  "allowRotate": false,
+  "showInJei": true,
+  "baseRenderer": {
+    "modelLocation": "multiblocked:energy_hatch",
+    "type": "imodel"
+  },
+  "properties": {
+    "isOpaque": true,
+    "destroyTime": 1.5,
+    "explosionResistance": 6.0,
+    "lightEmissive": 0,
+    "speedFactor": 1.0,
+    "jumpFactor": 1.0,
+    "friction": 0.6,
+    "hasCollision": true,
+    "tabGroup": "multiblocked.all",
+    "stackSize": 64
+  }
+}

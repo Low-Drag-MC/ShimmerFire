@@ -1,0 +1,138 @@
+{
+  "consumeCatalyst": false,
+  "location": "multiblocked:alsm",
+  "traits": {},
+  "allowRotate": true,
+  "showInJei": true,
+  "baseRenderer": {
+    "modelLocation": "multiblocked:alsm",
+    "type": "imodel"
+  },
+  "formedRenderer": {
+    "modelName": "alsm",
+    "type": "geo"
+  },
+  "properties": {
+    "isOpaque": false,
+    "destroyTime": 1.5,
+    "explosionResistance": 6.0,
+    "lightEmissive": 0,
+    "speedFactor": 1.0,
+    "jumpFactor": 1.0,
+    "friction": 0.6,
+    "hasCollision": true,
+    "tabGroup": "multiblocked.all",
+    "stackSize": 64
+  },
+  "basePattern": {
+    "structureDir": [
+      "LEFT",
+      "UP",
+      "BACK"
+    ],
+    "pattern": [
+      [
+        "D@AE",
+        "BBBB",
+        "CCCC"
+      ],
+      [
+        "AAAA",
+        "B  B",
+        "CCCC"
+      ],
+      [
+        "AAAA",
+        "CCCC",
+        "CCCC"
+      ]
+    ],
+    "aisleRepetitions": [
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "predicates": {
+      "controller": {
+        "location": "multiblocked:alsm",
+        "type": "component"
+      },
+      "B": {
+        "blocks": [
+          {
+            "id": "minecraft:glass"
+          }
+        ],
+        "type": "blocks",
+        "disableRenderFormed": true
+      },
+      "C": {
+        "blocks": [
+          {
+            "id": "minecraft:cyan_terracotta"
+          }
+        ],
+        "type": "blocks",
+        "disableRenderFormed": true
+      },
+      "item_in": {
+        "location": "multiblocked:item_hatch",
+        "type": "component",
+        "io": "IN"
+      },
+      "item_out": {
+        "location": "multiblocked:item_hatch",
+        "type": "component",
+        "io": "OUT"
+      },
+      "any": {
+        "type": "any"
+      },
+      "energy": {
+        "location": "multiblocked:energy_hatch",
+        "type": "component",
+        "minCount": 1,
+        "previewCount": 1,
+        "io": "IN"
+      },
+      "base": {
+        "location": "multiblocked:base",
+        "type": "component"
+      }
+    },
+    "symbolMap": {
+      "@": [
+        "controller"
+      ],
+      " ": [
+        "any"
+      ],
+      "A": [
+        "energy",
+        "base"
+      ],
+      "B": [
+        "B"
+      ],
+      "C": [
+        "C"
+      ],
+      "D": [
+        "item_in"
+      ],
+      "E": [
+        "item_out"
+      ]
+    }
+  },
+  "recipeMap": "alsm"
+}

@@ -2,6 +2,7 @@ package com.lowdragmc.shimmerfire.client;
 
 import com.lowdragmc.shimmer.client.light.ColorPointLight;
 import com.lowdragmc.shimmer.client.light.LightManager;
+import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
 import com.lowdragmc.shimmer.client.shader.ShaderInjection;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
@@ -33,6 +34,7 @@ import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
+import org.teacon.nocaet.client.GarlicRenderTypes;
 
 import static com.lowdragmc.shimmerfire.block.ColoredFireBlock.FIRE;
 
@@ -51,6 +53,26 @@ public class ClientProxy extends CommonProxy {
                     """);
             return s;
         });
+        ShaderInjection.registerVSHInjection("nocaet:rendertype_solid", ClientProxy::BloomMRTVSHInjection);
+        ShaderInjection.registerVSHInjection("nocaet:rendertype_cutout", ClientProxy::BloomMRTVSHInjection);
+
+        ShaderInjection.registerFSHInjection("nocaet:rendertype_solid", ClientProxy::BloomMRTFSHInjection);
+        ShaderInjection.registerFSHInjection("nocaet:rendertype_cutout", ClientProxy::BloomMRTFSHInjection);
+    }
+
+    private static String BloomMRTVSHInjection(String s) {
+        s = (new StringBuffer(s)).insert(s.lastIndexOf("void main()"), "out float isBloom;\n").toString();
+        s = (new StringBuffer(s)).insert(s.lastIndexOf(125), "isBloom = float(UV2.x);\n").toString();
+        return s;
+    }
+
+    private static String BloomMRTFSHInjection(String s) {
+        s = s.replace("#version 150", "#version 330 core");
+        s = (new StringBuffer(s)).insert(s.lastIndexOf("out vec4 fragColor"), "in float isBloom;\n").toString();
+        s = s.replace("out vec4 fragColor", "layout (location = 0) out vec4 fragColor");
+        s = (new StringBuffer(s)).insert(s.lastIndexOf("void main()"), "layout (location = 1) out vec4 bloomColor;\n").toString();
+        s = (new StringBuffer(s)).insert(s.lastIndexOf(125), "    if (isBloom > 255.) {\n        bloomColor = fragColor;\n    } else {\n        bloomColor = vec4(0.);\n    }\n").toString();
+        return s;
     }
 
     @SubscribeEvent
@@ -88,6 +110,9 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void clientSetup(FMLClientSetupEvent e) {
         e.enqueueWork(()->{
+            PostProcessing.CHUNK_TYPES.add(GarlicRenderTypes.CUTOUT);
+            PostProcessing.CHUNK_TYPES.add(GarlicRenderTypes.SOLID);
+
             ItemBlockRenderTypes.setRenderLayer(FIRE_BLOCK.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(COLORFUL_FIRE_BLOCK.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(CAMPFIRE_BLOCK.get(), RenderType.cutout());

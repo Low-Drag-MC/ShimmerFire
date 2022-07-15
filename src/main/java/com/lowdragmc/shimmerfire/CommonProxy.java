@@ -1,6 +1,16 @@
 package com.lowdragmc.shimmerfire;
 
+import com.google.gson.JsonObject;
 import com.lowdragmc.lowdraglib.ItemGroup.LDItemGroup;
+import com.lowdragmc.lowdraglib.client.renderer.impl.BlockStateRenderer;
+import com.lowdragmc.lowdraglib.utils.FileUtility;
+import com.lowdragmc.multiblocked.Multiblocked;
+import com.lowdragmc.multiblocked.api.definition.ComponentDefinition;
+import com.lowdragmc.multiblocked.api.definition.ControllerDefinition;
+import com.lowdragmc.multiblocked.api.definition.PartDefinition;
+import com.lowdragmc.multiblocked.api.recipe.RecipeMap;
+import com.lowdragmc.multiblocked.api.registry.MbdComponents;
+import com.lowdragmc.multiblocked.client.renderer.IMultiblockedRenderer;
 import com.lowdragmc.shimmerfire.api.Capabilities;
 import com.lowdragmc.shimmerfire.api.RawFire;
 import com.lowdragmc.shimmerfire.block.*;
@@ -13,6 +23,7 @@ import com.lowdragmc.shimmerfire.item.*;
 import net.minecraft.Util;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
@@ -23,17 +34,23 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Optional;
 
 
 /**
@@ -98,6 +115,18 @@ public class CommonProxy {
     public void registerBlocks(RegistryEvent.Register<Block> event) {
         HexGateBlockEntity.registerHexGate();
         FireBaptismBlockEntity.registerFireBaptism();
+
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "part/mbd_coil"), PartDefinition.class, CommonProxy::componentPost);
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "part/mbd_ebf_casing"), PartDefinition.class, CommonProxy::componentPost);
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "part/multiblocked_base"), PartDefinition.class, CommonProxy::componentPost);
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "part/multiblocked_ebf_casing"), PartDefinition.class, CommonProxy::componentPost);
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "part/multiblocked_energy_hatch"), PartDefinition.class, CommonProxy::componentPost);
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "part/multiblocked_item_hatch"), PartDefinition.class, CommonProxy::componentPost);
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "part/multiblocked_sun"), PartDefinition.class, CommonProxy::componentPost);
+
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_ebf"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_alsm"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_art_sun_controller"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
     }
 
     @SubscribeEvent
@@ -129,5 +158,40 @@ public class CommonProxy {
     @SubscribeEvent
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         Capabilities.register(event);
+    }
+
+    @SubscribeEvent
+    public void commonSetup(FMLCommonSetupEvent e) {
+        e.enqueueWork(() -> {
+            registerRecipeFromResource(new ResourceLocation(Multiblocked.MODID, "alsm"));
+            registerRecipeFromResource(new ResourceLocation(Multiblocked.MODID, "ebf"));
+            registerRecipeFromResource(new ResourceLocation(Multiblocked.MODID, "sun"));
+        });
+
+    }
+
+    private static void componentPost(ComponentDefinition definition, JsonObject config) {
+        if (definition.baseRenderer instanceof BlockStateRenderer) {
+            definition.baseRenderer = Multiblocked.GSON.fromJson(config.get("baseRenderer"), IMultiblockedRenderer.class);
+        }
+        if (definition.formedRenderer instanceof BlockStateRenderer) {
+            definition.formedRenderer = Multiblocked.GSON.fromJson(config.get("formedRenderer"), IMultiblockedRenderer.class);
+        }
+        if (definition.workingRenderer instanceof BlockStateRenderer) {
+            definition.workingRenderer = Multiblocked.GSON.fromJson(config.get("workingRenderer"), IMultiblockedRenderer.class);
+        }
+    }
+
+    public static void registerRecipeFromResource(ResourceLocation location) {
+        try {
+            InputStream inputstream = ShimmerFireMod.class.getResourceAsStream(String.format("/assets/%s/recipe_map/%s.json", location.getNamespace(), location.getPath()));
+            JsonObject config = FileUtility.jsonParser.parse(new InputStreamReader(inputstream)).getAsJsonObject();
+            RecipeMap recipeMap = Multiblocked.GSON.fromJson(config, RecipeMap.class);
+            if (recipeMap != null && !recipeMap.name.equals("empty")) {
+                RecipeMap.register(recipeMap);
+            }
+        } catch (Exception e) {
+            Multiblocked.LOGGER.error("error while loading the definition resource {}", location.toString());
+        }
     }
 }

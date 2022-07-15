@@ -1,0 +1,34 @@
+{
+  "canShared": true,
+  "location": "multiblocked:sun",
+  "traits": {},
+  "allowRotate": false,
+  "showInJei": true,
+  "baseRenderer": {
+    "state": {
+      "id": "minecraft:air",
+      "meta": 0
+    },
+    "type": "blockstate"
+  },
+  "workingRenderer": {
+    "shouldCull": true,
+    "texture": "multiblocked:art_sun",
+    "isShader": true,
+    "scale": 3.0,
+    "light": 15,
+    "type": "particle"
+  },
+  "properties": {
+    "isOpaque": true,
+    "destroyTime": 1.5,
+    "explosionResistance": 6.0,
+    "lightEmissive": 0,
+    "speedFactor": 1.0,
+    "jumpFactor": 1.0,
+    "friction": 0.6,
+    "hasCollision": true,
+    "tabGroup": "multiblocked.all",
+    "stackSize": 64
+  }
+}

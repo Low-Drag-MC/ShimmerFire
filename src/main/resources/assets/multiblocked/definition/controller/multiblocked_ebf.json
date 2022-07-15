@@ -1,0 +1,152 @@
+{
+  "consumeCatalyst": false,
+  "location": "multiblocked:ebf",
+  "traits": {},
+  "allowRotate": true,
+  "showInJei": true,
+  "baseRenderer": {
+    "baseTexture": "multiblocked:blocks/casing/ebf_casing",
+    "frontTexture": "multiblocked:blocks/gregtech_front",
+    "type": "gregtech"
+  },
+  "workingRenderer": {
+    "baseTexture": "multiblocked:blocks/casing/ebf_casing",
+    "frontTexture": "multiblocked:blocks/overlay/overlay_front_active",
+    "type": "gregtech"
+  },
+  "properties": {
+    "isOpaque": true,
+    "destroyTime": 1.5,
+    "explosionResistance": 6.0,
+    "lightEmissive": 0,
+    "speedFactor": 1.0,
+    "jumpFactor": 1.0,
+    "friction": 0.6,
+    "hasCollision": true,
+    "tabGroup": "multiblocked.all",
+    "stackSize": 64
+  },
+  "basePattern": {
+    "structureDir": [
+      "LEFT",
+      "UP",
+      "BACK"
+    ],
+    "pattern": [
+      [
+        "A@A",
+        "BBB",
+        "BBB",
+        "AAA"
+      ],
+      [
+        "AAA",
+        "B B",
+        "B B",
+        "ACA"
+      ],
+      [
+        "AAA",
+        "BBB",
+        "BBB",
+        "AAA"
+      ]
+    ],
+    "aisleRepetitions": [
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "predicates": {
+      "casing": {
+        "location": "multiblocked:ebf_casing",
+        "type": "component",
+        "minCount": 5
+      },
+      "controller": {
+        "location": "multiblocked:ebf",
+        "type": "component"
+      },
+      "B": {
+        "blocks": [
+          {
+            "id": "multiblocked:coil"
+          }
+        ],
+        "type": "blocks"
+      },
+      "C": {
+        "blocks": [
+          {
+            "id": "minecraft:grass_block"
+          }
+        ],
+        "type": "blocks"
+      },
+      "item_in": {
+        "location": "multiblocked:item_input",
+        "type": "component",
+        "minCount": 1,
+        "previewCount": 1
+      },
+      "energy_input": {
+        "location": "multiblocked:energy_input",
+        "type": "component",
+        "minCount": 1,
+        "maxCount": 2,
+        "previewCount": 1
+      },
+      "item_out": {
+        "location": "multiblocked:item_output",
+        "type": "component",
+        "minCount": 1,
+        "previewCount": 1
+      },
+      "fluid_input": {
+        "location": "multiblocked:fluid_input",
+        "type": "component",
+        "previewCount": 1
+      },
+      "fluid_output": {
+        "location": "multiblocked:fluid_output",
+        "type": "component",
+        "previewCount": 1
+      },
+      "any": {
+        "type": "any"
+      }
+    },
+    "symbolMap": {
+      "@": [
+        "controller"
+      ],
+      " ": [
+        "any"
+      ],
+      "A": [
+        "casing",
+        "item_in",
+        "energy_input",
+        "item_out",
+        "fluid_input",
+        "fluid_output"
+      ],
+      "B": [
+        "B"
+      ],
+      "C": [
+        "C"
+      ]
+    }
+  },
+  "recipeMap": "ebf"
+}
