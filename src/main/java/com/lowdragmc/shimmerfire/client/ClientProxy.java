@@ -32,6 +32,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
 import org.teacon.nocaet.client.GarlicRenderTypes;
@@ -110,8 +111,10 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void clientSetup(FMLClientSetupEvent e) {
         e.enqueueWork(()->{
-            PostProcessing.CHUNK_TYPES.add(GarlicRenderTypes.CUTOUT);
-            PostProcessing.CHUNK_TYPES.add(GarlicRenderTypes.SOLID);
+            if (ShimmerFireMod.isModLoaded("nocaet") && ModList.get().getModFileById("shimmer").versionString().equals("0.1.8")) {
+                PostProcessing.CHUNK_TYPES.add(GarlicRenderTypes.CUTOUT);
+                PostProcessing.CHUNK_TYPES.add(GarlicRenderTypes.SOLID);
+            }
 
             ItemBlockRenderTypes.setRenderLayer(FIRE_BLOCK.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(COLORFUL_FIRE_BLOCK.get(), RenderType.cutout());
