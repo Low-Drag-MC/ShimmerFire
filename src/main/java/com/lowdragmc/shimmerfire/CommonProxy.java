@@ -16,6 +16,7 @@ import com.lowdragmc.shimmerfire.api.RawFire;
 import com.lowdragmc.shimmerfire.block.*;
 import com.lowdragmc.shimmerfire.block.decorated.ColoredDecorationBlock;
 import com.lowdragmc.shimmerfire.blockentity.*;
+import com.lowdragmc.shimmerfire.blockentity.multiblocked.AssemblyBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.multiblocked.FireBaptismBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.multiblocked.HexGateBlockEntity;
 import com.lowdragmc.shimmerfire.entity.FireSpiritEntity;
@@ -34,7 +35,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -46,11 +46,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Optional;
 
 
 /**
@@ -128,13 +126,13 @@ public class CommonProxy {
         MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_ebf"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
         MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_alsm"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
         MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_art_sun_controller"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
-        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_assembly"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_assembly"), AssemblyBlockEntity.AssemblyDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
     }
 
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> event) {
         IForgeRegistry<Item> registry = event.getRegistry();
-        registry.register(new ForgeSpawnEggItem(FIRE_SPIRIT, 4996656, 986895, new Item.Properties().tab(CreativeModeTab.TAB_MISC)).setRegistryName(ShimmerFireMod.MODID, "fire_spirit_spawn_egg"));
+        registry.register(new ForgeSpawnEggItem(FIRE_SPIRIT, 4996656, 986895, new Item.Properties().tab(TAB_ITEMS)).setRegistryName(ShimmerFireMod.MODID, "fire_spirit_spawn_egg"));
         for (RawFire fire : RawFire.values()) {
             registry.register(new ColoredFlintItem(fire));
         }

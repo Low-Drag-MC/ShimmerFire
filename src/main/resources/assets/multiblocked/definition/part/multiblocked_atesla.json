@@ -13,6 +13,7 @@
   },
   "formedRenderer": {
     "modelName": "atesla",
+    "isGlobal": "true",
     "type": "geo"
   },
   "properties": {

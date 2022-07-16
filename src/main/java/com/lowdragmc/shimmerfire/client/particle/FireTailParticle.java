@@ -6,6 +6,7 @@ import com.lowdragmc.lowdraglib.client.shader.management.Shader;
 import com.lowdragmc.lowdraglib.client.shader.management.ShaderManager;
 import com.lowdragmc.lowdraglib.utils.Vector3;
 import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
+import com.lowdragmc.shimmer.core.mixins.ShimmerMixinPlugin;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.api.RawFire;
 import com.lowdragmc.shimmerfire.utils.curve.CubicBezierCurve3;
@@ -14,6 +15,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.Util;
 import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.GameRenderer;
@@ -117,7 +119,11 @@ public class FireTailParticle extends TrailParticle {
                 uniformCache.glUniform4F("color1", (color.colorVale >> 16 & 0xff)/256f,(color.colorVale >> 8 & 0xff)/256f,(color.colorVale & 0xff)/256f, 1);
                 uniformCache.glUniform4F("color2", 1,1,1, 1);
             }, shaderProgram -> shaderProgram.bindTexture("iChannel0", new ResourceLocation("ldlib:textures/particle/kila_tail.png")));
-            PostProcessing.BLOOM_UNREAL.getPostTarget().bindWrite(!ShaderManager.getInstance().hasViewPort());
+            if (ShimmerMixinPlugin.IS_OPT_LOAD) {
+                Minecraft.getInstance().getMainRenderTarget().bindWrite(!ShaderManager.getInstance().hasViewPort());
+            } else {
+                PostProcessing.BLOOM_UNREAL.getPostTarget().bindWrite(!ShaderManager.getInstance().hasViewPort());
+            }
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
             RenderSystem.depthMask(true);

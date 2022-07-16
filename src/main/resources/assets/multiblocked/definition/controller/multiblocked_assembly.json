@@ -36,8 +36,8 @@
         "C C"
       ],
       [
-        "AAA",
-        " @ ",
+        "A@A",
+        "   ",
         "   "
       ],
       [
@@ -62,8 +62,12 @@
     ],
     "predicates": {
       "controller": {
-        "location": "multiblocked:assembly",
-        "type": "component"
+        "blocks": [
+          {
+            "id": "minecraft:cyan_terracotta"
+          }
+        ],
+        "type": "blocks"
       },
       "B": {
         "blocks": [
