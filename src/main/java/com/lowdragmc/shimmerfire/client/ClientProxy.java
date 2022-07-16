@@ -116,14 +116,14 @@ public class ClientProxy extends CommonProxy {
             if (ShimmerFireMod.isModLoaded("nocaet") && ModList.get().getModFileById("shimmer").versionString().equals("0.1.8")) {
                 Class<?> clazz = GarlicRenderTypes.class;
                 try {
-                    Field cutout = clazz.getDeclaredField("CUTOUT");
-                    Field solid = clazz.getDeclaredField("SOLID");
-
-                    cutout.setAccessible(true);
-                    solid.setAccessible(true);
-
-                    PostProcessing.CHUNK_TYPES.add((RenderType) cutout.get(null));
-                    PostProcessing.CHUNK_TYPES.add((RenderType) solid.get(null));
+                    Field[] fields = clazz.getDeclaredFields();
+                    for (Field field : fields) {
+                        field.setAccessible(true);
+                        Object obj = field.get(null);
+                        if (obj instanceof RenderType renderType) {
+                            PostProcessing.CHUNK_TYPES.add(renderType);
+                        }
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
