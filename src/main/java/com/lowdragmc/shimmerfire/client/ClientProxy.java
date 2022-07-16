@@ -37,6 +37,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
 import org.teacon.nocaet.client.GarlicRenderTypes;
 
+import java.lang.reflect.Field;
+
 import static com.lowdragmc.shimmerfire.block.ColoredFireBlock.FIRE;
 
 /**
@@ -112,8 +114,19 @@ public class ClientProxy extends CommonProxy {
     public void clientSetup(FMLClientSetupEvent e) {
         e.enqueueWork(()->{
             if (ShimmerFireMod.isModLoaded("nocaet") && ModList.get().getModFileById("shimmer").versionString().equals("0.1.8")) {
-                PostProcessing.CHUNK_TYPES.add(GarlicRenderTypes.CUTOUT);
-                PostProcessing.CHUNK_TYPES.add(GarlicRenderTypes.SOLID);
+                Class<?> clazz = GarlicRenderTypes.class;
+                try {
+                    Field cutout = clazz.getDeclaredField("CUTOUT");
+                    Field solid = clazz.getDeclaredField("SOLID");
+
+                    cutout.setAccessible(true);
+                    solid.setAccessible(true);
+
+                    PostProcessing.CHUNK_TYPES.add((RenderType) cutout.get(null));
+                    PostProcessing.CHUNK_TYPES.add((RenderType) solid.get(null));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
 
             ItemBlockRenderTypes.setRenderLayer(FIRE_BLOCK.get(), RenderType.cutout());
