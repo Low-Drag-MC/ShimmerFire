@@ -1,0 +1,30 @@
+{
+  "canShared": true,
+  "location": "multiblocked:atesla",
+  "traits": {},
+  "allowRotate": false,
+  "showInJei": true,
+  "baseRenderer": {
+    "state": {
+      "id": "minecraft:glass",
+      "meta": 0
+    },
+    "type": "blockstate"
+  },
+  "formedRenderer": {
+    "modelName": "atesla",
+    "type": "geo"
+  },
+  "properties": {
+    "isOpaque": false,
+    "destroyTime": 1.5,
+    "explosionResistance": 6.0,
+    "lightEmissive": 0,
+    "speedFactor": 1.0,
+    "jumpFactor": 1.0,
+    "friction": 0.6,
+    "hasCollision": true,
+    "tabGroup": "multiblocked.all",
+    "stackSize": 64
+  }
+}

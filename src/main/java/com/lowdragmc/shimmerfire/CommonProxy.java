@@ -123,10 +123,12 @@ public class CommonProxy {
         MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "part/multiblocked_energy_hatch"), PartDefinition.class, CommonProxy::componentPost);
         MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "part/multiblocked_item_hatch"), PartDefinition.class, CommonProxy::componentPost);
         MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "part/multiblocked_sun"), PartDefinition.class, CommonProxy::componentPost);
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "part/multiblocked_atesla"), PartDefinition.class, CommonProxy::componentPost);
 
         MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_ebf"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
         MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_alsm"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
         MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_art_sun_controller"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_assembly"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
     }
 
     @SubscribeEvent
@@ -166,6 +168,7 @@ public class CommonProxy {
             registerRecipeFromResource(new ResourceLocation(Multiblocked.MODID, "alsm"));
             registerRecipeFromResource(new ResourceLocation(Multiblocked.MODID, "ebf"));
             registerRecipeFromResource(new ResourceLocation(Multiblocked.MODID, "sun"));
+            registerRecipeFromResource(new ResourceLocation(Multiblocked.MODID, "asembly"));
         });
 
     }

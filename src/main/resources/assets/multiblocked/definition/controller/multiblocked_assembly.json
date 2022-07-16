@@ -1,0 +1,120 @@
+{
+  "consumeCatalyst": false,
+  "location": "multiblocked:assembly",
+  "traits": {},
+  "allowRotate": false,
+  "showInJei": true,
+  "baseRenderer": {
+    "state": {
+      "id": "minecraft:heavy_weighted_pressure_plate",
+      "meta": 0
+    },
+    "type": "blockstate"
+  },
+  "properties": {
+    "isOpaque": false,
+    "destroyTime": 1.5,
+    "explosionResistance": 6.0,
+    "lightEmissive": 0,
+    "speedFactor": 1.0,
+    "jumpFactor": 1.0,
+    "friction": 0.6,
+    "hasCollision": true,
+    "tabGroup": "multiblocked.all",
+    "stackSize": 64
+  },
+  "basePattern": {
+    "structureDir": [
+      "BACK",
+      "UP",
+      "RIGHT"
+    ],
+    "pattern": [
+      [
+        "AAA",
+        "B B",
+        "C C"
+      ],
+      [
+        "AAA",
+        " @ ",
+        "   "
+      ],
+      [
+        "AAA",
+        "B B",
+        "C C"
+      ]
+    ],
+    "aisleRepetitions": [
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "predicates": {
+      "controller": {
+        "location": "multiblocked:assembly",
+        "type": "component"
+      },
+      "B": {
+        "blocks": [
+          {
+            "id": "minecraft:cyan_terracotta"
+          }
+        ],
+        "type": "blocks",
+        "disableRenderFormed": true
+      },
+      "item_out": {
+        "location": "multiblocked:item_hatch",
+        "type": "component",
+        "minCount": 1
+      },
+      "any": {
+        "type": "any"
+      },
+      "atesla": {
+        "location": "multiblocked:atesla",
+        "type": "component"
+      },
+      "energy": {
+        "location": "multiblocked:energy_hatch",
+        "type": "component",
+        "minCount": 1
+      },
+      "base": {
+        "location": "multiblocked:base",
+        "type": "component"
+      }
+    },
+    "symbolMap": {
+      "@": [
+        "controller"
+      ],
+      " ": [
+        "any"
+      ],
+      "A": [
+        "item_out",
+        "energy",
+        "base"
+      ],
+      "B": [
+        "B"
+      ],
+      "C": [
+        "atesla"
+      ]
+    }
+  },
+  "recipeMap": "asembly"
+}

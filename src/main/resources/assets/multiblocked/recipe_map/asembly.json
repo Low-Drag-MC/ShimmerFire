@@ -1,0 +1,46 @@
+{
+  "name": "asembly",
+  "progressTexture": "multiblocked:textures/gui/progress_bar_arrow.png",
+  "recipes": [
+    {
+      "uid": "aaa",
+      "duration": 100,
+      "inputs": {
+        "item": [
+          {
+            "content": {
+              "type": "multiblocked:sized",
+              "count": 1,
+              "ingredient": {
+                "item": "minecraft:glass_pane"
+              }
+            },
+            "chance": 1.0
+          }
+        ]
+      },
+      "outputs": {
+        "item": [
+          {
+            "content": {
+              "type": "multiblocked:sized",
+              "count": 2,
+              "ingredient": {
+                "item": "minecraft:redstone_torch"
+              }
+            },
+            "chance": 0.5
+          }
+        ]
+      },
+      "tickInputs": {
+        "forge_energy": [
+          {
+            "content": 32,
+            "chance": 1.0
+          }
+        ]
+      }
+    }
+  ]
+}

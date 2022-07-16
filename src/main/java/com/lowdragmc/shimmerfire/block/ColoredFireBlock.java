@@ -1,6 +1,8 @@
 package com.lowdragmc.shimmerfire.block;
 
+import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.api.RawFire;
+import com.lowdragmc.shimmerfire.blockentity.MimicDissolveBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -88,12 +90,13 @@ public class ColoredFireBlock extends FireBlock {
 
                 boolean flag1 = pLevel.isHumidAt(pPos);
                 int k = flag1 ? -50 : 0;
-                this.tryCatchFire(pLevel, pPos.east(), 300 + k, pRand, i, Direction.WEST);
-                this.tryCatchFire(pLevel, pPos.west(), 300 + k, pRand, i, Direction.EAST);
-                this.tryCatchFire(pLevel, pPos.below(), 250 + k, pRand, i, Direction.UP);
-                this.tryCatchFire(pLevel, pPos.above(), 250 + k, pRand, i, Direction.DOWN);
-                this.tryCatchFire(pLevel, pPos.north(), 300 + k, pRand, i, Direction.SOUTH);
-                this.tryCatchFire(pLevel, pPos.south(), 300 + k, pRand, i, Direction.NORTH);
+                RawFire fire = pState.getValue(FIRE);
+                this.tryCatchFire(fire, pLevel, pPos.east(), 300 + k, pRand, i, Direction.WEST);
+                this.tryCatchFire(fire, pLevel, pPos.west(), 300 + k, pRand, i, Direction.EAST);
+                this.tryCatchFire(fire, pLevel, pPos.below(), 250 + k, pRand, i, Direction.UP);
+                this.tryCatchFire(fire, pLevel, pPos.above(), 250 + k, pRand, i, Direction.DOWN);
+                this.tryCatchFire(fire, pLevel, pPos.north(), 300 + k, pRand, i, Direction.SOUTH);
+                this.tryCatchFire(fire, pLevel, pPos.south(), 300 + k, pRand, i, Direction.NORTH);
                 BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
 
                 for(int l = -1; l <= 1; ++l) {
@@ -115,7 +118,7 @@ public class ColoredFireBlock extends FireBlock {
 
                                     if (i2 > 0 && pRand.nextInt(k1) <= i2 && (!pLevel.isRaining() || !this.isNearRain(pLevel, blockpos$mutableblockpos))) {
                                         int j2 = Math.min(15, i + pRand.nextInt(5) / 4);
-                                        pLevel.setBlock(blockpos$mutableblockpos, this.getStateWithAge(pLevel, blockpos$mutableblockpos, j2), 3);
+                                        pLevel.setBlock(blockpos$mutableblockpos, this.getStateWithAge(fire, pLevel, blockpos$mutableblockpos, j2), 3);
                                     }
                                 }
                             }
@@ -131,15 +134,20 @@ public class ColoredFireBlock extends FireBlock {
         return 30 + pRandom.nextInt(10);
     }
 
-    private void tryCatchFire(Level pLevel, BlockPos pPos, int pChance, Random pRandom, int pAge, Direction face) {
+    private void tryCatchFire(RawFire fire, Level pLevel, BlockPos pPos, int pChance, Random pRandom, int pAge, Direction face) {
         int i = pLevel.getBlockState(pPos).getFlammability(pLevel, pPos, face);
         if (pRandom.nextInt(pChance) < i) {
             BlockState blockstate = pLevel.getBlockState(pPos);
             if (pRandom.nextInt(pAge + 10) < 5 && !pLevel.isRainingAt(pPos)) {
                 int j = Math.min(pAge + pRandom.nextInt(5) / 4, 15);
-                pLevel.setBlock(pPos, this.getStateWithAge(pLevel, pPos, j), 3);
+                pLevel.setBlock(pPos, this.getStateWithAge(fire, pLevel, pPos, j), 3);
             } else {
                 pLevel.removeBlock(pPos, false);
+                pLevel.setBlock(pPos, CommonProxy.MIMIC_DISSOLVE_BLOCK.get().defaultBlockState(), 3);
+                if (pLevel.getBlockEntity(pPos) instanceof MimicDissolveBlockEntity blockEntity) {
+                    blockEntity.mimicBlockState = blockstate;
+                    blockEntity.notifyUpdate();
+                }
             }
 
             blockstate.onCaughtFire(pLevel, pPos, face, null);
@@ -147,9 +155,9 @@ public class ColoredFireBlock extends FireBlock {
 
     }
 
-    private BlockState getStateWithAge(LevelAccessor pLevel, BlockPos pPos, int pAge) {
-        BlockState blockstate = getState(pLevel, pPos);
-        return blockstate.is(Blocks.FIRE) ? blockstate.setValue(AGE, Integer.valueOf(pAge)) : blockstate;
+    private BlockState getStateWithAge(RawFire fire, LevelAccessor pLevel, BlockPos pPos, int pAge) {
+        BlockState blockstate = getStateForPlacement(pLevel, pPos);
+        return blockstate.is(this) ? blockstate.setValue(AGE, pAge).setValue(FIRE, fire) : blockstate;
     }
 
     private boolean isValidFireLocation(BlockGetter pLevel, BlockPos pPos) {
