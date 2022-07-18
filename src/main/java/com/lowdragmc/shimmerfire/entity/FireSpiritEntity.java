@@ -2,12 +2,11 @@ package com.lowdragmc.shimmerfire.entity;
 
 import com.lowdragmc.shimmer.client.light.ColorPointLight;
 import com.lowdragmc.shimmer.client.light.LightManager;
-import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.api.RawFire;
+import com.lowdragmc.shimmerfire.client.particle.VividFireParticle;
 import com.mojang.math.Vector3f;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -21,11 +20,9 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.ambient.AmbientCreature;
-import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -35,9 +32,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.time.LocalDate;
-import java.time.temporal.ChronoField;
-import java.util.Random;
+import java.lang.ref.WeakReference;
 
 /**
  * @author KilaBash
@@ -48,26 +43,32 @@ import java.util.Random;
 @MethodsReturnNonnullByDefault
 public class FireSpiritEntity extends AmbientCreature {
     private static final EntityDataAccessor<Integer> FIRE_COLOR = SynchedEntityData.defineId(FireSpiritEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Byte> DATA_ID_FLAGS = SynchedEntityData.defineId(FireSpiritEntity.class, EntityDataSerializers.BYTE);
-    private static final TargetingConditions BAT_RESTING_TARGETING = TargetingConditions.forNonCombat().range(4.0D);
-    @Nullable
-    private BlockPos targetPosition;
     @OnlyIn(Dist.CLIENT)
     private ColorPointLight colorPointLight;
+    @OnlyIn(Dist.CLIENT)
+    private VividFireParticle vividFireParticle;
+
+    private WeakReference<Player> master;
 
     public FireSpiritEntity(EntityType<? extends FireSpiritEntity> entityType, Level level) {
         super(entityType, level);
-        this.setResting(true);
-    }
-
-    public boolean isFlapping() {
-        return !this.isResting() && this.tickCount % 3 == 0;
+        setNoGravity(true);
     }
 
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(DATA_ID_FLAGS, (byte)0);
         this.entityData.define(FIRE_COLOR, RawFire.DESTROY.ordinal());
+    }
+
+    @Nullable
+    public Player getPlayer() {
+        if (master == null) return null;
+        Player player = master.get();
+        return player == null ? null : player.isAddedToWorld() && player.level == this.level ? player : null;
+    }
+
+    public void setMaster(Player master) {
+        this.master = new WeakReference<>(master);
     }
 
     /**
@@ -84,17 +85,25 @@ public class FireSpiritEntity extends AmbientCreature {
         return super.getVoicePitch() * 0.95F;
     }
 
-    @Nullable
-    public SoundEvent getAmbientSound() {
-        return this.isResting() && this.random.nextInt(4) != 0 ? null : SoundEvents.BAT_AMBIENT;
-    }
-
     protected SoundEvent getHurtSound(@Nonnull DamageSource pDamageSource) {
         return SoundEvents.BAT_HURT;
     }
 
     protected SoundEvent getDeathSound() {
         return SoundEvents.BAT_DEATH;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Nullable
+    public VividFireParticle getOrCreateFire() {
+        if (vividFireParticle == null || !vividFireParticle.isAlive()) {
+            Vec3 position = getPosition(0);
+            if (level instanceof ClientLevel clientLevel) {
+                vividFireParticle = new VividFireParticle(clientLevel, position.x, position.y, position.z, getColor().colorVale, 0.3f, true);
+                vividFireParticle.addParticle();
+            }
+        }
+        return vividFireParticle;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -113,6 +122,9 @@ public class FireSpiritEntity extends AmbientCreature {
         if (colorPointLight != null) {
             colorPointLight.remove();
         }
+        if (vividFireParticle != null) {
+            vividFireParticle.remove();
+        }
     }
 
     /**
@@ -122,30 +134,10 @@ public class FireSpiritEntity extends AmbientCreature {
         return false;
     }
 
-    protected void doPush(@Nonnull Entity pEntity) {
-        // TODO BURNING
-    }
-
-    protected void pushEntities() {
-        // TODO BURNING
-    }
-
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 6.0D);
     }
 
-    public boolean isResting() {
-        return (this.entityData.get(DATA_ID_FLAGS) & 1) != 0;
-    }
-
-    public void setResting(boolean pIsHanging) {
-        byte b0 = this.entityData.get(DATA_ID_FLAGS);
-        if (pIsHanging) {
-            this.entityData.set(DATA_ID_FLAGS, (byte)(b0 | 1));
-        } else {
-            this.entityData.set(DATA_ID_FLAGS, (byte)(b0 & -2));
-        }
-    }
 
     public void setColor(RawFire color) {
         this.entityData.set(FIRE_COLOR, color.ordinal());
@@ -159,78 +151,28 @@ public class FireSpiritEntity extends AmbientCreature {
      * Called to update the entity's position/logic.
      */
     public void tick() {
-        super.tick();
-        if (this.isResting()) {
-            this.setDeltaMovement(Vec3.ZERO);
-            this.setPosRaw(this.getX(), (double)Mth.floor(this.getY()) + 1.0D - (double)this.getBbHeight(), this.getZ());
-        } else {
-            this.setDeltaMovement(this.getDeltaMovement().multiply(.5D, 0.3D, .5D));
-        }
-        if (level.isClientSide) {
-            Random random = level.random;
-            Vec3 pos = getPosition(0);
-            if (random.nextInt(5) == 0) {
-                for(int i = 0; i < random.nextInt(1) + 1; ++i) {
-                    Particle particle = Minecraft.getInstance().particleEngine.createParticle(CommonProxy.FIRE_SPARK.get(), pos.x + 0.5D, pos.y + 0.5D, pos.z + 0.5D,
-                            random.nextFloat() / 2.0F, 5.0E-5D, random.nextFloat() / 2.0F);
-                    if (particle != null) {
-                        int color = getColor().colorVale;
-                        particle.setColor((color >> 16) & 0xff, (color >> 8) & 0xff, (color) & 0xff);
-                    }
-                }
+        if (!level.isClientSide) {
+            Player player = getPlayer();
+            if (player == null) {
+                remove(RemovalReason.DISCARDED);
+            } else {
+                Vec3 eyePosition = player.getEyePosition();
+                float f = 0;
+                float f1 = -(player.getYRot() + 45) * ((float)Math.PI / 180F);
+                float f2 = Mth.cos(f1);
+                float f3 = Mth.sin(f1);
+                float f4 = Mth.cos(f);
+                float f5 = Mth.sin(f);
+                Vec3 angle = new Vec3(f3 * f4, (-f5), (f2 * f4));
+                eyePosition = eyePosition.add(angle);
+                moveTo(eyePosition);
             }
         }
+        super.tick();
     }
-
-
 
     protected void customServerAiStep() {
         super.customServerAiStep();
-        BlockPos blockpos = this.blockPosition();
-        BlockPos abovePos = blockpos.above();
-        if (this.isResting()) {
-            boolean flag = this.isSilent();
-            if (this.level.getBlockState(abovePos).isRedstoneConductor(this.level, blockpos)) {
-                if (this.random.nextInt(200) == 0) {
-                    this.yHeadRot = (float)this.random.nextInt(360);
-                }
-
-                if (this.level.getNearestPlayer(BAT_RESTING_TARGETING, this) != null) {
-                    this.setResting(false);
-                    if (!flag) {
-                        this.level.levelEvent(null, 1025, blockpos, 0);
-                    }
-                }
-            } else {
-                this.setResting(false);
-                if (!flag) {
-                    this.level.levelEvent(null, 1025, blockpos, 0);
-                }
-            }
-        } else {
-            if (this.targetPosition != null && (!this.level.isEmptyBlock(this.targetPosition) || this.targetPosition.getY() <= this.level.getMinBuildHeight())) {
-                this.targetPosition = null;
-            }
-
-            if (this.targetPosition == null || this.random.nextInt(30) == 0 || this.targetPosition.closerToCenterThan(this.position(), 2.0D)) {
-                this.targetPosition = new BlockPos(this.getX() + (double)this.random.nextInt(7) - (double)this.random.nextInt(7), this.getY() + (double)this.random.nextInt(6) - 2.0D, this.getZ() + (double)this.random.nextInt(7) - (double)this.random.nextInt(7));
-            }
-
-            double d2 = (double)this.targetPosition.getX() + 0.5D - this.getX();
-            double d0 = (double)this.targetPosition.getY() + 0.1D - this.getY();
-            double d1 = (double)this.targetPosition.getZ() + 0.5D - this.getZ();
-            Vec3 vec3 = this.getDeltaMovement();
-            Vec3 vec31 = vec3.add((Math.signum(d2) * 0.5D - vec3.x) * (double)0.1F, (Math.signum(d0) * (double)0.7F - vec3.y) * (double)0.1F, (Math.signum(d1) * 0.5D - vec3.z) * (double)0.1F);
-            this.setDeltaMovement(vec31);
-            float f = (float)(Mth.atan2(vec31.z, vec31.x) * (double)(180F / (float)Math.PI)) - 90.0F;
-            float f1 = Mth.wrapDegrees(f - this.getYRot());
-            this.zza = 0.5F;
-            this.setYRot(this.getYRot() + f1);
-            if (this.random.nextInt(100) == 0 && this.level.getBlockState(abovePos).isRedstoneConductor(this.level, abovePos)) {
-                this.setResting(true);
-            }
-        }
-
     }
 
     @Nonnull
@@ -257,13 +199,12 @@ public class FireSpiritEntity extends AmbientCreature {
      * Called when the entity is attacked.
      */
     public boolean hurt(@Nonnull DamageSource pSource, float pAmount) {
+        if (pSource.getEntity() instanceof Player player && player == getPlayer()) {
+            remove(RemovalReason.DISCARDED);
+        }
         if (this.isInvulnerableTo(pSource)) {
             return false;
         } else {
-            if (!this.level.isClientSide && this.isResting()) {
-                this.setResting(false);
-            }
-
             return super.hurt(pSource, pAmount);
         }
     }
@@ -273,13 +214,11 @@ public class FireSpiritEntity extends AmbientCreature {
      */
     public void readAdditionalSaveData(@Nonnull CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
-        this.entityData.set(DATA_ID_FLAGS, pCompound.getByte("Flags"));
         this.entityData.set(FIRE_COLOR, pCompound.getInt("Color"));
     }
 
     public void addAdditionalSaveData(@Nonnull CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
-        pCompound.putByte("Flags", this.entityData.get(DATA_ID_FLAGS));
         pCompound.putInt("Color", this.entityData.get(FIRE_COLOR));
     }
 
@@ -288,25 +227,6 @@ public class FireSpiritEntity extends AmbientCreature {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @org.jetbrains.annotations.Nullable SpawnGroupData pSpawnData, @org.jetbrains.annotations.Nullable CompoundTag pDataTag) {
         setColor(RawFire.values()[random.nextInt(RawFire.values().length)]);
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
-    }
-
-    public static boolean checkBatSpawnRules(EntityType<Bat> pBat, LevelAccessor pLevel, MobSpawnType pReason, BlockPos pPos, Random pRandom) {
-        int i = pLevel.getMaxLocalRawBrightness(pPos);
-        int j = 4;
-        if (isHalloween()) {
-            j = 7;
-        } else if (pRandom.nextBoolean()) {
-            return false;
-        }
-
-        return i <= pRandom.nextInt(j) && checkMobSpawnRules(pBat, pLevel, pReason, pPos, pRandom);
-    }
-
-    private static boolean isHalloween() {
-        LocalDate localdate = LocalDate.now();
-        int i = localdate.get(ChronoField.DAY_OF_MONTH);
-        int j = localdate.get(ChronoField.MONTH_OF_YEAR);
-        return j == 10 && i >= 20 || j == 11 && i <= 3;
     }
 
     protected float getStandingEyeHeight(@Nonnull Pose pPose, EntityDimensions pSize) {

@@ -16,7 +16,6 @@ import com.lowdragmc.shimmerfire.client.renderer.FireBaptismRenderer;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -25,7 +24,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.SandBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -49,26 +47,6 @@ public class FireBaptismBlockEntity extends ControllerTileEntity {
 
     public FireBaptismBlockEntity(ControllerDefinition definition, BlockPos pos, BlockState state) {
         super(definition, pos, state);
-    }
-
-    @Override
-    public void writeInitialSyncData(FriendlyByteBuf buf) {
-        super.writeInitialSyncData(buf);
-    }
-
-    @Override
-    public void receiveInitialSyncData(FriendlyByteBuf buf) {
-        super.receiveInitialSyncData(buf);
-    }
-
-    @Override
-    public void load(@NotNull CompoundTag compound) {
-        super.load(compound);
-    }
-
-    @Override
-    public void saveAdditional(@NotNull CompoundTag compound) {
-        super.saveAdditional(compound);
     }
 
     @Override

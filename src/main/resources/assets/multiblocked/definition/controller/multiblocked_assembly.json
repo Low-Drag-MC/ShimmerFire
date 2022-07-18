@@ -6,7 +6,7 @@
   "showInJei": true,
   "baseRenderer": {
     "state": {
-      "id": "minecraft:heavy_weighted_pressure_plate",
+      "id": "minecraft:cyan_terracotta",
       "meta": 0
     },
     "type": "blockstate"
@@ -36,8 +36,8 @@
         "C C"
       ],
       [
-        "AAA",
-        " @ ",
+        "A@A",
+        "   ",
         "   "
       ],
       [
