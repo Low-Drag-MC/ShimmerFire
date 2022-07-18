@@ -14,12 +14,14 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ambient.AmbientCreature;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,6 +32,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.lang.ref.WeakReference;
 
 /**
  * @author KilaBash
@@ -45,13 +48,27 @@ public class FireSpiritEntity extends AmbientCreature {
     @OnlyIn(Dist.CLIENT)
     private VividFireParticle vividFireParticle;
 
+    private WeakReference<Player> master;
+
     public FireSpiritEntity(EntityType<? extends FireSpiritEntity> entityType, Level level) {
         super(entityType, level);
+        setNoGravity(true);
     }
 
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(FIRE_COLOR, RawFire.DESTROY.ordinal());
+    }
+
+    @Nullable
+    public Player getPlayer() {
+        if (master == null) return null;
+        Player player = master.get();
+        return player == null ? null : player.isAddedToWorld() && player.level == this.level ? player : null;
+    }
+
+    public void setMaster(Player master) {
+        this.master = new WeakReference<>(master);
     }
 
     /**
@@ -117,14 +134,6 @@ public class FireSpiritEntity extends AmbientCreature {
         return false;
     }
 
-    protected void doPush(@Nonnull Entity pEntity) {
-        // TODO BURNING
-    }
-
-    protected void pushEntities() {
-        // TODO BURNING
-    }
-
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 6.0D);
     }
@@ -142,13 +151,28 @@ public class FireSpiritEntity extends AmbientCreature {
      * Called to update the entity's position/logic.
      */
     public void tick() {
+        if (!level.isClientSide) {
+            Player player = getPlayer();
+            if (player == null) {
+                remove(RemovalReason.DISCARDED);
+            } else {
+                Vec3 eyePosition = player.getEyePosition();
+                float f = 0;
+                float f1 = -(player.getYRot() + 45) * ((float)Math.PI / 180F);
+                float f2 = Mth.cos(f1);
+                float f3 = Mth.sin(f1);
+                float f4 = Mth.cos(f);
+                float f5 = Mth.sin(f);
+                Vec3 angle = new Vec3(f3 * f4, (-f5), (f2 * f4));
+                eyePosition = eyePosition.add(angle);
+                moveTo(eyePosition);
+            }
+        }
         super.tick();
     }
 
-
     protected void customServerAiStep() {
         super.customServerAiStep();
-
     }
 
     @Nonnull
@@ -175,6 +199,9 @@ public class FireSpiritEntity extends AmbientCreature {
      * Called when the entity is attacked.
      */
     public boolean hurt(@Nonnull DamageSource pSource, float pAmount) {
+        if (pSource.getEntity() instanceof Player player && player == getPlayer()) {
+            remove(RemovalReason.DISCARDED);
+        }
         if (this.isInvulnerableTo(pSource)) {
             return false;
         } else {

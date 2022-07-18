@@ -33,7 +33,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -132,7 +131,7 @@ public class CommonProxy {
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> event) {
         IForgeRegistry<Item> registry = event.getRegistry();
-        registry.register(new ForgeSpawnEggItem(FIRE_SPIRIT, 4996656, 986895, new Item.Properties().tab(TAB_ITEMS)).setRegistryName(ShimmerFireMod.MODID, "fire_spirit_spawn_egg"));
+        registry.register(new FireSpiritSpawnEgg(FIRE_SPIRIT, 4996656, 986895, new Item.Properties().tab(TAB_ITEMS)).setRegistryName(ShimmerFireMod.MODID, "fire_spirit_spawn_egg"));
         for (RawFire fire : RawFire.values()) {
             registry.register(new ColoredFlintItem(fire));
         }
