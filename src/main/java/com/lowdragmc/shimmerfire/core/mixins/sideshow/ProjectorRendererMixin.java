@@ -15,6 +15,7 @@ import org.teacon.slides.projector.ProjectorBlock;
 import org.teacon.slides.projector.ProjectorBlockEntity;
 import org.teacon.slides.renderer.ProjectorRenderer;
 import org.teacon.slides.renderer.Slide;
+import org.teacon.slides.renderer.SlideState;
 
 /**
  * @author KilaBash
@@ -26,7 +27,7 @@ public abstract class ProjectorRendererMixin {
 
     @Inject(
             method = {"render(Lorg/teacon/slides/projector/ProjectorBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V"},
-            at = @At(value = "INVOKE", target = "Lorg/teacon/slides/renderer/Slide;render(Lnet/minecraft/client/renderer/MultiBufferSource;Lcom/mojang/math/Matrix4f;Lcom/mojang/math/Matrix3f;FFIIIZZ)V"),
+            at = @At(value = "INVOKE", target = "Lorg/teacon/slides/renderer/Slide;render(Lnet/minecraft/client/renderer/MultiBufferSource;Lcom/mojang/math/Matrix4f;Lcom/mojang/math/Matrix3f;FFIIIZZJF)V"),
             locals = LocalCapture.CAPTURE_FAILHARD,
             remap = false,
             cancellable = true)
@@ -47,7 +48,7 @@ public abstract class ProjectorRendererMixin {
         PostProcessing postProcessing = effect == null ? null : PostProcessing.getPost(effect);
         if (postProcessing != null) {
             PoseStack.Pose last = RenderUtils.copyPoseStack(pStack).last();
-            postProcessing.postEntity(bufferSource -> slide.render(bufferSource, last.pose(), last.normal(), width, height, color, 15728880, OverlayTexture.NO_OVERLAY, flipped || tile.mDoubleSided, !flipped || tile.mDoubleSided));
+            postProcessing.postEntity(bufferSource -> slide.render(bufferSource, last.pose(), last.normal(), width, height, color, 15728880, OverlayTexture.NO_OVERLAY, flipped || tile.mDoubleSided, !flipped || tile.mDoubleSided, SlideState.getAnimationTick(), partialTick));
             pStack.popPose();
             ci.cancel();
         }
