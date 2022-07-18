@@ -7,8 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nonnull;
-
 import static com.lowdragmc.shimmerfire.blockentity.ColorfulFireBlockEntity.colorTagKey;
 import static com.lowdragmc.shimmerfire.blockentity.ColorfulFireBlockEntity.radiusTagKey;
 
@@ -26,49 +24,31 @@ public class ColorfulCampfireBlockEntity extends ColoredCampfireBlockEntity impl
     }
 
     @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
-        if (pTag.contains(colorTagKey)){
-            color = pTag.getInt(colorTagKey);
-        }
-        if (pTag.contains(radiusTagKey)){
-            radius = pTag.getInt(radiusTagKey);
-        }
+    protected void read(CompoundTag tag, boolean clientPacket) {
+        super.read(tag, clientPacket);
+        setRadius(tag.getInt(radiusTagKey));
+        setColor(tag.getInt(colorTagKey));
     }
 
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        super.saveAdditional(pTag);
-        pTag.putInt(colorTagKey, this.color);
-        pTag.putInt(radiusTagKey, this.radius);
-    }
-
-    /**
-     * Get an NBT compound to sync to the client with SPacketChunkData, used for initial loading of the chunk or when
-     * many blocks change at once. This compound comes back to you clientside in
-     */
-    @Override
-    @Nonnull
-    public CompoundTag getUpdateTag() {
-        CompoundTag compoundtag = super.getUpdateTag();
-        compoundtag.putInt(colorTagKey,color);
-        compoundtag.putInt(radiusTagKey,radius);
-        return compoundtag;
+    protected void write(CompoundTag tag, boolean clientPacket) {
+        super.write(tag, clientPacket);
+        tag.putInt(colorTagKey, this.color);
+        tag.putInt(radiusTagKey, this.radius);
     }
 
     public void setColor(int color) {
-        if (this.color!=color){
-            this.color = color;
-            if (!level.isClientSide){
-//                level.sendBlockUpdated(worldPosition,bloc);
-            }else {
-                ShimmerFireUtils.setSingleBlocksDirty(worldPosition);
-            }
+        this.color = color;
+        if (level.isClientSide){
+            ShimmerFireUtils.setSingleBlocksDirty(worldPosition);
         }
     }
 
     public void setRadius(int radius) {
         this.radius = radius;
+        if (level.isClientSide){
+            ShimmerFireUtils.setSingleBlocksDirty(worldPosition);
+        }
     }
 
     public int getColor() {

@@ -4,7 +4,11 @@ import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.block.ColorfulCampfireBlock;
 import com.lowdragmc.shimmerfire.block.ColorfulFireBlock;
+import com.lowdragmc.shimmerfire.blockentity.ColoredCampfireBlockEntity;
+import com.lowdragmc.shimmerfire.blockentity.ColorfulCampfireBlockEntity;
+import com.lowdragmc.shimmerfire.blockentity.ColorfulFireBlockEntity;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,6 +26,7 @@ import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.CandleCakeBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -93,8 +98,13 @@ public class ColorfulFlintItem extends FlintAndSteelItem {
             if (BaseFireBlock.canBePlacedAt(level, blockpos1, context.getHorizontalDirection())) {
                 level.playSound(player, blockpos1, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
                 level.setBlock(blockpos1, CommonProxy.COLORFUL_FIRE_BLOCK.get().defaultBlockState(), Block.UPDATE_ALL_IMMEDIATE);
-                ColorfulFireBlock.setColor(level,blockpos1,color);
-                ColorfulFireBlock.setRadius(level,blockpos1,radius);
+
+                ColorfulFireBlockEntity blockEntity = (ColorfulFireBlockEntity)level.getBlockEntity(blockpos1);
+                if (!level.isClientSide){
+                    blockEntity.setColor(color);
+                    blockEntity.setRadius(radius);
+                    blockEntity.notifyUpdate();
+                }
 
                 level.getChunkSource().getLightEngine().checkBlock(blockpos1);
 
@@ -114,13 +124,17 @@ public class ColorfulFlintItem extends FlintAndSteelItem {
             blockstate = blockstate.setValue(BlockStateProperties.LIT, Boolean.TRUE);
             level.playSound(player, blockpos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
             level.setBlock(blockpos, blockstate, Block.UPDATE_ALL_IMMEDIATE);
+            if (blockstate.getBlock() == CommonProxy.COLORFUL_CAMPFIRE_BLOCK.get()){
+                ColorfulCampfireBlockEntity blockEntity = (ColorfulCampfireBlockEntity)level.getBlockEntity(blockpos);
+                if (!level.isClientSide){
+                    blockEntity.setRadius(radius);
+                    blockEntity.setColor(color);
+                    blockEntity.notifyUpdate();
+                }
+            }
             level.gameEvent(player, GameEvent.BLOCK_PLACE, blockpos);
             if (player != null) {
                 context.getItemInHand().hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
-            }
-            if (blockstate.getBlock() == CommonProxy.COLORFUL_CAMPFIRE_BLOCK.get()){
-                ColorfulCampfireBlock.setRadius(level,blockpos,radius);
-                ColorfulCampfireBlock.setColor(level,blockpos,color);
             }
 
             return InteractionResult.sidedSuccess(level.isClientSide());

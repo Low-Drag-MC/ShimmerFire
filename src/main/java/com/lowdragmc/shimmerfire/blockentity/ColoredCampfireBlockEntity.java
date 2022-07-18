@@ -31,7 +31,7 @@ import java.util.Random;
  * @date 2022/05/09
  * @implNote ColoredCampfireBlockEntity copy from {@link net.minecraft.world.level.block.entity.CampfireBlockEntity}
  */
-public class ColoredCampfireBlockEntity extends BlockEntity implements Clearable {
+public class ColoredCampfireBlockEntity extends SyncedBlockEntity implements Clearable {
     protected final NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
     protected final int[] cookingProgress = new int[4];
     protected final int[] cookingTime = new int[4];
@@ -51,14 +51,14 @@ public class ColoredCampfireBlockEntity extends BlockEntity implements Clearable
             ItemStack itemstack = pBlockEntity.items.get(i);
             if (!itemstack.isEmpty()) {
                 flag = true;
-                int j = pBlockEntity.cookingProgress[i]++;
+                pBlockEntity.cookingProgress[i]++;
                 if (pBlockEntity.cookingProgress[i] >= pBlockEntity.cookingTime[i]) {
                     Container container = new SimpleContainer(itemstack);
                     ItemStack itemstack1 = pLevel.getRecipeManager().getRecipeFor(RecipeType.CAMPFIRE_COOKING, container, pLevel).map((p_155305_) -> p_155305_.assemble(container)).orElse(itemstack);
                     Containers.dropItemStack(pLevel, pPos.getX(), pPos.getY(),
                             pPos.getZ(), itemstack1);
                     pBlockEntity.items.set(i, ItemStack.EMPTY);
-                    pLevel.sendBlockUpdated(pPos, pState, pState, 3);
+                    pBlockEntity.notifyUpdate();
                 }
             }
         }
@@ -119,47 +119,26 @@ public class ColoredCampfireBlockEntity extends BlockEntity implements Clearable
         return this.items;
     }
 
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
+    @Override
+    protected void read(CompoundTag tag, boolean clientPacket) {
         this.items.clear();
-        ContainerHelper.loadAllItems(pTag, this.items);
-        if (pTag.contains("CookingTimes", 11)) {
-            int[] aint = pTag.getIntArray("CookingTimes");
+        ContainerHelper.loadAllItems(tag,this.items);
+        if (tag.contains("CookingTimes", 11)) {
+            int[] aint = tag.getIntArray("CookingTimes");
             System.arraycopy(aint, 0, this.cookingProgress, 0, Math.min(this.cookingTime.length, aint.length));
         }
 
-        if (pTag.contains("CookingTotalTimes", 11)) {
-            int[] aint1 = pTag.getIntArray("CookingTotalTimes");
+        if (tag.contains("CookingTotalTimes", 11)) {
+            int[] aint1 = tag.getIntArray("CookingTotalTimes");
             System.arraycopy(aint1, 0, this.cookingTime, 0, Math.min(this.cookingTime.length, aint1.length));
         }
-
     }
 
-    protected void saveAdditional(CompoundTag pTag) {
-        super.saveAdditional(pTag);
-        ContainerHelper.saveAllItems(pTag, this.items, true);
-        pTag.putIntArray("CookingTimes", this.cookingProgress);
-        pTag.putIntArray("CookingTotalTimes", this.cookingTime);
-    }
-
-    /**
-     * Retrieves packet to send to the client whenever this Tile Entity is resynced via World.notifyBlockUpdate. For
-     * modded TE's, this packet comes back to you clientside in {@link #onDataPacket}
-     */
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    /**
-     * Get an NBT compound to sync to the client with SPacketChunkData, used for initial loading of the chunk or when
-     * many blocks change at once. This compound comes back to you clientside in
-     */
     @Override
-    @Nonnull
-    public CompoundTag getUpdateTag() {
-        CompoundTag compoundtag = new CompoundTag();
-        ContainerHelper.saveAllItems(compoundtag, this.items, true);
-        return compoundtag;
+    protected void write(CompoundTag tag, boolean clientPacket) {
+        ContainerHelper.saveAllItems(tag, this.items, true);
+        tag.putIntArray("CookingTimes", this.cookingProgress);
+        tag.putIntArray("CookingTotalTimes", this.cookingTime);
     }
 
     public Optional<CampfireCookingRecipe> getCookableRecipe(ItemStack pStack) {
@@ -183,7 +162,8 @@ public class ColoredCampfireBlockEntity extends BlockEntity implements Clearable
 
     protected void markUpdated() {
         this.setChanged();
-        this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
+        this.notifyUpdate();
+//        this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
     }
 
     public void clearContent() {
