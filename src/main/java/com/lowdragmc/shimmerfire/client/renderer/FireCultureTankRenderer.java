@@ -1,8 +1,10 @@
 package com.lowdragmc.shimmerfire.client.renderer;
 
+import com.lowdragmc.shimmer.client.model.ShimmerMetadataSection;
 import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
 import com.lowdragmc.shimmer.client.shader.RenderUtils;
 import com.lowdragmc.shimmer.core.IBakedQuad;
+import com.lowdragmc.shimmer.core.mixins.ShimmerMixinPlugin;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.api.RawFire;
@@ -100,7 +102,11 @@ public class FireCultureTankRenderer extends GeoBlockRenderer<FireCultureTankBlo
          BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState);
          List<BakedQuad> quads = model.getQuads(blockState, null, new Random(), EmptyModelData.INSTANCE);
          net.minecraftforge.client.ForgeHooksClient.setRenderType(null);
-         return quads.stream().filter(quad -> ((IBakedQuad)quad).isBloom()).toList();
+         if (!ShimmerMixinPlugin.IS_OPT_LOAD) {
+            return quads.stream().filter(quad -> ((IBakedQuad)quad).isBloom()).toList();
+         } else {
+            return quads.stream().filter(quad -> ShimmerMetadataSection.isBloom(quad.getSprite())).toList();
+         }
       });
    }
 
