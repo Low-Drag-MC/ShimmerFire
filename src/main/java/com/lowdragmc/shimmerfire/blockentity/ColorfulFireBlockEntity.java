@@ -5,7 +5,6 @@ import com.lowdragmc.shimmerfire.utils.ShimmerFireUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
-import org.lwjgl.system.CallbackI;
 
 public class ColorfulFireBlockEntity extends SyncedBlockEntity {
 
@@ -21,17 +20,21 @@ public class ColorfulFireBlockEntity extends SyncedBlockEntity {
 
     public void setColor(int color) {
         this.color = color;
-        notifyUpdate();
+        if (level == null) return;
         if (level.isClientSide){
             ShimmerFireUtils.setSingleBlocksDirty(worldPosition);
+        } else {
+            notifyUpdate();
         }
     }
 
     public void setRadius(int radius) {
         this.radius = radius;
-        notifyUpdate();
+        if (level == null) return;
         if (level.isClientSide){
             ShimmerFireUtils.setSingleBlocksDirty(worldPosition);
+        } else {
+            notifyUpdate();
         }
     }
 

@@ -39,14 +39,14 @@ public class ColorfulCampfireBlockEntity extends ColoredCampfireBlockEntity impl
 
     public void setColor(int color) {
         this.color = color;
-        if (level.isClientSide){
+        if (level != null && level.isClientSide){
             ShimmerFireUtils.setSingleBlocksDirty(worldPosition);
         }
     }
 
     public void setRadius(int radius) {
         this.radius = radius;
-        if (level.isClientSide){
+        if (level != null && level.isClientSide){
             ShimmerFireUtils.setSingleBlocksDirty(worldPosition);
         }
     }

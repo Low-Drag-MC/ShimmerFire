@@ -12,7 +12,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CampfireCookingRecipe;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -106,24 +105,15 @@ public class ColorfulCampfireBlock extends CampfireBlock {
         }
     }
 
-    public static void setColor(BlockGetter level,BlockPos pos,int color){
-        ((ColorfulCampfireBlockEntity)level.getBlockEntity(pos)).setColor(color);
-    }
-
-    public static int getColor(BlockGetter level, BlockPos pos){
+    public static int getColor(@Nonnull BlockGetter level, @Nonnull BlockPos pos){
         return ((ColorfulCampfireBlockEntity)level.getBlockEntity(pos)).getColor();
     }
 
-    public static void setRadius(BlockGetter level,BlockPos pos,int radius){
-        ((ColorfulCampfireBlockEntity)level.getBlockEntity(pos)).setRadius(radius);
-    }
-
-    public static int getRadius(BlockGetter level,BlockPos pos){
-        return ((ColorfulCampfireBlockEntity)level.getBlockEntity(pos)).getRadius();
-    }
-
-    public static ColorPointLight.Template getColorPointLight(BlockGetter level, BlockPos pos){
-        ColorfulCampfireBlockEntity blockEntity = (ColorfulCampfireBlockEntity)level.getBlockEntity(pos);
-        return new ColorPointLight.Template(blockEntity.getRadius(), blockEntity.getColor());
+    public static ColorPointLight.Template getColorPointLight(@Nullable BlockGetter level, BlockPos pos){
+        if (level != null && level.getBlockEntity(pos) instanceof ColorfulCampfireBlockEntity blockEntity) {
+            return new ColorPointLight.Template(blockEntity.getRadius(), blockEntity.getColor());
+        } else {
+            return null;
+        }
     }
 }

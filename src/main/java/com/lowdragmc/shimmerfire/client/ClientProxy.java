@@ -141,7 +141,7 @@ public class ClientProxy extends CommonProxy {
                 RawFire fire = state.getValue(FIRE);
                 return new ColorPointLight.Template(fire.radius, fire.colorVale);
             });
-            LightManager.INSTANCE.registerBlockLight(COLORFUL_FIRE_BLOCK.get(),(state,pos)->
+            LightManager.INSTANCE.registerBlockLight(COLORFUL_FIRE_BLOCK.get(), (state, pos)->
                     ColorfulFireBlock.getColorPointLight(Minecraft.getInstance().level, pos)
             );
             LightManager.INSTANCE.registerBlockLight(CAMPFIRE_BLOCK.get(), (state, pos) -> {
@@ -152,7 +152,7 @@ public class ClientProxy extends CommonProxy {
                 return null;
             });
 
-            LightManager.INSTANCE.registerBlockLight(COLORFUL_CAMPFIRE_BLOCK.get(),(state,pos)->{
+            LightManager.INSTANCE.registerBlockLight(COLORFUL_CAMPFIRE_BLOCK.get(), (state, pos)->{
                 if (state.getValue(CampfireBlock.LIT)){
                     return ColorfulCampfireBlock.getColorPointLight(Minecraft.getInstance().level, pos);
                 }

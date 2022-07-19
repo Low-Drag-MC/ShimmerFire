@@ -6,7 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.Container;
@@ -18,11 +17,9 @@ import net.minecraft.world.item.crafting.CampfireCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 import java.util.Random;
 
@@ -152,18 +149,12 @@ public class ColoredCampfireBlockEntity extends SyncedBlockEntity implements Cle
                 this.cookingTime[i] = pCookTime;
                 this.cookingProgress[i] = 0;
                 this.items.set(i, pStack.split(1));
-                this.markUpdated();
+                this.notifyUpdate();
                 return true;
             }
         }
 
         return false;
-    }
-
-    protected void markUpdated() {
-        this.setChanged();
-        this.notifyUpdate();
-//        this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
     }
 
     public void clearContent() {
@@ -172,7 +163,7 @@ public class ColoredCampfireBlockEntity extends SyncedBlockEntity implements Cle
 
     public void dowse() {
         if (this.level != null) {
-            this.markUpdated();
+            this.notifyUpdate();
         }
     }
 }

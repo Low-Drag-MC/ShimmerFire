@@ -4,7 +4,6 @@ import com.lowdragmc.shimmer.client.light.ColorPointLight;
 import com.lowdragmc.shimmerfire.blockentity.ColorfulFireBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -15,6 +14,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ColorfulFireBlock extends FireBlock implements EntityBlock {
@@ -36,25 +36,19 @@ public class ColorfulFireBlock extends FireBlock implements EntityBlock {
         pBuilder.add(AGE, NORTH, EAST, SOUTH, WEST, UP);
     }
 
-    public static void setColor(BlockGetter level,BlockPos pos,int color){
-        ((ColorfulFireBlockEntity)level.getBlockEntity(pos)).setColor(color);
-    }
-
-    public static int getColor(BlockAndTintGetter level, BlockPos pos){
-        return ((ColorfulFireBlockEntity)level.getBlockEntity(pos)).getColor();
-    }
-
-    public static void setRadius(BlockGetter level,BlockPos pos,int radius){
-        ((ColorfulFireBlockEntity)level.getBlockEntity(pos)).setRadius(radius);
-    }
-
-    public static int getRadius(BlockGetter level,BlockPos pos){
-        return ((ColorfulFireBlockEntity)level.getBlockEntity(pos)).getRadius();
+    public static int getRadius(@Nonnull BlockGetter level, BlockPos pos){
+        if (level.getBlockEntity(pos) instanceof ColorfulFireBlockEntity blockEntity) {
+            return blockEntity.getRadius();
+        }
+        return 0;
     }
 
     public static ColorPointLight.Template getColorPointLight(Level level, BlockPos pos){
-        ColorfulFireBlockEntity blockEntity = (ColorfulFireBlockEntity)level.getBlockEntity(pos);
-        return new ColorPointLight.Template(blockEntity.getRadius(), blockEntity.getColor());
+        if (level != null && level.getBlockEntity(pos) instanceof ColorfulFireBlockEntity blockEntity) {
+            return new ColorPointLight.Template(blockEntity.getRadius(), blockEntity.getColor());
+        } else {
+            return null;
+        }
     }
 
     @Override
