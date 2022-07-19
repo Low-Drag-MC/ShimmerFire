@@ -113,7 +113,7 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void clientSetup(FMLClientSetupEvent e) {
         e.enqueueWork(()->{
-            if (ShimmerFireMod.isModLoaded("nocaet") && ModList.get().getModFileById("shimmer").versionString().equals("0.1.8")) {
+            if (ShimmerFireMod.isModLoaded("nocaet")) {
                 Class<?> clazz = GarlicRenderTypes.class;
                 try {
                     Field[] fields = clazz.getDeclaredFields();
