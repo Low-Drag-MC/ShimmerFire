@@ -50,12 +50,6 @@ public class ClientProxy extends CommonProxy {
 
     public ClientProxy() {
         super();
-        ShaderInjection.registerFSHInjection("ldlib:particle", s -> {
-            s = s.replace("fragColor = linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);", """
-                        fragColor = linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);
-                    """);
-            return s;
-        });
         ShaderInjection.registerVSHInjection("nocaet:rendertype_solid", ClientProxy::BloomMRTVSHInjection);
         ShaderInjection.registerVSHInjection("nocaet:rendertype_cutout", ClientProxy::BloomMRTVSHInjection);
 

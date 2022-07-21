@@ -23,6 +23,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -169,16 +171,18 @@ public class VividFireParticle extends LParticle {
     protected static final Function<Integer, ParticleRenderType> TYPE = Util.memoize(color -> new ParticleRenderType(){
         @Override
         public void begin(@NotNull BufferBuilder bufferBuilder, @NotNull TextureManager textureManager) {
+            RenderTarget mainTarget = Minecraft.getInstance().getMainRenderTarget();
+            int lastID = GL11.glGetInteger(GL30.GL_FRAMEBUFFER_BINDING);
+
             ShaderManager.getTempTarget().clear(false);
             RenderTarget target = ShaderManager.getInstance().renderFullImageInFramebuffer(ShaderManager.getTempTarget(),
                     Shaders.load(Shader.ShaderType.FRAGMENT, new ResourceLocation(ShimmerFireMod.MODID, "vivid_fire")), uniformCache -> {
                 uniformCache.glUniform4F("color", (color >> 16 & 0xff)/256f,(color >> 8 & 0xff)/256f,(color & 0xff)/256f, 1);
             }, shaderProgram -> shaderProgram.bindTexture("fire", new ResourceLocation("shimmerfire:textures/particle/fire_mask_2.png")));
 
-            if (ShimmerMixinPlugin.IS_OPT_LOAD) {
-                Minecraft.getInstance().getMainRenderTarget().bindWrite(!ShaderManager.getInstance().hasViewPort());
-            } else {
-                PostProcessing.BLOOM_UNREAL.getPostTarget().bindWrite(!ShaderManager.getInstance().hasViewPort());
+            GlStateManager._glBindFramebuffer(36160, lastID);
+            if (!ShaderManager.getInstance().hasViewPort()) {
+                GlStateManager._viewport(0, 0, mainTarget.viewWidth, mainTarget.viewHeight);
             }
 
             RenderSystem.enableBlend();

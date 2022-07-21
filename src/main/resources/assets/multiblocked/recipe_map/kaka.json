@@ -1,0 +1,48 @@
+{
+  "name": "kaka",
+  "progressTexture": "multiblocked:textures/gui/progress_bar_arrow.png",
+  "recipes": [
+    {
+      "uid": "fceead5d-376f-4d98-b9b6-6e24e870f958",
+      "duration": 100,
+      "inputs": {
+        "item": [
+          {
+            "content": {
+              "type": "multiblocked:sized",
+              "count": 1,
+              "ingredient": {
+                "item": "minecraft:iron_ingot"
+              }
+            },
+            "chance": 1.0
+          },
+          {
+            "content": {
+              "type": "multiblocked:sized",
+              "count": 1,
+              "ingredient": {
+                "item": "minecraft:iron_ingot"
+              }
+            },
+            "chance": 1.0
+          }
+        ]
+      },
+      "outputs": {
+        "item": [
+          {
+            "content": {
+              "type": "multiblocked:sized",
+              "count": 2,
+              "ingredient": {
+                "item": "minecraft:iron_ingot"
+              }
+            },
+            "chance": 1.0
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -2,7 +2,6 @@ package com.lowdragmc.shimmerfire.client.particle;
 
 import com.lowdragmc.lowdraglib.client.particle.LParticle;
 import com.lowdragmc.lowdraglib.client.particle.impl.TextureParticle;
-import com.lowdragmc.lowdraglib.client.shader.Shaders;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -22,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * @author KilaBash

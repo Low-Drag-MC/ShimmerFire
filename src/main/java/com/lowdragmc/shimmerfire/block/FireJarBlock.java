@@ -48,7 +48,7 @@ public class FireJarBlock extends Block {
 
     public FireJarBlock() {
         super(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.PODZOL).strength(3.0F)
-                .lightLevel(state -> 5)
+                .lightLevel(state -> 8)
                 .sound(SoundType.METAL).noOcclusion());
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FIRE, RawFire.DESTROY).setValue(EMPTY, true));
