@@ -9,21 +9,16 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ambient.AmbientCreature;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -41,7 +36,7 @@ import java.lang.ref.WeakReference;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class FireSpiritEntity extends AmbientCreature {
+public class FireSpiritEntity extends Entity {
     private static final EntityDataAccessor<Integer> FIRE_COLOR = SynchedEntityData.defineId(FireSpiritEntity.class, EntityDataSerializers.INT);
     @OnlyIn(Dist.CLIENT)
     private ColorPointLight colorPointLight;
@@ -56,7 +51,6 @@ public class FireSpiritEntity extends AmbientCreature {
     }
 
     protected void defineSynchedData() {
-        super.defineSynchedData();
         this.entityData.define(FIRE_COLOR, RawFire.DESTROY.ordinal());
     }
 
@@ -69,28 +63,6 @@ public class FireSpiritEntity extends AmbientCreature {
 
     public void setMaster(Player master) {
         this.master = new WeakReference<>(master);
-    }
-
-    /**
-     * Returns the volume for the sounds this mob makes.
-     */
-    protected float getSoundVolume() {
-        return 0.1F;
-    }
-
-    /**
-     * Gets the pitch of living sounds in living entities.
-     */
-    public float getVoicePitch() {
-        return super.getVoicePitch() * 0.95F;
-    }
-
-    protected SoundEvent getHurtSound(@Nonnull DamageSource pDamageSource) {
-        return SoundEvents.BAT_HURT;
-    }
-
-    protected SoundEvent getDeathSound() {
-        return SoundEvents.BAT_DEATH;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -134,11 +106,6 @@ public class FireSpiritEntity extends AmbientCreature {
         return false;
     }
 
-    public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 6.0D);
-    }
-
-
     public void setColor(RawFire color) {
         this.entityData.set(FIRE_COLOR, color.ordinal());
     }
@@ -171,10 +138,6 @@ public class FireSpiritEntity extends AmbientCreature {
         super.tick();
     }
 
-    protected void customServerAiStep() {
-        super.customServerAiStep();
-    }
-
     @Nonnull
     protected Entity.MovementEmission getMovementEmission() {
         return Entity.MovementEmission.EVENTS;
@@ -195,6 +158,11 @@ public class FireSpiritEntity extends AmbientCreature {
         return true;
     }
 
+    @Override
+    public Packet<?> getAddEntityPacket() {
+        return new ClientboundAddEntityPacket(this);
+    }
+
     /**
      * Called when the entity is attacked.
      */
@@ -213,20 +181,11 @@ public class FireSpiritEntity extends AmbientCreature {
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
     public void readAdditionalSaveData(@Nonnull CompoundTag pCompound) {
-        super.readAdditionalSaveData(pCompound);
         this.entityData.set(FIRE_COLOR, pCompound.getInt("Color"));
     }
 
     public void addAdditionalSaveData(@Nonnull CompoundTag pCompound) {
-        super.addAdditionalSaveData(pCompound);
         pCompound.putInt("Color", this.entityData.get(FIRE_COLOR));
-    }
-
-    @Nullable
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @org.jetbrains.annotations.Nullable SpawnGroupData pSpawnData, @org.jetbrains.annotations.Nullable CompoundTag pDataTag) {
-        setColor(RawFire.values()[random.nextInt(RawFire.values().length)]);
-        return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
 
     protected float getStandingEyeHeight(@Nonnull Pose pPose, EntityDimensions pSize) {

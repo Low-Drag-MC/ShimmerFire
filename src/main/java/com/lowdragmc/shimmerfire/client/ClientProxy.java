@@ -50,12 +50,6 @@ public class ClientProxy extends CommonProxy {
 
     public ClientProxy() {
         super();
-        ShaderInjection.registerFSHInjection("ldlib:particle", s -> {
-            s = s.replace("fragColor = linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);", """
-                        fragColor = linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);
-                    """);
-            return s;
-        });
         ShaderInjection.registerVSHInjection("nocaet:rendertype_solid", ClientProxy::BloomMRTVSHInjection);
         ShaderInjection.registerVSHInjection("nocaet:rendertype_cutout", ClientProxy::BloomMRTVSHInjection);
 
@@ -158,7 +152,6 @@ public class ClientProxy extends CommonProxy {
                 }
                 return null;
             });
-            LightManager.INSTANCE.registerBlockLight(Blocks.SOUL_LANTERN, (state, pos) -> new ColorPointLight.Template(8, 0xff74F1F5));
             LightManager.INSTANCE.registerBlockLight(FIRE_JAR_BLOCK.get(), (blockState, pos) -> {
                 if (!blockState.getValue(FireJarBlock.EMPTY)) {
                     RawFire fire = blockState.getValue(FIRE);

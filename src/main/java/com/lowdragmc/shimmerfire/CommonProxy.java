@@ -85,7 +85,7 @@ public class CommonProxy {
     public static final RegistryObject<BlockEntityType<ColorfulCampfireBlockEntity>> COLORFUL_CAMPFIRE = BLOCK_ENTITIES.register("colorful_campfire_fire",() -> BlockEntityType.Builder.of(ColorfulCampfireBlockEntity::new,COLORFUL_CAMPFIRE_BLOCK.get()).build(null));
     public static final RegistryObject<BlockEntityType<MimicDissolveBlockEntity>> MIMIC_DISSOLVE = BLOCK_ENTITIES.register("mimic_dissolve",()->BlockEntityType.Builder.of(MimicDissolveBlockEntity::new,MIMIC_DISSOLVE_BLOCK.get()).build(null));
     // entities
-    public static final RegistryObject<EntityType<FireSpiritEntity>> FIRE_SPIRIT = ENTITIES.register("fire_spirit", () -> EntityType.Builder.of(FireSpiritEntity::new, MobCategory.AMBIENT).sized(0.5F, 0.9F).build("fire_spirit"));
+    public static final RegistryObject<EntityType<FireSpiritEntity>> FIRE_SPIRIT = ENTITIES.register("fire_spirit", () -> EntityType.Builder.of(FireSpiritEntity::new, MobCategory.MISC).sized(0.5F, 0.9F).build("fire_spirit"));
     // particles
     public static final RegistryObject<SimpleParticleType> FIRE_SPARK = PARTICLE_TYPES.register("fire_spark", () -> new SimpleParticleType(false));
     // Items
@@ -101,11 +101,6 @@ public class CommonProxy {
         BLOCK_ENTITIES.register(eventBus);
         ENTITIES.register(eventBus);
         PARTICLE_TYPES.register(eventBus);
-    }
-
-    @SubscribeEvent
-    public void registerEntityAttributeCreation(EntityAttributeCreationEvent event) {
-        event.put(FIRE_SPIRIT.get(), FireSpiritEntity.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -126,12 +121,13 @@ public class CommonProxy {
         MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_alsm"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
         MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_art_sun_controller"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
         MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_assembly"), AssemblyBlockEntity.AssemblyDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/kaka_fuwenjitan"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
     }
 
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> event) {
         IForgeRegistry<Item> registry = event.getRegistry();
-        registry.register(new FireSpiritSpawnEgg(FIRE_SPIRIT, 4996656, 986895, new Item.Properties().tab(TAB_ITEMS)).setRegistryName(ShimmerFireMod.MODID, "fire_spirit_spawn_egg"));
+        registry.register(new FireSpiritSpawnEgg(FIRE_SPIRIT, new Item.Properties().tab(TAB_ITEMS)).setRegistryName(ShimmerFireMod.MODID, "fire_spirit_spawn_egg"));
         for (RawFire fire : RawFire.values()) {
             registry.register(new ColoredFlintItem(fire));
         }
