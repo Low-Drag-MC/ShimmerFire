@@ -5,7 +5,6 @@ import com.lowdragmc.lowdraglib.client.shader.Shaders;
 import com.lowdragmc.lowdraglib.client.shader.management.Shader;
 import com.lowdragmc.lowdraglib.client.shader.management.ShaderManager;
 import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
-import com.lowdragmc.shimmer.core.mixins.ShimmerMixinPlugin;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;

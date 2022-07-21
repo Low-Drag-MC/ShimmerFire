@@ -6,7 +6,6 @@ import com.lowdragmc.lowdraglib.client.shader.management.Shader;
 import com.lowdragmc.lowdraglib.client.shader.management.ShaderManager;
 import com.lowdragmc.lowdraglib.utils.Vector3;
 import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
-import com.lowdragmc.shimmer.core.mixins.ShimmerMixinPlugin;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.api.RawFire;
 import com.lowdragmc.shimmerfire.utils.curve.CubicBezierCurve3;
@@ -119,6 +118,7 @@ public class FireTailParticle extends TrailParticle {
     protected static final Function<RawFire, ParticleRenderType> TYPE = Util.memoize(color -> new ParticleRenderType(){
         @Override
         public void begin(@NotNull BufferBuilder bufferBuilder, @NotNull TextureManager textureManager) {
+            RenderTarget mainTarget = Minecraft.getInstance().getMainRenderTarget();
             int lastID = GL11.glGetInteger(GL30.GL_FRAMEBUFFER_BINDING);
 
             ShaderManager.getTempTarget().clear(false);
@@ -128,6 +128,9 @@ public class FireTailParticle extends TrailParticle {
             }, shaderProgram -> shaderProgram.bindTexture("iChannel0", new ResourceLocation("ldlib:textures/particle/kila_tail.png")));
 
             GlStateManager._glBindFramebuffer(36160, lastID);
+            if (!ShaderManager.getInstance().hasViewPort()) {
+                GlStateManager._viewport(0, 0, mainTarget.viewWidth, mainTarget.viewHeight);
+            }
 
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
