@@ -6,6 +6,7 @@ import com.lowdragmc.lowdraglib.utils.Vector3;
 import com.lowdragmc.multiblocked.api.definition.ControllerDefinition;
 import com.lowdragmc.multiblocked.api.recipe.RecipeLogic;
 import com.lowdragmc.multiblocked.api.tile.ControllerTileEntity;
+import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -78,11 +79,12 @@ public class AssemblyBlockEntity extends ControllerTileEntity {
     private void emitLaser(int x, int z) {
         if (level instanceof ClientLevel clientLevel) {
             Vector3 from = new Vector3(getBlockPos().offset(x, 2, z)).add(0.5, 0.5, 0.5);
-            TextureBeamParticle beamParticle = new TextureBeamParticle(clientLevel, from, new Vector3(getBlockPos()).add(0.5, 0, 0.5));
+            TextureBeamParticle beamParticle = new TextureBeamParticle(clientLevel, from, new Vector3(getBlockPos()).add(0.5, 1, 0.5));
             beamParticle.setTexture(new ResourceLocation(ShimmerFireMod.MODID, "textures/particle/laser.png"));
+            beamParticle.setWidth(0.1f);
             beamParticle.setLifetime(8);
-            beamParticle.setEmit(0.3F);
-            beamParticle.addParticle();
+            beamParticle.setEmit(-0.3F);
+            PostProcessing.BLOOM_UNREAL.postParticle(beamParticle);
         }
     }
 

@@ -5,6 +5,7 @@
   "refmap": "shimmerfire.refmap.json",
   "minVersion": "0.8",
   "client": [
+    "ClientPacketListenerMixin",
     "MixinBufferUploader",
     "MixinLevelRender",
     "PoseStackMixin",
@@ -13,8 +14,10 @@
     "sideshow.ProjectorScreenMixin"
   ],
   "mixins": [
+    "ClientboundLevelParticlesPacketMixin",
     "FireBlockMixin",
     "LecternMixin",
+    "ParticleCommandMixin",
     "SoulLanternMixin",
     "sideshow.ProjectorBlockEntityMixin",
     "sideshow.ProjectorRendererMixin"
