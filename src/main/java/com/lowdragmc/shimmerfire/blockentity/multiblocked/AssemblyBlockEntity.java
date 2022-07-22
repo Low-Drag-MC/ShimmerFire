@@ -6,6 +6,7 @@ import com.lowdragmc.lowdraglib.utils.Vector3;
 import com.lowdragmc.multiblocked.api.definition.ControllerDefinition;
 import com.lowdragmc.multiblocked.api.recipe.RecipeLogic;
 import com.lowdragmc.multiblocked.api.tile.ControllerTileEntity;
+import com.lowdragmc.multiblocked.api.tile.part.IPartComponent;
 import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -56,6 +57,17 @@ public class AssemblyBlockEntity extends ControllerTileEntity {
                         recipeLogic.markDirty();
                         if (itemEntity.getItem().isEmpty()) {
                             entity.kill();
+                        }
+                        BlockPos[] poses = new BlockPos[] {
+                                getBlockPos().offset(1, 2, 1),
+                                getBlockPos().offset(-1, 2, -1),
+                                getBlockPos().offset(-1, 2, 1),
+                                getBlockPos().offset(1, 2, -1),
+                        };
+                        for (BlockPos pos : poses) {
+                            if (level.getBlockEntity(pos) instanceof IPartComponent part) {
+                                part.setStatus("working");
+                            }
                         }
                     }
                 }
