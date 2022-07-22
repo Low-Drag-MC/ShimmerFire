@@ -1,9 +1,22 @@
 {
-	"required": true,
-	"package": "com.lowdragmc.shimmerfire.core.mixins",
-	"compatibilityLevel": "JAVA_17",
-	"refmap": "shimmerfire.refmap.json",
-	"minVersion": "0.8",
-	"client": [ "MixinBufferUploader", "MixinLevelRender", "PoseStackMixin", "PoseStackPoseMixin", "VertexFormatElementUsageAccessor", "sideshow.ProjectorScreenMixin"],
-	"mixins": ["FireBlockMixin", "SoulLanternMixin", "sideshow.ProjectorBlockEntityMixin", "sideshow.ProjectorRendererMixin"]
+  "required": true,
+  "package": "com.lowdragmc.shimmerfire.core.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "shimmerfire.refmap.json",
+  "minVersion": "0.8",
+  "client": [
+    "MixinBufferUploader",
+    "MixinLevelRender",
+    "PoseStackMixin",
+    "PoseStackPoseMixin",
+    "VertexFormatElementUsageAccessor",
+    "sideshow.ProjectorScreenMixin"
+  ],
+  "mixins": [
+    "FireBlockMixin",
+    "LecternMixin",
+    "SoulLanternMixin",
+    "sideshow.ProjectorBlockEntityMixin",
+    "sideshow.ProjectorRendererMixin"
+  ]
 }

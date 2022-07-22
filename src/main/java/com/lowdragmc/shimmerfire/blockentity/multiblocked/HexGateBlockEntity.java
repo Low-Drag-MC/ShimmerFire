@@ -1,5 +1,6 @@
 package com.lowdragmc.shimmerfire.blockentity.multiblocked;
 
+import com.lowdragmc.lowdraglib.client.particle.impl.TextureBeamParticle;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.utils.Vector3;
 import com.lowdragmc.multiblocked.api.definition.ControllerDefinition;
@@ -14,7 +15,6 @@ import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.WorldData;
 import com.lowdragmc.shimmerfire.api.RawFire;
 import com.lowdragmc.shimmerfire.blockentity.FirePedestalBlockEntity;
-import com.lowdragmc.shimmerfire.client.particle.ColouredBeamParticle;
 import com.lowdragmc.shimmerfire.client.particle.FireSpiritParticle;
 import com.lowdragmc.shimmerfire.client.particle.FireTailParticle;
 import com.lowdragmc.shimmerfire.client.renderer.HexGateRenderer;
@@ -189,7 +189,7 @@ public class HexGateBlockEntity extends ControllerTileEntity {
             }
         } else if (isIdle() && workingStage < 0){
             workingStage--;
-            if (workingStage == -60) {
+            if (workingStage == -30) {
                 setStatus("pre_working");
                 workingStage = 0;
                 preLeft = COLD_START_ENERGY;
@@ -239,10 +239,11 @@ public class HexGateBlockEntity extends ControllerTileEntity {
             }
             if (isPostWorking() && level instanceof ClientLevel clientLevel) {
                 BlockPos from = getBlockPos().relative(getFrontFacing(), 2);
-                ColouredBeamParticle beamParticle = new ColouredBeamParticle(clientLevel,
+                TextureBeamParticle beamParticle = new TextureBeamParticle(clientLevel,
                         new Vector3(from).add(0.5),
                         new Vector3(from.relative(getFrontFacing(), 256)).add(0.5));
                 beamParticle.setTexture(new ResourceLocation(ShimmerFireMod.MODID, "textures/particle/laser.png"));
+                beamParticle.setFullLight();
                 beamParticle.setLifetime(50);
                 beamParticle.setEmit(0.3F);
                 beamParticle.setColor(
@@ -322,7 +323,11 @@ public class HexGateBlockEntity extends ControllerTileEntity {
     @Override
     public ModularUI createUI(Player entityPlayer) {
         if (isFormed()) {
-            return new ModularUI(200, 200, this, entityPlayer).widget(new HexGateWidget(this));
+            if (isIdle()) {
+                return new ModularUI(200, 200, this, entityPlayer).widget(new HexGateWidget(this));
+            } else {
+                return null;
+            }
         } else {
             return super.createUI(entityPlayer);
         }
@@ -334,14 +339,22 @@ public class HexGateBlockEntity extends ControllerTileEntity {
         if (!isRemote() && isFormed() && isIdle() && workingStage >= 0) {
             if (level != null && level.hasNeighborSignal(getBlockPos())) {
                 if (destination != null ) {
-                    if (getLevel().getBlockEntity(destination) instanceof HexGateBlockEntity) {
-                        workingStage = -1;
-                    } else {
+                    if (!go(destination)) {
                         setGateInfo(gateName, null);
                     }
                 }
             }
         }
+    }
+
+    public boolean go(BlockPos destination) {
+        if (destination != null && isIdle() && workingStage >= 0) {
+            if (level != null && level.getBlockEntity(destination) instanceof HexGateBlockEntity) {
+                workingStage = -1;
+                return true;
+            }
+        }
+        return false;
     }
 
     @NotNull

@@ -1,6 +1,7 @@
 package com.lowdragmc.shimmerfire.gui;
 
 import com.lowdragmc.lowdraglib.gui.texture.ColorRectTexture;
+import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceBorderTexture;
 import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
 import com.lowdragmc.lowdraglib.gui.util.ClickData;
@@ -28,15 +29,16 @@ public class HexGateWidget extends WidgetGroup {
     private String gateName;
 
     public HexGateWidget(HexGateBlockEntity hexGate) {
-        super(0, 0, 200, 200);
+        super(0, 0, 200, 225);
         this.hexGate = hexGate;
         this.gateName = hexGate.gateName;
         this.setBackground(ResourceBorderTexture.BORDERED_BACKGROUND);
-        this.addWidget(new ImageWidget(5, 5, 190, 150, ResourceBorderTexture.BORDERED_BACKGROUND_BLUE));
-        this.addWidget(new LabelWidget(5, 163, "Gate Name: "));
-        this.addWidget(new TextFieldWidget(65, 160, 130, 15, null, s -> gateName = s).setCurrentString(gateName));
-        this.addWidget(new ButtonWidget(5, 180, 190, 15, null, this::save).setButtonTexture(ResourceBorderTexture.BUTTON_COMMON, new TextTexture("save", -1).setDropShadow(true)).setHoverBorderTexture(1, -1));
-        this.addWidget(gateGroup = new DraggableScrollableWidgetGroup(10, 10, 180, 140));
+        this.addWidget(new ImageWidget(5, 5, 190, 20, new TextTexture("HexGate")));
+        this.addWidget(new ImageWidget(5, 25, 190, 150, ResourceBorderTexture.BORDERED_BACKGROUND_BLUE));
+        this.addWidget(new LabelWidget(5, 183, "Gate Name: "));
+        this.addWidget(new TextFieldWidget(65, 180, 130, 15, null, s -> gateName = s).setCurrentString(gateName));
+        this.addWidget(new ButtonWidget(5, 200, 190, 15, null, this::save).setButtonTexture(ResourceBorderTexture.BUTTON_COMMON, new TextTexture("save", -1).setDropShadow(true)).setHoverBorderTexture(1, -1));
+        this.addWidget(gateGroup = new DraggableScrollableWidgetGroup(10, 30, 180, 140));
     }
 
     @Override
@@ -83,7 +85,14 @@ public class HexGateWidget extends WidgetGroup {
                     .addWidget(new ImageWidget(0, 0, width, 10, new ColorRectTexture(0x5f000000)))
                     .addWidget(new ImageWidget(0, 0, width, 10,
                             new TextTexture(name + " (%s)".formatted(pos.toShortString()))
-                                    .setWidth(width).setType(TextTexture.TextType.ROLL)));
+                                    .setWidth(width).setType(TextTexture.TextType.ROLL)))
+                    .addWidget(new ButtonWidget(width - 22, 0, 20, 10, new GuiTextureGroup(new ColorRectTexture(0xafff4444), new TextTexture("GO")), cd -> {
+                        if (!cd.isRemote) {
+                            hexGate.go(pos);
+                            gui.entityPlayer.closeContainer();
+                        }
+                    })
+                            .setHoverBorderTexture(1, -1));
             gateGroup.addWidget(selectable);
 
             if (pos.equals(init)) {

@@ -176,7 +176,7 @@ public class VividFireParticle extends LParticle {
             ShaderManager.getTempTarget().clear(false);
             RenderTarget target = ShaderManager.getInstance().renderFullImageInFramebuffer(ShaderManager.getTempTarget(),
                     Shaders.load(Shader.ShaderType.FRAGMENT, new ResourceLocation(ShimmerFireMod.MODID, "vivid_fire")), uniformCache -> {
-                uniformCache.glUniform4F("color", (color >> 16 & 0xff)/256f,(color >> 8 & 0xff)/256f,(color & 0xff)/256f, 1);
+                uniformCache.glUniform4F("color", (color >> 16 & 0xff)/300f,(color >> 8 & 0xff)/300f,(color & 0xff)/300f, 1);
             }, shaderProgram -> shaderProgram.bindTexture("fire", new ResourceLocation("shimmerfire:textures/particle/fire_mask_2.png")));
 
             GlStateManager._glBindFramebuffer(36160, lastID);

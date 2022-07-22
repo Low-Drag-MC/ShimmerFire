@@ -136,8 +136,8 @@ dependencies {
     implementation fg.deobf("blank:slideshow-forge-1.18:0.6.3")
     implementation fg.deobf("blank:garlic-forge-1.18:1.0.0")
 
-    implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:1.18.2-0.6.4")
-    implementation fg.deobf("com.lowdragmc.multiblocked:Multiblocked:1.18.2-0.9.6")
+    implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:1.18.2-0.6.5")
+    implementation fg.deobf("com.lowdragmc.multiblocked:Multiblocked:1.18.2-0.10.0")
     implementation fg.deobf("com.lowdragmc.shimmer:Shimmer-forge-1.18.2:0.1.9")
 
     //freamedblock
