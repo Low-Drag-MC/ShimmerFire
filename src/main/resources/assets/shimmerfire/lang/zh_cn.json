@@ -47,5 +47,10 @@
   "item.shimmerfire.flint_fire_rot": "打火石 (§5腐败§r)",
   "item.shimmerfire.flint_fire_life": "打火石 (§2生命§r)",
   "item.shimmerfire.flint_fire_arcane": "打火石 (§b神秘§r)",
-  "item.shimmerfire.colorful_flint_fire": "§5多§2彩§b打§4火§6石§r"
+  "item.shimmerfire.colorful_flint_fire": "§5多§2彩§b打§4火§6石§r",
+
+  "hex_gate.name": "飞门名：",
+  "hex_gate.title": "海克斯飞门——连通世界",
+  "hex_gate.go": "飞！",
+  "hex_gate.save": "保存站名和默认目的地"
 }

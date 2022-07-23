@@ -26,6 +26,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
@@ -49,7 +51,7 @@ import java.util.List;
  */
 public class HexGateBlockEntity extends ControllerTileEntity {
 
-    private static final int COLD_START_ENERGY = 50000;
+    private static final int COLD_START_ENERGY = 30000;
 
     @OnlyIn(Dist.CLIENT)
     public FireSpiritParticle fireParticle;
@@ -58,6 +60,8 @@ public class HexGateBlockEntity extends ControllerTileEntity {
     public int workingStage;
     @Nonnull
     public String gateName;
+    @Nullable
+    public BlockPos defaultDestination;
     @Nullable
     public BlockPos destination;
 
@@ -68,17 +72,17 @@ public class HexGateBlockEntity extends ControllerTileEntity {
 
     protected void writeGateInfo(FriendlyByteBuf buffer) {
         buffer.writeUtf(gateName);
-        buffer.writeBoolean(destination != null);
-        if (destination != null) {
-            buffer.writeBlockPos(destination);
+        buffer.writeBoolean(defaultDestination != null);
+        if (defaultDestination != null) {
+            buffer.writeBlockPos(defaultDestination);
         }
     }
 
     protected void readGateInfo(FriendlyByteBuf buffer) {
         gateName = buffer.readUtf();
-        destination = null;
+        defaultDestination = null;
         if (buffer.readBoolean()) {
-            destination = buffer.readBlockPos();
+            defaultDestination = buffer.readBlockPos();
         }
     }
 
@@ -98,9 +102,9 @@ public class HexGateBlockEntity extends ControllerTileEntity {
     public void load(@NotNull CompoundTag compound) {
         super.load(compound);
         gateName = compound.contains("gateName") ? compound.getString("gateName") : gateName;
-        destination = null;
+        defaultDestination = null;
         if (compound.contains("destination")) {
-            destination = NbtUtils.readBlockPos(compound.getCompound("destination"));
+            defaultDestination = NbtUtils.readBlockPos(compound.getCompound("destination"));
         }
     }
 
@@ -108,15 +112,15 @@ public class HexGateBlockEntity extends ControllerTileEntity {
     public void saveAdditional(@NotNull CompoundTag compound) {
         super.saveAdditional(compound);
         compound.putString("gateName", gateName);
-        if (destination != null) {
-            compound.put("destination", NbtUtils.writeBlockPos(destination));
+        if (defaultDestination != null) {
+            compound.put("destination", NbtUtils.writeBlockPos(defaultDestination));
         }
     }
 
     public void setGateInfo(String gateName, BlockPos destination) {
         if (!isRemote()) {
             this.gateName = gateName;
-            this.destination = destination;
+            this.defaultDestination = destination;
             markAsDirty();
             writeCustomData(21, this::writeGateInfo);
             if (isFormed()) {
@@ -162,7 +166,7 @@ public class HexGateBlockEntity extends ControllerTileEntity {
             }
         } else if (isPostWorking()) {
             workingStage++;
-            if (workingStage == 10 && destination != null && getLevel().getBlockEntity(destination) instanceof HexGateBlockEntity destHexGate) {
+            if (workingStage >= 10 && workingStage % 10 == 0 && destination != null && getLevel().getBlockEntity(destination) instanceof HexGateBlockEntity destHexGate) {
                 Direction front = getFrontFacing();
                 BlockPos from = getBlockPos().relative(front, 2);
                 List<Entity> entities = level.getEntities(null, new AABB(
@@ -179,7 +183,11 @@ public class HexGateBlockEntity extends ControllerTileEntity {
                     if (entity.isAlive()) {
                         Vector3 vec = new Vector3(entity.position()).subtract(new Vector3(getBlockPos()).add(0.5));
                         vec.rotate(-rotate, Vector3.Y);
-                        entity.moveTo(new Vector3(destHexGate.getBlockPos()).add(0.5).add(vec).vec3());
+                        vec = new Vector3(destHexGate.getBlockPos()).add(0.5).add(vec);
+                        if (!entity.isPassenger()) {
+                            entity.moveTo(vec.vec3());
+                        }
+                        this.level.playSound(null, vec.x, vec.y, vec.z, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.0F);
                     }
                 }
             }
@@ -338,8 +346,8 @@ public class HexGateBlockEntity extends ControllerTileEntity {
         super.onNeighborChange();
         if (!isRemote() && isFormed() && isIdle() && workingStage >= 0) {
             if (level != null && level.hasNeighborSignal(getBlockPos())) {
-                if (destination != null ) {
-                    if (!go(destination)) {
+                if (defaultDestination != null ) {
+                    if (!go(defaultDestination)) {
                         setGateInfo(gateName, null);
                     }
                 }
@@ -351,6 +359,7 @@ public class HexGateBlockEntity extends ControllerTileEntity {
         if (destination != null && isIdle() && workingStage >= 0) {
             if (level != null && level.getBlockEntity(destination) instanceof HexGateBlockEntity) {
                 workingStage = -1;
+                this.destination = destination;
                 return true;
             }
         }

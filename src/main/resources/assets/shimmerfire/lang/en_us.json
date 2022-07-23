@@ -47,5 +47,10 @@
   "item.shimmerfire.flint_fire_rot": "Fire Flint (§5Rot§r)",
   "item.shimmerfire.flint_fire_life": "Fire Flint (§2Life§r)",
   "item.shimmerfire.flint_fire_arcane": "Fire Flint (§bArcane§r)",
-  "item.shimmerfire.colorful_flint_fire": "Colorful Fire Flint"
+  "item.shimmerfire.colorful_flint_fire": "Colorful Fire Flint",
+
+  "hex_gate.name": "Gate Name: ",
+  "hex_gate.title": "HexGate——connected world",
+  "hex_gate.go": "GO",
+  "hex_gate.save": "save name and default destination"
 }

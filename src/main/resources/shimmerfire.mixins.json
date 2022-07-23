@@ -8,6 +8,7 @@
     "ClientPacketListenerMixin",
     "MixinBufferUploader",
     "MixinLevelRender",
+    "ParticleEngineMixin",
     "PoseStackMixin",
     "PoseStackPoseMixin",
     "VertexFormatElementUsageAccessor",

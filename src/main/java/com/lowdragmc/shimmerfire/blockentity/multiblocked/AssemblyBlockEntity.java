@@ -59,10 +59,10 @@ public class AssemblyBlockEntity extends ControllerTileEntity {
                             entity.kill();
                         }
                         BlockPos[] poses = new BlockPos[] {
-                                getBlockPos().offset(1, 2, 1),
-                                getBlockPos().offset(-1, 2, -1),
-                                getBlockPos().offset(-1, 2, 1),
-                                getBlockPos().offset(1, 2, -1),
+                                getBlockPos().offset(1, 1, 1),
+                                getBlockPos().offset(-1, 1, -1),
+                                getBlockPos().offset(-1, 1, 1),
+                                getBlockPos().offset(1, 1, -1),
                         };
                         for (BlockPos pos : poses) {
                             if (level.getBlockEntity(pos) instanceof IPartComponent part) {
@@ -93,6 +93,7 @@ public class AssemblyBlockEntity extends ControllerTileEntity {
             Vector3 from = new Vector3(getBlockPos().offset(x, 2, z)).add(0.5, 0.5, 0.5);
             TextureBeamParticle beamParticle = new TextureBeamParticle(clientLevel, from, new Vector3(getBlockPos()).add(0.5, 1, 0.5));
             beamParticle.setTexture(new ResourceLocation(ShimmerFireMod.MODID, "textures/particle/laser.png"));
+            beamParticle.setFullLight();
             beamParticle.setWidth(0.1f);
             beamParticle.setLifetime(8);
             beamParticle.setEmit(-0.3F);
