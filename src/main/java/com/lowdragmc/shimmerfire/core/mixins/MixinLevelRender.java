@@ -1,18 +1,21 @@
 package com.lowdragmc.shimmerfire.core.mixins;
 
+import com.lowdragmc.shimmerfire.client.ClientProxy;
 import com.lowdragmc.shimmerfire.client.RenderTypes;
 import com.lowdragmc.shimmerfire.client.renderer.MimicDissolveRender;
+import com.mojang.blaze3d.shaders.Uniform;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
 import net.minecraft.client.Camera;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.*;
 import org.lwjgl.opengl.GL43;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.teacon.nocaet.client.GarlicRenderTypes;
 
 @Mixin(LevelRenderer.class)
 public class MixinLevelRender {
@@ -25,6 +28,20 @@ public class MixinLevelRender {
             RenderTypes.MimicDissolveRenderType.MIMIC_DISSOLVE.end(MimicDissolveRender.bufferBuilder,0,0,0);
             GL43.glPopDebugGroup();
             MimicDissolveRender.needUpload.set(false);
+        }
+    }
+
+    @Inject(method = "renderChunkLayer",
+            at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setupShaderLights(Lnet/minecraft/client/renderer/ShaderInstance;)V"))
+    private void b(RenderType pRenderType, PoseStack pPoseStack, double pCamX, double pCamY, double pCamZ, Matrix4f pProjectionMatrix, CallbackInfo ci){
+        if (pRenderType == GarlicRenderTypes.GARLIC_CUTOUT) {
+            ShaderInstance instance = RenderSystem.getShader();
+            if (instance != null) {
+                Uniform uniform = instance.getUniform("isBloom");
+                if (uniform != null) {
+                    uniform.set(ClientProxy.BLOOM_LEAVE ? 1f : 0f);
+                }
+            }
         }
     }
 }

@@ -52,3 +52,9 @@ description='''ShimemrFire, a Teacon22 demo mod.'''
     versionRange="[0.1.6,)"
     ordering="NONE"
     side="CLIENT"
+[[dependencies.shimmerfire]]
+    modId="nocaet"
+    mandatory=false
+    versionRange="[1.0.0,)"
+    ordering="BEFORE"
+    side="BOTH"

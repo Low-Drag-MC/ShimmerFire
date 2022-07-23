@@ -48,13 +48,13 @@ import static com.lowdragmc.shimmerfire.block.ColoredFireBlock.FIRE;
  */
 public class ClientProxy extends CommonProxy {
 
+    public static boolean BLOOM_LEAVE = true;
+
     public ClientProxy() {
         super();
         ShaderInjection.registerVSHInjection("nocaet:rendertype_solid", ClientProxy::BloomMRTVSHInjection);
-        ShaderInjection.registerVSHInjection("nocaet:rendertype_cutout", ClientProxy::BloomMRTVSHInjection);
 
         ShaderInjection.registerFSHInjection("nocaet:rendertype_solid", ClientProxy::BloomMRTFSHInjection);
-        ShaderInjection.registerFSHInjection("nocaet:rendertype_cutout", ClientProxy::BloomMRTFSHInjection);
     }
 
     private static String BloomMRTVSHInjection(String s) {
