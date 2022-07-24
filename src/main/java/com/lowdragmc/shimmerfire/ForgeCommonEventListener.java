@@ -1,6 +1,5 @@
 package com.lowdragmc.shimmerfire;
 
-import com.lowdragmc.shimmerfire.client.ClientProxy;
 import com.lowdragmc.shimmerfire.core.IBloomParticle;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -19,9 +18,6 @@ import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -33,7 +29,7 @@ import java.util.Collection;
  * @date 2022/5/12
  * @implNote ForgeEventListener
  */
-@Mod.EventBusSubscriber(modid = ShimmerFireMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.DEDICATED_SERVER)
+@Mod.EventBusSubscriber(modid = ShimmerFireMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ForgeCommonEventListener {
 
     @SubscribeEvent
