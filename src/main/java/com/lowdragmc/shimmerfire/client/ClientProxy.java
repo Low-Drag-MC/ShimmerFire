@@ -48,7 +48,7 @@ import static com.lowdragmc.shimmerfire.block.ColoredFireBlock.FIRE;
  */
 public class ClientProxy extends CommonProxy {
 
-    public static boolean BLOOM_LEAVE = true;
+    public static boolean BLOOM_LEAVE = false;
 
     public ClientProxy() {
         super();
