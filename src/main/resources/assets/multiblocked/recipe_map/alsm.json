@@ -10,7 +10,7 @@
           {
             "content": {
               "type": "multiblocked:sized",
-              "count": 2,
+              "count": 1,
               "ingredient": {
                 "item": "minecraft:redstone_torch"
               }
