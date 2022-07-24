@@ -8,17 +8,22 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
 import net.minecraft.client.Camera;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.*;
 import org.lwjgl.opengl.GL43;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.teacon.nocaet.client.GarlicRenderTypes;
 
+import javax.annotation.Nullable;
+
 @Mixin(LevelRenderer.class)
 public class MixinLevelRender {
+
+    @Shadow @Nullable private ClientLevel level;
 
     @Inject(method = "renderLevel",
         at = @At(value = "INVOKE",ordinal = 1,target = "Lnet/minecraft/client/renderer/LevelRenderer;checkPoseStack(Lcom/mojang/blaze3d/vertex/PoseStack;)V"))
@@ -39,7 +44,7 @@ public class MixinLevelRender {
             if (instance != null) {
                 Uniform uniform = instance.getUniform("isBloom");
                 if (uniform != null) {
-                    uniform.set(ClientProxy.BLOOM_LEAVE ? 1f : 0f);
+                    uniform.set((ClientProxy.BLOOM_LEAVE && level != null && level.isNight()) ? 1f : 0f);
                 }
             }
         }
