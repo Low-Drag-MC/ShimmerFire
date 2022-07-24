@@ -1,0 +1,35 @@
+package com.lowdragmc.shimmerfire;
+
+import com.lowdragmc.shimmerfire.client.ClientProxy;
+import net.minecraft.commands.Commands;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RegisterClientCommandsEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+/**
+ * @author KilaBash
+ * @date 2022/5/12
+ * @implNote ForgeEventListener
+ */
+@Mod.EventBusSubscriber(modid = ShimmerFireMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.DEDICATED_SERVER)
+public class ForgeCommonEventListener {
+
+    @SubscribeEvent
+    public static void onRegisterClientCommands(RegisterCommandsEvent event) {
+        event.getDispatcher().register(Commands.literal("shimmerfire")
+                .then(Commands.literal("leaves_bloom_on")
+                        .executes(context -> {
+                            ClientProxy.BLOOM_LEAVE = true;
+                            return 1;
+                        }))
+                .then(Commands.literal("leaves_bloom_off")
+                        .executes(context -> {
+                            ClientProxy.BLOOM_LEAVE = false;
+                            return 1;
+                        }))
+        );
+    }
+}
