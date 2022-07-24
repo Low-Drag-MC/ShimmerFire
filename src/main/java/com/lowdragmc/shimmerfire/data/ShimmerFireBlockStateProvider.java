@@ -256,7 +256,7 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
 
     private ModelFile colorfulCampfireLit(ResourceLocation fireModel) {
         return this.models().withExistingParent("block/campfire/colorful", fireModel)
-                .texture("fire", "shimmerfire:blocks/colorful_fire/colorful_campfire_fire_lit");
+                .texture("fire", "shimmerfire:blocks/colorful_fire/campfire_fire");
     }
 
     private void createColorfulFire() {

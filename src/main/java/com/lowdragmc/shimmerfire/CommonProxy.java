@@ -22,23 +22,28 @@ import com.lowdragmc.shimmerfire.blockentity.multiblocked.HexGateBlockEntity;
 import com.lowdragmc.shimmerfire.entity.FireSpiritEntity;
 import com.lowdragmc.shimmerfire.item.*;
 import net.minecraft.Util;
+import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -61,6 +66,7 @@ public class CommonProxy {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, ShimmerFireMod.MODID);
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, ShimmerFireMod.MODID);
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, ShimmerFireMod.MODID);
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS,ShimmerFireMod.MODID);
     // blocks
     public static final RegistryObject<ColoredFireBlock> FIRE_BLOCK = BLOCKS.register("colored_fire", ColoredFireBlock::new);
     public static final RegistryObject<ColoredCampfireBlock> CAMPFIRE_BLOCK = BLOCKS.register("colored_campfire", ColoredCampfireBlock::new);
@@ -92,7 +98,9 @@ public class CommonProxy {
     public static final CreativeModeTab TAB_ITEMS = new LDItemGroup(ShimmerFireMod.MODID, "all", () -> new ItemStack(FIRE_EMITTER_BLOCK.get()));
     public static final RegistryObject<BindingWand> BINDING_WAND_ITEM = ITEMS.register("binding_wand", BindingWand::new);
     public static final RegistryObject<FireJarItem> FIRE_JAR_ITEM = ITEMS.register("fire_jar", ()->new FireJarItem(FIRE_JAR_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)));
-
+    public static final RegistryObject<ColorfulFlintItem> COLORFUL_FLINT_ITEM = ITEMS.register("colorful_flint_fire",ColorfulFlintItem::new);
+    // recipe
+    public static final RegistryObject<SimpleRecipeSerializer<FlintDyeRecipe>> FLINT_DYE_RECIPE = RECIPE.register("flint_dye",()-> new SimpleRecipeSerializer<>(FlintDyeRecipe::new));
     public CommonProxy() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.register(this);
@@ -101,6 +109,8 @@ public class CommonProxy {
         BLOCK_ENTITIES.register(eventBus);
         ENTITIES.register(eventBus);
         PARTICLE_TYPES.register(eventBus);
+        RECIPE.register(eventBus);
+        eventBus.addListener(CommonProxy::loadCompleteEvent);
     }
 
     @SubscribeEvent
@@ -141,7 +151,6 @@ public class CommonProxy {
             registerSimpleItem(registry, block.get());
         }
         registerSimpleItem(registry,MIMIC_DISSOLVE_BLOCK.get());
-        registry.register(new ColorfulFlintItem());
         registerSimpleItem(registry,COLORFUL_CAMPFIRE_BLOCK.get());
     }
 
@@ -189,5 +198,22 @@ public class CommonProxy {
         } catch (Exception e) {
             Multiblocked.LOGGER.error("error while loading the definition resource {}", location.toString());
         }
+    }
+
+    @SubscribeEvent
+    public static void loadCompleteEvent(FMLLoadCompleteEvent event){
+        event.enqueueWork(()->{
+            CauldronInteraction.WATER.put(COLORFUL_FLINT_ITEM.get(), (pBlockState, pLevel, pBlockPos, pPlayer, pHand, pStack) -> {
+                Item item = pStack.getItem();
+                if (!(item instanceof ColorfulFlintItem) || !pStack.getTag().contains("color")){
+                    return InteractionResult.PASS;
+                }
+                if (!pLevel.isClientSide){
+                    pStack.getTag().remove("color");
+                    LayeredCauldronBlock.lowerFillLevel(pBlockState,pLevel,pBlockPos);
+                }
+                return InteractionResult.sidedSuccess(pLevel.isClientSide);
+            });
+        });
     }
 }

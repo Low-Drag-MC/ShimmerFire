@@ -108,6 +108,7 @@ f041c65f4d2f904cc04a2fa20779d5b205dc5008 assets/shimmerfire/models/item/flint_fi
 f041c65f4d2f904cc04a2fa20779d5b205dc5008 assets/shimmerfire/models/item/flint_fire_destroy.json
 f041c65f4d2f904cc04a2fa20779d5b205dc5008 assets/shimmerfire/models/item/flint_fire_life.json
 f041c65f4d2f904cc04a2fa20779d5b205dc5008 assets/shimmerfire/models/item/flint_fire_rot.json
+87c2db74e73af5791ace6da463994969efd2caed data/minecraft/recipes/flint_dye.json
 8c1c942a05f4a74d9932402a753e2d2d3761e07b data/minecraft/tags/blocks/campfires.json
 8c1c942a05f4a74d9932402a753e2d2d3761e07b data/minecraft/tags/blocks/mineable/axe.json
 0673c56d3ab58029ce2bb99f92f597a547adcd66 data/minecraft/tags/blocks/mineable/pickaxe.json

@@ -62,7 +62,7 @@ public class ShimmerFireLootTablesProvider extends LootTableProvider {
 
         protected void addTables() {
             for (RegistryObject<Block> entry : CommonProxy.BLOCKS.getEntries()) {
-                if (entry.get() != CommonProxy.FIRE_BLOCK.get()) {
+                if (entry.get() != CommonProxy.FIRE_BLOCK.get() && entry.get() != CommonProxy.MIMIC_DISSOLVE_BLOCK.get()) {
                     dropSelf(entry.get());
                 }
             }
