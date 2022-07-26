@@ -24,7 +24,6 @@ import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -32,7 +31,6 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
 import org.teacon.nocaet.client.GarlicRenderTypes;
@@ -53,8 +51,9 @@ public class ClientProxy extends CommonProxy {
     public ClientProxy() {
         super();
         ShaderInjection.registerVSHInjection("nocaet:rendertype_solid", ClientProxy::BloomMRTVSHInjection);
-
         ShaderInjection.registerFSHInjection("nocaet:rendertype_solid", ClientProxy::BloomMRTFSHInjection);
+
+        ShaderInjection.registerFSHInjection("nocaet:rendertype_cutout", ClientProxy::BloomMRTFSHInjection2);
     }
 
     private static String BloomMRTVSHInjection(String s) {
@@ -69,6 +68,21 @@ public class ClientProxy extends CommonProxy {
         s = s.replace("out vec4 fragColor", "layout (location = 0) out vec4 fragColor");
         s = (new StringBuffer(s)).insert(s.lastIndexOf("void main()"), "layout (location = 1) out vec4 bloomColor;\n").toString();
         s = (new StringBuffer(s)).insert(s.lastIndexOf(125), "    if (isBloom > 255.) {\n        bloomColor = fragColor;\n    } else {\n        bloomColor = vec4(0.);\n    }\n").toString();
+        return s;
+    }
+
+    private static String BloomMRTFSHInjection2(String s) {
+        s = s.replace("#version 150", "#version 330 core");
+        s = (new StringBuffer(s)).insert(s.lastIndexOf("in float vertexDistance;"), "uniform float isBloom;\n").toString();
+        s = s.replace("out vec4 fragColor", "layout (location = 0) out vec4 fragColor");
+        s = (new StringBuffer(s)).insert(s.lastIndexOf("void main()"), "layout (location = 1) out vec4 bloomColor;\n").toString();
+        s = (new StringBuffer(s)).insert(s.lastIndexOf(125), """
+                if (isBloom > 0.5) {
+                    bloomColor = fragColor;
+                } else {
+                    bloomColor = vec4(0.);
+                }
+                """).toString();
         return s;
     }
 

@@ -589,7 +589,7 @@
       "A": {
         "blocks": [
           {
-            "id": "minecraft:stone"
+            "id": "minecraft:obsidian"
           }
         ],
         "type": "blocks",
@@ -603,7 +603,7 @@
       "B": {
         "blocks": [
           {
-            "id": "minecraft:grass"
+            "id": "minecraft:crying_obsidian"
           }
         ],
         "type": "blocks",
@@ -613,7 +613,7 @@
       "C": {
         "blocks": [
           {
-            "id": "shimmerfire:fire_pedestal"
+            "id": "multiblocked:pedestal"
           }
         ],
         "type": "blocks",
@@ -622,7 +622,7 @@
       "fluid_input": {
         "blocks": [
           {
-            "id": "minecraft:cauldron"
+            "id": "multiblocked:jar"
           }
         ],
         "type": "blocks",
@@ -632,7 +632,7 @@
       "item_input": {
         "blocks": [
           {
-            "id": "shimmerfire:fire_pedestal"
+            "id": "multiblocked:pedestal"
           }
         ],
         "type": "blocks",
