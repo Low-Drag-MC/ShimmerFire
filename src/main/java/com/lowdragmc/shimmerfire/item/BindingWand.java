@@ -3,6 +3,7 @@ package com.lowdragmc.shimmerfire.item;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.block.FirePortBlock;
 import com.lowdragmc.shimmerfire.blockentity.FirePortBlockEntity;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -16,12 +17,15 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * @author KilaBash
  * @date 2022/6/17
  * @implNote BindingWand
  */
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class BindingWand extends Item {
 
     public BindingWand() {
@@ -32,7 +36,7 @@ public class BindingWand extends Item {
         return !stack.isEmpty() && stack.getItem() instanceof BindingWand;
     }
 
-    public static void setLastPos(ItemStack stack, BlockPos pos) {
+    public static void setLastPos(ItemStack stack, @Nullable BlockPos pos) {
         if (isBindingWand(stack)) {
             if (pos == null) {
                 stack.removeTagKey("last");

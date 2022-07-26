@@ -16,13 +16,10 @@ import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 /**
@@ -36,13 +33,6 @@ public class FireBaptismRenderer  extends GeoComponentRenderer {
 
     public FireBaptismRenderer() {
         super("fire_baptism", false);
-    }
-
-    @Override
-    public void renderItem(ItemStack stack, ItemTransforms.TransformType transformType, boolean leftHand, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay, BakedModel bakedModel) {
-        bakedModel = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(matrixStack, bakedModel, transformType, leftHand);
-        matrixStack.translate(-0.5, 0, -0.5);
-        super.renderItem(stack, transformType, leftHand, matrixStack, buffer, combinedLight, combinedOverlay, bakedModel);
     }
 
     public void render(BlockEntity te, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {

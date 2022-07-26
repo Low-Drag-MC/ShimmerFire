@@ -26,7 +26,7 @@
               "type": "multiblocked:sized",
               "count": 1,
               "ingredient": {
-                "item": "minecraft:repeater"
+                "item": "shimmerfire:fire_spirit"
               }
             },
             "chance": 1.0

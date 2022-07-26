@@ -8,6 +8,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
 import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.*;
 import org.lwjgl.opengl.GL43;
@@ -44,7 +45,7 @@ public class MixinLevelRender {
             if (instance != null) {
                 Uniform uniform = instance.getUniform("isBloom");
                 if (uniform != null) {
-                    uniform.set((ClientProxy.BLOOM_LEAVE && level != null && level.isNight()) ? 1f : 0f);
+                    uniform.set((ClientProxy.BLOOM_LEAVE && level != null && level.getSkyDarken(Minecraft.getInstance().getFrameTime()) < 0.25) ? 1f : 0f);
                 }
             }
         }

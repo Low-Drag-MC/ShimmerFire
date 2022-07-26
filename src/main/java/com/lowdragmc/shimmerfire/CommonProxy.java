@@ -137,7 +137,7 @@ public class CommonProxy {
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> event) {
         IForgeRegistry<Item> registry = event.getRegistry();
-        registry.register(new FireSpiritSpawnEgg(FIRE_SPIRIT, new Item.Properties().tab(TAB_ITEMS)).setRegistryName(ShimmerFireMod.MODID, "fire_spirit_spawn_egg"));
+        registry.register(new FireSpiritItem(FIRE_SPIRIT, new Item.Properties().tab(TAB_ITEMS)).setRegistryName(ShimmerFireMod.MODID, "fire_spirit"));
         for (RawFire fire : RawFire.values()) {
             registry.register(new ColoredFlintItem(fire));
         }

@@ -48,9 +48,12 @@
   "item.shimmerfire.flint_fire_life": "打火石 (§2生命§r)",
   "item.shimmerfire.flint_fire_arcane": "打火石 (§b神秘§r)",
   "item.shimmerfire.colorful_flint_fire": "§5多§2彩§b打§4火§6石§r",
-
-	"item.tooltip.color": "颜色",
-	"item.tooltip.radius": "半径",
+  "item.shimmerfire.fire_spirit": "微光灵动",
+  "item.shimmerfire.fire_spirit.tooltip": "§6像那闪烁的微光，希望把我的道路照亮，夜色愈农，它愈放出耀眼的光芒§r",
+  "item.shimmerfire.fire_spirit.clue": "等等！你再做什么？海克斯科技改造沙子？",
+  "item.shimmerfire.fire_spirit.shift": "右键方块放出你的精灵",
+  "item.tooltip.color": "颜色",
+  "item.tooltip.radius": "半径",
 
   "hex_gate.name": "飞门名：",
   "hex_gate.title": "海克斯飞门——连通世界",

@@ -3,6 +3,7 @@ package com.lowdragmc.shimmerfire.item;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.blockentity.ColorfulCampfireBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.ColorfulFireBlockEntity;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -28,6 +29,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Random;
 
@@ -39,6 +41,8 @@ import static net.minecraft.world.level.block.CampfireBlock.WATERLOGGED;
  * @date 2022/5/5
  * @implNote ColorfulFlintItem
  */
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class ColorfulFlintItem extends FlintAndSteelItem {
 
     public static void setColor(ItemStack itemStack, int color) {
