@@ -17,6 +17,12 @@
             },
             "chance": 1.0
           }
+        ],
+        "forge_energy": [
+          {
+            "content": 4800,
+            "chance": 1.0
+          }
         ]
       },
       "outputs": {

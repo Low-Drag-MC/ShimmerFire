@@ -18,6 +18,7 @@
     "ClientboundLevelParticlesPacketMixin",
     "FireBlockMixin",
     "LecternMixin",
+    "RecipeWidgetMixin",
     "SoulLanternMixin",
     "sideshow.ProjectorBlockEntityMixin",
     "sideshow.ProjectorRendererMixin"

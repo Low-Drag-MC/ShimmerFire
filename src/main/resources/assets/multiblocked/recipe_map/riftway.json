@@ -1,16 +1,19 @@
 {
-  "name": "sun",
+  "name": "riftway",
   "progressTexture": "multiblocked:textures/gui/progress_bar_arrow.png",
   "recipes": [
     {
-      "uid": "d272c049-7ac8-46fb-b14b-dfdb9c4f37f6",
-      "duration": 1000,
+      "uid": "energy",
+      "duration": 240,
       "inputs": {
-        "fluid": [
+        "item": [
           {
             "content": {
-              "fluid": "minecraft:lava",
-              "amount": 1000
+              "type": "multiblocked:sized",
+              "count": 1,
+              "ingredient": {
+                "item": "minecraft:iron_ingot"
+              }
             },
             "chance": 1.0
           }
@@ -19,7 +22,7 @@
       "tickOutputs": {
         "forge_energy": [
           {
-            "content": 500,
+            "content": 60,
             "chance": 1.0
           }
         ]

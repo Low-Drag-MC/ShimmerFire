@@ -18,6 +18,7 @@ import com.lowdragmc.shimmerfire.block.decorated.ColoredDecorationBlock;
 import com.lowdragmc.shimmerfire.blockentity.*;
 import com.lowdragmc.shimmerfire.blockentity.multiblocked.AssemblyBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.multiblocked.FireBaptismBlockEntity;
+import com.lowdragmc.shimmerfire.blockentity.multiblocked.FuWenJiTanBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.multiblocked.HexGateBlockEntity;
 import com.lowdragmc.shimmerfire.entity.FireSpiritEntity;
 import com.lowdragmc.shimmerfire.item.*;
@@ -129,9 +130,9 @@ public class CommonProxy {
 
         MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_ebf"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
         MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_alsm"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
-        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_art_sun_controller"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_riftway"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
         MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/multiblocked_assembly"), AssemblyBlockEntity.AssemblyDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
-        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/kaka_fuwenjitan"), ControllerDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
+        MbdComponents.registerComponentFromResource(ShimmerFireMod.class, Multiblocked.GSON, new ResourceLocation(Multiblocked.MODID, "controller/kaka_fuwenjitan"), FuWenJiTanBlockEntity.FuWenJiTanDefinition.class, com.lowdragmc.multiblocked.CommonProxy::controllerPost);
     }
 
     @SubscribeEvent
@@ -169,8 +170,9 @@ public class CommonProxy {
         e.enqueueWork(() -> {
             registerRecipeFromResource(new ResourceLocation(Multiblocked.MODID, "alsm"));
             registerRecipeFromResource(new ResourceLocation(Multiblocked.MODID, "ebf"));
-            registerRecipeFromResource(new ResourceLocation(Multiblocked.MODID, "sun"));
+            registerRecipeFromResource(new ResourceLocation(Multiblocked.MODID, "riftway"));
             registerRecipeFromResource(new ResourceLocation(Multiblocked.MODID, "asembly"));
+            FuWenJiTanBlockEntity.registerRecipeMap();
         });
 
     }

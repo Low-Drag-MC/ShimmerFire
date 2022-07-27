@@ -32,6 +32,14 @@
             "chance": 1.0
           }
         ]
+      },
+      "tickInputs": {
+        "forge_energy": [
+          {
+            "content": 20,
+            "chance": 1.0
+          }
+        ]
       }
     }
   ]

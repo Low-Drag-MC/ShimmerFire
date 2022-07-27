@@ -58,5 +58,22 @@
   "hex_gate.name": "Gate Name: ",
   "hex_gate.title": "HexGate——connected world",
   "hex_gate.go": "GO",
-  "hex_gate.save": "save name and default destination"
+  "hex_gate.save": "save name and default destination",
+
+  "kubejs.kaka.inst": "Instability: ",
+  "kubejs.kaka.inst.negligible": "Negligible",
+  "kubejs.kaka.inst.minor": "Minor",
+  "kubejs.kaka.inst.moderate": "Moderate",
+  "kubejs.kaka.inst.high": "High",
+  "kubejs.kaka.inst.very_high": "Very High",
+  "kubejs.kaka.inst.dangerous": "Dangerous",
+
+  "block.multiblocked.riftway": "Generator",
+  "block.multiblocked.ebf": "Electric Blast Furnace",
+  "block.multiblocked.alsm": "ALSM",
+  "block.multiblocked.assembly": "Laser Assembly",
+  "block.multiblocked.base": "Base Block",
+  "block.multiblocked.item_hatch": "Item Hatch",
+  "block.multiblocked.energy_hatch": "Energy Hatch",
+  "block.kaka.fuwenjitan": "Rune"
 }

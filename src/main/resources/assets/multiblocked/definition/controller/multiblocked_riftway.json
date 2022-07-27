@@ -1,15 +1,15 @@
 {
   "consumeCatalyst": false,
-  "location": "multiblocked:art_sun_controller",
+  "location": "multiblocked:riftway",
   "traits": {},
-  "allowRotate": false,
+  "allowRotate": true,
   "showInJei": true,
   "baseRenderer": {
     "modelLocation": "multiblocked:alsm",
     "type": "imodel"
   },
   "formedRenderer": {
-    "modelName": "fusion_sun",
+    "modelName": "riftway",
     "type": "geo"
   },
   "properties": {
@@ -26,37 +26,34 @@
   },
   "basePattern": {
     "structureDir": [
-      "BACK",
+      "RIGHT",
       "UP",
-      "RIGHT"
+      "FRONT"
     ],
     "pattern": [
       [
-        "AAA",
-        "B B",
-        "C C",
-        "C C",
-        "   ",
-        "   ",
-        "   "
+        "AAAAA",
+        "AAAAA",
+        "AAAAA",
+        "AAAAA"
       ],
       [
-        "AAA",
-        "   ",
-        "   ",
-        " @ ",
-        "   ",
-        "   ",
-        " D "
+        "AAAAA",
+        "AAAAA",
+        "AAAAA",
+        "AAAAA"
       ],
       [
-        "AAA",
-        "B B",
-        "C C",
-        "C C",
-        "   ",
-        "   ",
-        "   "
+        "AAAAA",
+        "@ACAA",
+        "AACAA",
+        " AAA "
+      ],
+      [
+        "BBBBB",
+        "     ",
+        "     ",
+        "     "
       ]
     ],
     "aisleRepetitions": [
@@ -71,45 +68,57 @@
       [
         1,
         1
+      ],
+      [
+        1,
+        1
       ]
     ],
     "predicates": {
-      "energy_out": {
-        "location": "multiblocked:energy_hatch",
-        "type": "component",
-        "disableRenderFormed": true,
-        "minCount": 1
-      },
-      "controller": {
-        "location": "multiblocked:art_sun_controller",
-        "type": "component"
-      },
-      "C": {
+      "A": {
         "blocks": [
           {
-            "id": "minecraft:polished_deepslate_wall"
+            "id": "multiblocked:base"
           }
         ],
         "type": "blocks",
         "disableRenderFormed": true
       },
-      "fluid": {
-        "capability": "fluid",
-        "type": "capability",
+      "controller": {
+        "location": "multiblocked:riftway",
+        "type": "component"
+      },
+      "B": {
+        "blocks": [
+          {
+            "id": "minecraft:smooth_stone_slab"
+          }
+        ],
+        "type": "blocks",
+        "disableRenderFormed": true
+      },
+      "item": {
+        "location": "multiblocked:item_hatch",
+        "type": "component",
         "disableRenderFormed": true,
-        "minCount": 1
+        "minCount": 1,
+        "maxCount": 1,
+        "previewCount": 1
+      },
+      "star": {
+        "location": "multiblocked:sun",
+        "type": "component"
       },
       "any": {
         "type": "any"
       },
-      "sun": {
-        "location": "multiblocked:sun",
-        "type": "component"
-      },
-      "base": {
-        "location": "multiblocked:base",
+      "energy": {
+        "location": "multiblocked:energy_output",
         "type": "component",
-        "disableRenderFormed": true
+        "disableRenderFormed": true,
+        "minCount": 1,
+        "maxCount": 1,
+        "previewCount": 1
       }
     },
     "symbolMap": {
@@ -120,20 +129,17 @@
         "any"
       ],
       "A": [
-        "energy_out",
-        "fluid",
-        "base"
+        "A",
+        "item",
+        "energy"
       ],
       "B": [
-        "base"
+        "B"
       ],
       "C": [
-        "C"
-      ],
-      "D": [
-        "sun"
+        "star"
       ]
     }
   },
-  "recipeMap": "sun"
+  "recipeMap": "riftway"
 }
