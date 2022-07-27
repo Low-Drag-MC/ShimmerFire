@@ -12,10 +12,13 @@ import com.lowdragmc.multiblocked.common.tile.PedestalTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
@@ -58,22 +61,24 @@ public class FuWenJiTanBlockEntity extends ControllerTileEntity {
     @Override
     public void updateFormed() {
         super.updateFormed();
-        var controller = this;
-        var controllerPos = controller.getBlockPos().immutable();
+        if (recipeLogic == null) {
+            return;
+        }
+        var controllerPos = getBlockPos().immutable();
         var centerPos = controllerPos.below(2);
-        var world = controller.getLevel();
+        var world = getLevel();
 
         AtomicInteger instability = new AtomicInteger();
 
-        var recipeLogic = controller.getRecipeLogic();
-        var recipeMap = controller.getDefinition().recipeMap;
+        var recipeMap = getDefinition().recipeMap;
 
         var entity = world.getBlockEntity(centerPos);
 
         ItemStack input;
+
         if(recipeLogic.isIdle() && isFoad == 1 && entity instanceof PedestalTileEntity pedestal) {
             for (Recipe recipe : recipeMap.allRecipes()) {
-                if (recipe.matchRecipe(IO.IN, controller, recipe.inputs)) {
+                if (recipe.matchRecipe(IO.IN, this, recipe.inputs)) {
                     input = ItemStack.of((CompoundTag) recipe.data.get("item"));
                     if (ItemStack.isSame(input, pedestal.getItemStack())) {
                         recipeLogic.lastRecipe = recipe;
@@ -95,7 +100,7 @@ public class FuWenJiTanBlockEntity extends ControllerTileEntity {
             var recipe = recipeLogic.lastRecipe;
             input = ItemStack.of((CompoundTag) recipe.data.get("item"));
             boolean explode = false;
-            if(recipe.matchRecipe(IO.IN, controller, recipe.inputs)) {
+            if(recipe.matchRecipe(IO.IN, this, recipe.inputs)) {
                 if (!ItemStack.isSame(input, pedestal.getItemStack())) {
                     explode = true;
                 }
@@ -114,9 +119,9 @@ public class FuWenJiTanBlockEntity extends ControllerTileEntity {
             }
         }
 
-        if (recipeLogic.isWorking() && controller.getTimer() % 20 ==0) {
+        if (recipeLogic.isWorking() && getTimer() % 20 ==0) {
             List<PedestalTileEntity> pedestals = new ArrayList<>();
-            BlockPos.betweenClosedStream(centerPos.offset(0, -2, 0), centerPos.offset(12, 2, 12)).forEach(blockPos -> {
+            BlockPos.betweenClosedStream(centerPos.offset(-12, -2, 0), centerPos.offset(12, 2, 12)).forEach(blockPos -> {
                 var pos = blockPos.immutable();
                 if(pos.equals(centerPos)) return;
 
@@ -133,7 +138,9 @@ public class FuWenJiTanBlockEntity extends ControllerTileEntity {
                 }
 
                 if (world.getBlockEntity(pos) instanceof PedestalTileEntity pedestal) {
-                    pedestals.add(pedestal);
+                    if (!pedestal.getItemStack().isEmpty()) {
+                        pedestals.add(pedestal);
+                    }
 
                     if (pedestal.getItemStack().isEmpty()) {
                         instability.addAndGet(1);
@@ -142,7 +149,9 @@ public class FuWenJiTanBlockEntity extends ControllerTileEntity {
                     }
 
                     if (world.getBlockEntity(ipos) instanceof PedestalTileEntity ipedestal) {
-                        pedestals.add(ipedestal);
+                        if (!ipedestal.getItemStack().isEmpty()) {
+                            pedestals.add(ipedestal);
+                        }
                         if (!ItemStack.isSame(pedestal.getItemStack(), ipedestal.getItemStack())) {
                             instability.addAndGet(1);
                         }
@@ -158,16 +167,60 @@ public class FuWenJiTanBlockEntity extends ControllerTileEntity {
                     recipeLogic.setStatus(RecipeLogic.Status.IDLE);
                     isFoad = 0;
                     markAsDirty();
+
+                    for(var pedestal : pedestals) {
+                        if(!pedestal.getItemStack().isEmpty() && world.random.nextBoolean()) {
+                            var x = pedestal.getBlockPos().getX() + 0.5;
+                            var y = pedestal.getBlockPos().getY() + 1.5;
+                            var z = pedestal.getBlockPos().getZ() + 0.5;
+
+                            if(world.random.nextBoolean()) {
+                                level.explode(null,
+                                        controllerPos.getX() + 0.5,
+                                        controllerPos.getY() + 1.5,
+                                        controllerPos.getZ() + 0.5, 1,
+                                        Explosion.BlockInteraction.NONE);
+                            } else {
+                                spawnLightning(x, y, z, true);
+                            }
+
+                            var stack = pedestal.getItemStack().getItem().getRegistryName();
+
+                            MinecraftServer server = level.getServer();
+                            server.getCommands().performCommand(server.createCommandSourceStack().withSuppressedOutput(),
+                                    "particle minecraft:item %s %f %f %f 0.1 0.1 0.1 0.1 8 normal".formatted(stack.toString(), x, y, z));
+
+                            pedestal.setItemStack(ItemStack.EMPTY);
+                        }
+                    }
                 }
+            }
+        }
+    }
+
+    public void spawnLightning(double x, double y, double z, boolean effectOnly) {
+        if (this.level instanceof ServerLevel) {
+            LightningBolt e = EntityType.LIGHTNING_BOLT.create(this.level);
+            if (e != null) {
+                e.moveTo(x, y, z);
+                e.setVisualOnly(effectOnly);
+                this.level.addFreshEntity(e);
             }
         }
 
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
-        persistedData = null;
+    public void onStructureFormed() {
+        super.onStructureFormed();
+        if (level != null && level.getServer() != null) {
+            var x = getBlockPos().getX() + 0.5;
+            var y = getBlockPos().getY() + 0.5;
+            var z = getBlockPos().getZ() + 0.5;
+            MinecraftServer server = level.getServer();
+            server.getCommands().performCommand(server.createCommandSourceStack().withSuppressedOutput(),
+                    "particle minecraft:happy_villager %f %f %f 0.4 0.3 0.4 0 24 normal".formatted(x, y, z));
+        }
     }
 
     @Override
@@ -176,15 +229,6 @@ public class FuWenJiTanBlockEntity extends ControllerTileEntity {
             isFoad = 1;
         }
         return super.use(player, hand, hit);
-    }
-
-    @Override
-    public void receiveCustomData(int dataId, FriendlyByteBuf buf) {
-        if (dataId == 14) {
-
-        } else {
-            super.receiveCustomData(dataId, buf);
-        }
     }
 
     public static class FuWenJiTanRecipeLogic extends RecipeLogic {
