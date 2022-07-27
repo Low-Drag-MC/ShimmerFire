@@ -15,12 +15,6 @@
             },
             "chance": 1.0
           }
-        ],
-        "forge_energy": [
-          {
-            "content": 4800,
-            "chance": 1.0
-          }
         ]
       },
       "outputs": {
@@ -33,6 +27,14 @@
                 "item": "minecraft:glass_pane"
               }
             },
+            "chance": 1.0
+          }
+        ]
+      },
+      "tickInputs": {
+        "forge_energy": [
+          {
+            "content": 24,
             "chance": 1.0
           }
         ]
