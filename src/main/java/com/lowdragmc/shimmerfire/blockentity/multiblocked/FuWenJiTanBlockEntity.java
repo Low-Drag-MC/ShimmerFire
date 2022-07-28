@@ -25,7 +25,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
@@ -111,17 +110,15 @@ public class FuWenJiTanBlockEntity extends ControllerTileEntity {
                 recipeLogic.lastRecipe = null;
                 recipeLogic.setStatus(RecipeLogic.Status.IDLE);
                 recipeLogic.markDirty();
-                var e = level.explode(null,
-                        controllerPos.getX() + 0.5,
+                spawnLightning(controllerPos.getX() + 0.5,
                         controllerPos.getY() + 0.5,
-                        controllerPos.getZ() + 0.5, 2,
-                        Explosion.BlockInteraction.NONE);
+                        controllerPos.getZ() + 0.5, true);
             }
         }
 
         if (recipeLogic.isWorking() && getTimer() % 20 ==0) {
             List<PedestalTileEntity> pedestals = new ArrayList<>();
-            BlockPos.betweenClosedStream(centerPos.offset(-12, -2, 0), centerPos.offset(12, 2, 12)).forEach(blockPos -> {
+            BlockPos.betweenClosedStream(centerPos.offset(-4, -2, 0), centerPos.offset(4, 2, 4)).forEach(blockPos -> {
                 var pos = blockPos.immutable();
                 if(pos.equals(centerPos)) return;
 
@@ -163,7 +160,7 @@ public class FuWenJiTanBlockEntity extends ControllerTileEntity {
 
             if(recipeLogic != null && recipeLogic.isWorking()) {
                 var req = recipeLogic.lastRecipe.data.getInt("recipelnstability");
-                if(instability.get() + req >= world.random.nextInt(200)) {
+                if(instability.get() + req >= world.random.nextInt(400)) {
                     recipeLogic.setStatus(RecipeLogic.Status.IDLE);
                     isFoad = 0;
                     markAsDirty();
@@ -174,16 +171,7 @@ public class FuWenJiTanBlockEntity extends ControllerTileEntity {
                             var y = pedestal.getBlockPos().getY() + 1.5;
                             var z = pedestal.getBlockPos().getZ() + 0.5;
 
-                            if(world.random.nextBoolean()) {
-                                level.explode(null,
-                                        controllerPos.getX() + 0.5,
-                                        controllerPos.getY() + 1.5,
-                                        controllerPos.getZ() + 0.5, 1,
-                                        Explosion.BlockInteraction.NONE);
-                            } else {
-                                spawnLightning(x, y, z, true);
-                            }
-
+                            spawnLightning(x, y, z, true);
                             var stack = pedestal.getItemStack().getItem().getRegistryName();
 
                             MinecraftServer server = level.getServer();
