@@ -15,12 +15,12 @@
     "shouldCull": true,
     "texture": "multiblocked:art_sun",
     "isShader": true,
-    "scale": 3.0,
+    "scale": 0.7,
     "light": 15,
     "type": "particle"
   },
   "properties": {
-    "isOpaque": true,
+    "isOpaque": false,
     "destroyTime": 1.5,
     "explosionResistance": 6.0,
     "lightEmissive": 0,

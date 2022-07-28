@@ -17,6 +17,12 @@
             },
             "chance": 1.0
           }
+        ],
+        "forge_energy": [
+          {
+            "content": 4800,
+            "chance": 1.0
+          }
         ]
       },
       "outputs": {
@@ -24,12 +30,12 @@
           {
             "content": {
               "type": "multiblocked:sized",
-              "count": 2,
+              "count": 1,
               "ingredient": {
                 "item": "minecraft:redstone_torch"
               }
             },
-            "chance": 0.5
+            "chance": 1.0
           }
         ]
       }

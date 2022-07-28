@@ -1,6 +1,7 @@
 package com.lowdragmc.shimmerfire.item;
 
 import com.lowdragmc.shimmerfire.client.renderer.GeoBlockItemRenderer;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -13,6 +14,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Consumer;
 
 /**
@@ -20,6 +22,8 @@ import java.util.function.Consumer;
  * @date 2022/6/27
  * @implNote GeoBlockItem
  */
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class GeoBlockItem extends BlockItem implements IAnimatable {
 
     private final AnimationFactory factory = new AnimationFactory(this);

@@ -49,16 +49,36 @@
   "item.shimmerfire.flint_fire_life": "打火石 (§2生命§r)",
   "item.shimmerfire.flint_fire_arcane": "打火石 (§b神秘§r)",
   "item.shimmerfire.colorful_flint_fire": "§5多§2彩§b打§4火§6石§r",
+  "item.shimmerfire.fire_spirit": "微光灵动",
+	"item.shimmerfire.fire_spirit.tooltip": "§6像那闪烁的微光，希望把我的道路照亮，夜色愈农，它愈放出耀眼的光芒§r",
+	"item.shimmerfire.fire_spirit.clue": "等等！你再做什么？海克斯科技改造沙子？",
+	"item.shimmerfire.fire_spirit.shift": "右键方块放出你的精灵",
 	"item.shimmerfire.mimic_dissolve": "伪装消逝动画方块",
 
-
-	"item.tooltip.color": "颜色",
-	"item.tooltip.radius": "半径",
+  "item.tooltip.color": "颜色",
+  "item.tooltip.radius": "半径",
 
 	"itemGroup.shimmerfire.all": "ShimmerFire",
 
   "hex_gate.name": "飞门名：",
   "hex_gate.title": "海克斯飞门——连通世界",
   "hex_gate.go": "飞！",
-  "hex_gate.save": "保存站名和默认目的地"
+  "hex_gate.save": "保存站名和默认目的地",
+
+  "kubejs.kaka.inst": "不稳定度：",
+  "kubejs.kaka.inst.negligible": "忽略不计",
+  "kubejs.kaka.inst.minor": "较低",
+  "kubejs.kaka.inst.moderate": "适度",
+  "kubejs.kaka.inst.high": "较高",
+  "kubejs.kaka.inst.very_high": "非常高",
+  "kubejs.kaka.inst.dangerous": "危险的",
+
+  "block.multiblocked.riftway": "发电机",
+  "block.multiblocked.ebf": "电力工业高炉",
+  "block.multiblocked.alsm": "ALSM装配机",
+  "block.multiblocked.assembly": "镭射雕刻台",
+  "block.multiblocked.base": "基础方块",
+  "block.multiblocked.item_hatch": "物品仓",
+  "block.multiblocked.energy_hatch": "能源仓",
+  "block.kaka.fuwenjitan": "符文祭坛"
 }

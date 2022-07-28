@@ -3,6 +3,7 @@ package com.lowdragmc.shimmerfire.item;
 import com.lowdragmc.shimmerfire.CommonProxy;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.api.RawFire;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.lowdragmc.shimmerfire.block.ColoredFireBlock.FIRE;
 import static net.minecraft.world.level.block.CampfireBlock.LIT;
@@ -35,6 +37,8 @@ import static net.minecraft.world.level.block.CampfireBlock.WATERLOGGED;
  * @date 2022/5/5
  * @implNote ColoredFlintItem
  */
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class ColoredFlintItem extends FlintAndSteelItem {
     public final RawFire fire;
     public ColoredFlintItem(RawFire fire) {

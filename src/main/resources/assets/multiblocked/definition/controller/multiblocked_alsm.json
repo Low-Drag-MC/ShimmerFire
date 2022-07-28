@@ -32,7 +32,7 @@
     ],
     "pattern": [
       [
-        "D@AE",
+        "A@AA",
         "BBBB",
         "CCCC"
       ],
@@ -84,15 +84,12 @@
         "type": "blocks",
         "disableRenderFormed": true
       },
-      "item_in": {
+      "item": {
         "location": "multiblocked:item_hatch",
         "type": "component",
-        "io": "IN"
-      },
-      "item_out": {
-        "location": "multiblocked:item_hatch",
-        "type": "component",
-        "io": "OUT"
+        "minCount": 1,
+        "previewCount": 1,
+        "io": "BOTH"
       },
       "any": {
         "type": "any"
@@ -118,19 +115,14 @@
       ],
       "A": [
         "energy",
-        "base"
+        "base",
+        "item"
       ],
       "B": [
         "B"
       ],
       "C": [
         "C"
-      ],
-      "D": [
-        "item_in"
-      ],
-      "E": [
-        "item_out"
       ]
     }
   },

@@ -1,8 +1,11 @@
 package com.lowdragmc.shimmerfire.item;
 
 import com.lowdragmc.shimmerfire.entity.FireSpiritEntity;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -13,6 +16,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
@@ -21,7 +25,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -30,10 +37,12 @@ import java.util.function.Supplier;
  * @date 2022/7/18
  * @implNote FireSpiritEgg
  */
-public class FireSpiritSpawnEgg extends Item {
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+public class FireSpiritItem extends Item {
     Supplier<? extends EntityType<?>> type;
 
-    public FireSpiritSpawnEgg(Supplier<? extends EntityType<?>> type, Properties props) {
+    public FireSpiritItem(Supplier<? extends EntityType<?>> type, Properties props) {
         super(props);
         this.type = type;
     }
@@ -99,4 +108,12 @@ public class FireSpiritSpawnEgg extends Item {
         }
         return super.use(pLevel, pPlayer, pHand);
     }
+
+    @Override
+    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+        if (pIsAdvanced == TooltipFlag.Default.ADVANCED) {
+            pTooltipComponents.add(new TranslatableComponent("item.shimmerfire.fire_spirit.shift"));
+        }
+    }
+
 }

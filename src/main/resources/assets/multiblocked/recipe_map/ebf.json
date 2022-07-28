@@ -10,17 +10,8 @@
           {
             "content": {
               "type": "multiblocked:sized",
-              "count": 4,
+              "count": 1,
               "tag": "minecraft:sand"
-            },
-            "chance": 1.0
-          }
-        ],
-        "fluid": [
-          {
-            "content": {
-              "fluid": "minecraft:water",
-              "amount": 1000
             },
             "chance": 1.0
           }
@@ -38,13 +29,12 @@
             },
             "chance": 1.0
           }
-        ],
-        "fluid": [
+        ]
+      },
+      "tickInputs": {
+        "forge_energy": [
           {
-            "content": {
-              "fluid": "minecraft:lava",
-              "amount": 1000
-            },
+            "content": 24,
             "chance": 1.0
           }
         ]

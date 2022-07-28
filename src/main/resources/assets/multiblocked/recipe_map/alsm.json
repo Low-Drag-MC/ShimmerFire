@@ -10,7 +10,7 @@
           {
             "content": {
               "type": "multiblocked:sized",
-              "count": 2,
+              "count": 1,
               "ingredient": {
                 "item": "minecraft:redstone_torch"
               }
@@ -26,9 +26,17 @@
               "type": "multiblocked:sized",
               "count": 1,
               "ingredient": {
-                "item": "minecraft:repeater"
+                "item": "shimmerfire:fire_spirit"
               }
             },
+            "chance": 1.0
+          }
+        ]
+      },
+      "tickInputs": {
+        "forge_energy": [
+          {
+            "content": 20,
             "chance": 1.0
           }
         ]

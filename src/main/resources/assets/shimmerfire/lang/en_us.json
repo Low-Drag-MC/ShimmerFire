@@ -49,6 +49,10 @@
   "item.shimmerfire.flint_fire_life": "Fire Flint (§2Life§r)",
   "item.shimmerfire.flint_fire_arcane": "Fire Flint (§bArcane§r)",
   "item.shimmerfire.colorful_flint_fire": "Colorful Fire Flint",
+  "item.shimmerfire.fire_spirit": "Shimmer Spirit",
+  "item.shimmerfire.fire_spirit.tooltip": "§6Like the shimmering light. I hope to illuminate my path. The darker the night, the more dazzling it emits§r",
+  "item.shimmerfire.fire_spirit.clue": "Wait! What do you expect? HexTech to transform a sand block?",
+  "item.shimmerfire.fire_spirit.shift": "right click the block to release your spirit.",
 	"item.shimmerfire.mimic_dissolve": "Mimic Dissolve Animation Block",
 
 	"item.tooltip.color": "color",
@@ -59,5 +63,22 @@
 	"hex_gate.name": "Gate Name: ",
   "hex_gate.title": "HexGate——connected world",
   "hex_gate.go": "GO",
-  "hex_gate.save": "save name and default destination"
+  "hex_gate.save": "save name and default destination",
+
+  "kubejs.kaka.inst": "Instability: ",
+  "kubejs.kaka.inst.negligible": "Negligible",
+  "kubejs.kaka.inst.minor": "Minor",
+  "kubejs.kaka.inst.moderate": "Moderate",
+  "kubejs.kaka.inst.high": "High",
+  "kubejs.kaka.inst.very_high": "Very High",
+  "kubejs.kaka.inst.dangerous": "Dangerous",
+
+  "block.multiblocked.riftway": "Generator",
+  "block.multiblocked.ebf": "Electric Blast Furnace",
+  "block.multiblocked.alsm": "ALSM",
+  "block.multiblocked.assembly": "Laser Assembly",
+  "block.multiblocked.base": "Base Block",
+  "block.multiblocked.item_hatch": "Item Hatch",
+  "block.multiblocked.energy_hatch": "Energy Hatch",
+  "block.kaka.fuwenjitan": "Rune"
 }

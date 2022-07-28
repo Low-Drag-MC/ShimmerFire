@@ -31,24 +31,17 @@ public abstract class ProjectorRendererMixin {
             locals = LocalCapture.CAPTURE_FAILHARD,
             remap = false,
             cancellable = true)
-    private void injectRender(ProjectorBlockEntity tile,
-                              float partialTick,
-                              PoseStack pStack,
-                              MultiBufferSource source,
-                              int packedLight,
-                              int packedOverlay,
-                              CallbackInfo ci,
+    private void injectRender(ProjectorBlockEntity tile, float partialTick, PoseStack pStack, MultiBufferSource source, int packedLight, int packedOverlay, CallbackInfo ci,
                               Slide slide,
                               int color,
-                              ProjectorBlock.InternalRotation rotation,
-                              boolean flipped,
-                              float width,
-                              float height) {
+                              PoseStack.Pose _last,
+                              boolean flipped) {
         String effect = ((IShimmerEffectProjector)(Object)tile).getEffect();
         PostProcessing postProcessing = effect == null ? null : PostProcessing.getPost(effect);
         if (postProcessing != null) {
             PoseStack.Pose last = RenderUtils.copyPoseStack(pStack).last();
-            postProcessing.postEntity(bufferSource -> slide.render(bufferSource, last.pose(), last.normal(), width, height, color, 15728880, OverlayTexture.NO_OVERLAY, flipped || tile.mDoubleSided, !flipped || tile.mDoubleSided, SlideState.getAnimationTick(), partialTick));
+
+            postProcessing.postEntity(bufferSource -> slide.render(bufferSource, last.pose(), last.normal(), tile.mWidth, tile.mHeight, color, 15728880, OverlayTexture.NO_OVERLAY, flipped || tile.mDoubleSided, !flipped || tile.mDoubleSided, SlideState.getAnimationTick(), partialTick));
             pStack.popPose();
             ci.cancel();
         }
