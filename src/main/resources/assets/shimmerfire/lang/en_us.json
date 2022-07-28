@@ -42,17 +42,21 @@
   "block.shimmerfire.colored_bloom_block_green": "Green Bloom Block",
   "block.shimmerfire.colored_bloom_block_red": "Red Bloom Block",
   "block.shimmerfire.colorful_campfire": "Colorful campfire",
-  "item.shimmerfire.binding_wand": "Binding Tool",
+	"block.shimmerfire.mimic_dissolve": "Mimic Dissolve Animation Block",
+	"item.shimmerfire.binding_wand": "Binding Tool",
   "item.shimmerfire.flint_fire_destroy": "Fire Flint (§6Destroy§r)",
   "item.shimmerfire.flint_fire_rot": "Fire Flint (§5Rot§r)",
   "item.shimmerfire.flint_fire_life": "Fire Flint (§2Life§r)",
   "item.shimmerfire.flint_fire_arcane": "Fire Flint (§bArcane§r)",
   "item.shimmerfire.colorful_flint_fire": "Colorful Fire Flint",
+	"item.shimmerfire.mimic_dissolve": "Mimic Dissolve Animation Block",
 
 	"item.tooltip.color": "color",
 	"item.tooltip.radius": "radius",
 
-  "hex_gate.name": "Gate Name: ",
+	"itemGroup.shimmerfire.all": "ShimmerFire",
+
+	"hex_gate.name": "Gate Name: ",
   "hex_gate.title": "HexGate——connected world",
   "hex_gate.go": "GO",
   "hex_gate.save": "save name and default destination"

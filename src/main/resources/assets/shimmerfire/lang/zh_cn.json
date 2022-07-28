@@ -42,15 +42,20 @@
   "block.shimmerfire.colored_bloom_block_green": "绿色泛光方块",
   "block.shimmerfire.colored_bloom_block_red": "红色泛光方块",
   "block.shimmerfire.colorful_campfire": "多彩篝火",
+	"block.shimmerfire.mimic_dissolve": "伪装消逝动画方块",
   "item.shimmerfire.binding_wand": "绑定工具",
   "item.shimmerfire.flint_fire_destroy": "打火石 (§6毁灭§r)",
   "item.shimmerfire.flint_fire_rot": "打火石 (§5腐败§r)",
   "item.shimmerfire.flint_fire_life": "打火石 (§2生命§r)",
   "item.shimmerfire.flint_fire_arcane": "打火石 (§b神秘§r)",
   "item.shimmerfire.colorful_flint_fire": "§5多§2彩§b打§4火§6石§r",
+	"item.shimmerfire.mimic_dissolve": "伪装消逝动画方块",
+
 
 	"item.tooltip.color": "颜色",
 	"item.tooltip.radius": "半径",
+
+	"itemGroup.shimmerfire.all": "ShimmerFire",
 
   "hex_gate.name": "飞门名：",
   "hex_gate.title": "海克斯飞门——连通世界",

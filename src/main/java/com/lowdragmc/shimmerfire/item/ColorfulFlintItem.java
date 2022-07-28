@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.CandleCakeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
@@ -182,7 +183,7 @@ public class ColorfulFlintItem extends FlintAndSteelItem {
             } else {
                 pTooltipComponents.add(new TranslatableComponent("item.tooltip.color")
                         .append(new TextComponent(":"))
-                        .append(new TextComponent("⬛")
+                        .append(new TextComponent(colorPlaceHolder)
                                 .withStyle((style) -> style.withColor(color))));
             }
         }
@@ -191,6 +192,15 @@ public class ColorfulFlintItem extends FlintAndSteelItem {
             pTooltipComponents.add(new TranslatableComponent("item.tooltip.radius")
                     .append(new TextComponent(":" + radius))
             );
+        }
+    }
+
+    private static String colorPlaceHolder;
+
+    static {
+        colorPlaceHolder = "⬛";
+        if (ModList.get().isLoaded("modernui")){
+            colorPlaceHolder = "\u200c"+colorPlaceHolder+"\u200c";
         }
     }
 }

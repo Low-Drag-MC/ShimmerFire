@@ -150,7 +150,7 @@ public class CommonProxy {
         for (RegistryObject<ColoredDecorationBlock> block : COLORED_BLOOM_BLOCKS) {
             registerSimpleItem(registry, block.get());
         }
-        registerSimpleItem(registry,MIMIC_DISSOLVE_BLOCK.get());
+        registry.register(new BlockItem(MIMIC_DISSOLVE_BLOCK.get(),new Item.Properties()).setRegistryName(MIMIC_DISSOLVE_BLOCK.get().getRegistryName()));
         registerSimpleItem(registry,COLORFUL_CAMPFIRE_BLOCK.get());
     }
 
