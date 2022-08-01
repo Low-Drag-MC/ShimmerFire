@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "minecraft:item/iron_helmet"
+    "layer0": "shimmerfire:items/cyberpunk_glasses"
   }
 }
