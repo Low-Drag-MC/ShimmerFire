@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.teacon.nocaet.client.GarlicRenderTypes;
 
@@ -49,5 +50,14 @@ public class MixinLevelRender {
                 }
             }
         }
+    }
+
+    @Redirect(method = "renderSky",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;getTimeOfDay(F)F"))
+    private float b(ClientLevel level, float partialTicks){
+        if (ClientProxy.isWearingGlasses()) {
+            return 0.5f;
+        }
+        return level.getTimeOfDay(partialTicks);
     }
 }

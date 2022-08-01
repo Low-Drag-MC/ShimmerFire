@@ -24,6 +24,8 @@ import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -46,7 +48,7 @@ import static com.lowdragmc.shimmerfire.block.ColoredFireBlock.FIRE;
  */
 public class ClientProxy extends CommonProxy {
 
-    public static boolean BLOOM_LEAVE = false;
+    public static boolean BLOOM_LEAVE = true;
 
     public ClientProxy() {
         super();
@@ -219,5 +221,10 @@ public class ClientProxy extends CommonProxy {
         }, CommonProxy.COLORFUL_CAMPFIRE_BLOCK.get());
     }
 
+
+    public static boolean isWearingGlasses() {
+        Player player = Minecraft.getInstance().player;
+        return player != null && player.getInventory().getArmor(EquipmentSlot.HEAD.getIndex()).is(CommonProxy.CYBERPUNK_GLASSES.get());
+    }
 
 }

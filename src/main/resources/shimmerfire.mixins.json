@@ -5,7 +5,9 @@
   "refmap": "shimmerfire.refmap.json",
   "minVersion": "0.8",
   "client": [
+    "ClientLevelMixin",
     "ClientPacketListenerMixin",
+    "FogRendererlMixin",
     "MixinBufferUploader",
     "MixinLevelRender",
     "ParticleEngineMixin",
