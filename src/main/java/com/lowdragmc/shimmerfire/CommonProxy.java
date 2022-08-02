@@ -30,10 +30,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.block.Block;
@@ -100,6 +97,7 @@ public class CommonProxy {
     public static final RegistryObject<BindingWand> BINDING_WAND_ITEM = ITEMS.register("binding_wand", BindingWand::new);
     public static final RegistryObject<FireJarItem> FIRE_JAR_ITEM = ITEMS.register("fire_jar", ()->new FireJarItem(FIRE_JAR_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)));
     public static final RegistryObject<ColorfulFlintItem> COLORFUL_FLINT_ITEM = ITEMS.register("colorful_flint_fire",ColorfulFlintItem::new);
+    public static final RegistryObject<CyberpunkGlassesItem> CYBERPUNK_GLASSES = ITEMS.register("cyberpunk_glasses", ()->new CyberpunkGlassesItem((new Item.Properties()).tab(TAB_ITEMS)));
     // recipe
     public static final RegistryObject<SimpleRecipeSerializer<FlintDyeRecipe>> FLINT_DYE_RECIPE = RECIPE.register("flint_dye",()-> new SimpleRecipeSerializer<>(FlintDyeRecipe::new));
     public CommonProxy() {
