@@ -171,6 +171,55 @@ public class LighterSword extends Item implements IAnimatable, ISyncable {
             }
         }
 
+        // way one , renderRecursively will call renderCube , detect flame part by instanceof
+//        @Override
+//        public void renderCube(GeoCube cube, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+//            software.bernie.geckolib3.util.RenderUtils.moveToPivot(cube, stack);
+//            software.bernie.geckolib3.util.RenderUtils.rotate(cube, stack);
+//            RenderUtils.moveBackFromPivot(cube, stack);
+//            Matrix3f matrix3f = stack.last().normal();
+//            Matrix4f matrix4f = stack.last().pose();
+//
+//            for (GeoQuad quad : cube.quads) {
+//                if (quad == null) {
+//                    continue;
+//                }
+//                Vector3f normal = quad.normal.copy();
+//                normal.transform(matrix3f);
+//
+//                /*
+//                 * Fix shading dark shading for flat cubes + compatibility wish Optifine shaders
+//                 */
+//                if ((cube.size.y() == 0 || cube.size.z() == 0) && normal.x() < 0) {
+//                    normal.mul(-1, 1, 1);
+//                }
+//                if ((cube.size.x() == 0 || cube.size.z() == 0) && normal.y() < 0) {
+//                    normal.mul(1, -1, 1);
+//                }
+//                if ((cube.size.x() == 0 || cube.size.y() == 0) && normal.z() < 0) {
+//                    normal.mul(1, 1, -1);
+//                }
+//
+//                for (GeoVertex vertex : quad.vertices) {
+//                    Vector4f vector4f = new Vector4f(vertex.position.x(), vertex.position.y(), vertex.position.z(), 1.0F);
+//                    vector4f.transform(matrix4f);
+////                    if (bufferIn instanceof IBufferBuilder ibufferBuilder) {
+////                        ibufferBuilder.vertex(vector4f.x(), vector4f.y(), vector4f.z());
+////                        ibufferBuilder.samplerVertex(vertex.position.x(), vertex.position.y(), vertex.position.z());
+////                        ibufferBuilder.color(red, green, blue, alpha);
+////                        ibufferBuilder.uv(vertex.textureU, vertex.textureV);
+////                        ibufferBuilder.uv2(packedLightIn);
+////                        ibufferBuilder.normal(normal.x(),normal.y(),normal.z());
+////                        ibufferBuilder.globalProgress();
+////                        ibufferBuilder.endVertex();
+////                    } else {
+//                    bufferIn.vertex(vector4f.x(), vector4f.y(), vector4f.z(), red, green, blue, alpha, vertex.textureU,
+//                            vertex.textureV, packedOverlayIn, packedLightIn, normal.x(), normal.y(), normal.z());
+////                    }
+//                }
+//            }
+//        }
+
     }
 
 

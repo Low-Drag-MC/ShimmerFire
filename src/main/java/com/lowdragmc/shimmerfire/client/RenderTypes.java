@@ -3,6 +3,7 @@ package com.lowdragmc.shimmerfire.client;
 import com.google.common.collect.ImmutableMap;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
 import com.lowdragmc.shimmerfire.core.mixins.VertexFormatElementUsageAccessor;
+import com.lowdragmc.shimmerfire.item.LighterSword;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
@@ -11,7 +12,6 @@ import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 
@@ -79,12 +79,26 @@ public class RenderTypes {
                 .add(new ResourceLocation(ShimmerFireMod.MODID,"textures/noise.png"),false,true)
                 .build();
 
+        public static final RenderStateShard.MultiTextureStateShard TEXTURE_ITEM = new RenderStateShard.MultiTextureStateShard.Builder()
+                .add(LighterSword.textureLocation,false,true)
+                .add(new ResourceLocation(ShimmerFireMod.MODID,"textures/noise.png"), false, true)
+                .build();
+
         public static final RenderType MIMIC_DISSOLVE = create("mimic_dissolve", DissolveVertexFormat,
                 VertexFormat.Mode.QUADS, 2097152, true, false,
                 RenderType.CompositeState.builder()
                         .setLightmapState(LIGHTMAP)
                         .setShaderState(RENDERTYPE_MIMIC_DISSOLVE_SHADER)
                         .setTextureState(TEXTURE)
+                        .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                        .createCompositeState(true));
+
+        public static final RenderType MIMIC_DISSOLVE_ITEM = create("mimic_dissolve", DissolveVertexFormat,
+                VertexFormat.Mode.QUADS, 2097152, true, false,
+                RenderType.CompositeState.builder()
+                        .setLightmapState(LIGHTMAP)
+                        .setShaderState(RENDERTYPE_MIMIC_DISSOLVE_SHADER)
+                        .setTextureState(TEXTURE_ITEM)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                         .createCompositeState(true));
 

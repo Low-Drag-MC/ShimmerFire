@@ -21,6 +21,30 @@ public class IBufferBuilder extends BufferBuilder {
         return this;
     }
 
+//
+//    private static final float globalProgress = 0.5f;
+//    private static final float scale = 5;
+//
+//    /**
+//     specialized for geoRender , the origin implementation renderCube will fill data by this , adapt to data we need
+//     */
+//    @Override
+//    public void vertex(float pX, float pY, float pZ, float pRed, float pGreen, float pBlue, float pAlpha, float pTexU, float pTexV, int pOverlayUV, int pLightmapUV, float pNormalX, float pNormalY, float pNormalZ) {
+//        this.vertex(pX,pY,pZ);
+//        float l = System.currentTimeMillis() % 1000 / 1000f;
+//        this.vertex(pTexU * scale,pTexV * scale,0);
+//        this.color(pRed, pGreen, pBlue, pAlpha);
+//        this.uv(pTexU,pTexV);
+//        this.uv2(pLightmapUV);
+//        this.normal(pNormalX,pNormalY,pNormalZ);
+//        this.progress(globalProgress);
+//        this.endVertex();
+//    }
+//
+//    public IBufferBuilder globalProgress(){
+//        return progress(globalProgress);
+//    }
+
     public IBufferBuilder progress(float progress){
         if (this.currentElement().getUsage() != RenderTypes.MimicDissolveRenderType.INSTANCE_ELEMENT){
             throw new RuntimeException();
