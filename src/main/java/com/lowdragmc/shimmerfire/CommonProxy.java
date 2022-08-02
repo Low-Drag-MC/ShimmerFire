@@ -145,6 +145,7 @@ public class CommonProxy {
         registry.register(new GeoBlockItem(FIRE_CULTURE_TANK_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)).setModel("culture_tank"));
         registry.register(new GeoBlockItem(CREATIVE_FIRE_CULTURE_TANK_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)).setModel("culture_tank"));
         registry.register(new GeoBlockItem(FIRE_PEDESTAL_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)).setModel("fire_pedestal"));
+        registry.register(new LighterSword());
         registerSimpleItem(registry, CAMPFIRE_BLOCK.get());
         registerSimpleItem(registry, FIRE_EMITTER_BLOCK.get());
         registerSimpleItem(registry, FIRE_RECEIVER_BLOCK.get());
