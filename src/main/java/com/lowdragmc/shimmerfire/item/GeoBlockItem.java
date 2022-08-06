@@ -28,10 +28,12 @@ public class GeoBlockItem extends BlockItem implements IAnimatable {
 
     private final AnimationFactory factory = new AnimationFactory(this);
     private String model;
+    private final String controllerName;
 
     public GeoBlockItem(Block block, Item.Properties properties) {
         super(block, properties);
         setRegistryName(block.getRegistryName());
+        controllerName = "controller_" + block.getRegistryName().getPath();
         model = block.getRegistryName().getPath();
     }
 
@@ -41,7 +43,7 @@ public class GeoBlockItem extends BlockItem implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 20, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, controllerName, 20, this::predicate));
     }
 
     @Override
