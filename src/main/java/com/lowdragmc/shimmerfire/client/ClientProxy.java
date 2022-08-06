@@ -18,6 +18,7 @@ import com.lowdragmc.shimmerfire.client.particle.SparkParticle;
 import com.lowdragmc.shimmerfire.client.renderer.*;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
@@ -26,6 +27,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -79,13 +81,17 @@ public class ClientProxy extends CommonProxy {
         s = s.replace("out vec4 fragColor", "layout (location = 0) out vec4 fragColor");
         s = (new StringBuffer(s)).insert(s.lastIndexOf("void main()"), "layout (location = 1) out vec4 bloomColor;\n").toString();
         s = (new StringBuffer(s)).insert(s.lastIndexOf(125), """
-                if (isBloom > 0.5) {
-                    bloomColor = fragColor;
-                } else {
-                    bloomColor = vec4(0.);
-                }
+                bloomColor = fragColor * isBloom;
                 """).toString();
         return s;
+    }
+
+    public static float getGarlicBloomFactor(ClientLevel level) {
+        if (ClientProxy.BLOOM_LEAVE && level != null) {
+            float skyDarken = level.getSkyDarken(Minecraft.getInstance().getFrameTime()); // 1 - 0.2
+            return (1 - skyDarken) * 10 / 8; // 0 - 1.0
+        }
+        return 0f;
     }
 
     @SubscribeEvent
