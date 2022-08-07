@@ -98,6 +98,7 @@ public class CommonProxy {
     public static final RegistryObject<FireJarItem> FIRE_JAR_ITEM = ITEMS.register("fire_jar", ()->new FireJarItem(FIRE_JAR_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)));
     public static final RegistryObject<ColorfulFlintItem> COLORFUL_FLINT_ITEM = ITEMS.register("colorful_flint_fire",ColorfulFlintItem::new);
     public static final RegistryObject<CyberpunkGlassesItem> CYBERPUNK_GLASSES = ITEMS.register("cyberpunk_glasses", ()->new CyberpunkGlassesItem((new Item.Properties()).tab(TAB_ITEMS)));
+    public static final RegistryObject<LighterSword> LIGHTER_SWORD = ITEMS.register(LighterSword.name,LighterSword::new);
     // recipe
     public static final RegistryObject<SimpleRecipeSerializer<FlintDyeRecipe>> FLINT_DYE_RECIPE = RECIPE.register("flint_dye",()-> new SimpleRecipeSerializer<>(FlintDyeRecipe::new));
     public CommonProxy() {
@@ -143,7 +144,6 @@ public class CommonProxy {
         registry.register(new GeoBlockItem(FIRE_CULTURE_TANK_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)).setModel("culture_tank"));
         registry.register(new GeoBlockItem(CREATIVE_FIRE_CULTURE_TANK_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)).setModel("culture_tank"));
         registry.register(new GeoBlockItem(FIRE_PEDESTAL_BLOCK.get(), new Item.Properties().tab(TAB_ITEMS)).setModel("fire_pedestal"));
-        registry.register(new LighterSword());
         registerSimpleItem(registry, CAMPFIRE_BLOCK.get());
         registerSimpleItem(registry, FIRE_EMITTER_BLOCK.get());
         registerSimpleItem(registry, FIRE_RECEIVER_BLOCK.get());

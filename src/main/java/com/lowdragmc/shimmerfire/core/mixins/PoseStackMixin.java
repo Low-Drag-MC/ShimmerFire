@@ -18,20 +18,20 @@ public class PoseStackMixin {
     @Shadow
     Deque<PoseStack.Pose> poseStack;
 
-    @Inject(method = "pushPose", at = @At("TAIL"),locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(method = "pushPose", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD)
     public void injectPush(CallbackInfo ci, PoseStack.Pose pose) {
         ((IPoseStackPose) (Object) (poseStack.getLast())).addOffset(
-                ((IPoseStackPose)(Object)pose).getOffset()
+                ((IPoseStackPose) (Object) pose).getOffset()
         );
     }
 
-    @Inject(method = "translate",at = @At("TAIL"))
-    public void injectTranslate(double pX, double pY, double pZ, CallbackInfo ci){
+    @Inject(method = "translate", at = @At("TAIL"))
+    public void injectTranslate(double pX, double pY, double pZ, CallbackInfo ci) {
         ((IPoseStackPose) (Object) (poseStack.getLast())).addOffset((float) pX, (float) pY, (float) pZ);
     }
 
-    @Inject(method = "setIdentity" , at=@At("TAIL"))
-    public void injectSetIdentity(CallbackInfo ci){
+    @Inject(method = "setIdentity", at = @At("TAIL"))
+    public void injectSetIdentity(CallbackInfo ci) {
         ((IPoseStackPose) (Object) (poseStack.getLast())).setIdentity();
     }
 }
