@@ -14,4 +14,8 @@ public class DecorationBlock extends Block {
     public DecorationBlock() {
         super(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.STONE).requiresCorrectToolForDrops().strength(1.5F, 6.0F));
     }
+
+    public DecorationBlock(BlockBehaviour.Properties properties) {
+        super(properties);
+    }
 }

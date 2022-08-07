@@ -14,7 +14,8 @@
     "PoseStackMixin",
     "PoseStackPoseMixin",
     "VertexFormatElementUsageAccessor",
-    "sideshow.ProjectorScreenMixin"
+    "sideshow.ProjectorScreenMixin",
+    "ShimmerHotfixMixin"
   ],
   "mixins": [
     "ClientboundLevelParticlesPacketMixin",

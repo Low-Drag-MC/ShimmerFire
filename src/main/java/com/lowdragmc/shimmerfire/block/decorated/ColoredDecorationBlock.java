@@ -8,6 +8,9 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
@@ -29,6 +32,10 @@ public class ColoredDecorationBlock extends DecorationBlock {
 //    public static final EnumProperty<Color> COLOR = EnumProperty.create("color", Color.class);
 
     public ColoredDecorationBlock(Color color) {
+        super(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.STONE)
+                .requiresCorrectToolForDrops()
+                .strength(1.5F, 6.0F)
+                .emissiveRendering((state, level, pos) -> true));
         this.color = color;
     }
 
