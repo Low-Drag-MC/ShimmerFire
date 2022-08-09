@@ -76,7 +76,7 @@ public class ForgeCommonEventListener {
         return sendBloomParticles(level, pPlayer, pLongDistance, pPosX, pPosY, pPosZ, packet);
     }
 
-    private static boolean sendBloomParticles(Level level, ServerPlayer pPlayer, boolean pLongDistance, double pPosX, double pPosY, double pPosZ, Packet<?> pPacket) {
+    public static boolean sendBloomParticles(Level level, ServerPlayer pPlayer, boolean pLongDistance, double pPosX, double pPosY, double pPosZ, Packet<?> pPacket) {
         if (pPlayer.getLevel() != level) {
             return false;
         } else {

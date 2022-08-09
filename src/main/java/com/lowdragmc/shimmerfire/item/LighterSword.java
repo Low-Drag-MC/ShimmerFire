@@ -3,7 +3,9 @@ package com.lowdragmc.shimmerfire.item;
 import com.lowdragmc.shimmer.client.postprocessing.PostProcessing;
 import com.lowdragmc.shimmer.client.shader.RenderUtils;
 import com.lowdragmc.shimmerfire.CommonProxy;
+import com.lowdragmc.shimmerfire.ForgeCommonEventListener;
 import com.lowdragmc.shimmerfire.ShimmerFireMod;
+import com.lowdragmc.shimmerfire.core.IBloomParticle;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.CameraType;
@@ -12,16 +14,25 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -39,10 +50,12 @@ import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class LighterSword extends Item implements IAnimatable, ISyncable {
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
+public class LighterSword extends SwordItem implements IAnimatable, ISyncable {
 
     public final AnimationFactory factory = new AnimationFactory(this);
     public static String name = "lighter_sword";
@@ -51,6 +64,39 @@ public class LighterSword extends Item implements IAnimatable, ISyncable {
     private static final String animationInitial = "initial";
     private static final String animationFinal = "final";
     private static final String animationFirstperson = "FP_view";
+
+    @SubscribeEvent
+    public static void attachFire(LivingHurtEvent event) {
+        Entity entity = event.getSource().getEntity();
+        if (entity instanceof Player player) {
+            if (!player.getItemInHand(InteractionHand.MAIN_HAND).is(CommonProxy.LIGHTER_SWORD.get())){
+                return;
+            }
+            Entity target = event.getEntity();
+            if (target instanceof Player s && s.isCreative()){
+                return;
+            }
+            if (!target.fireImmune()) {
+                target.setSecondsOnFire(5);
+                Level level = target.level;
+                if (!level.isClientSide && level instanceof ServerLevel serverLevel){
+                    Vec3 position = target.position();
+                    List<ServerPlayer> players = serverLevel.players();
+                    var packet = new ClientboundLevelParticlesPacket(ParticleTypes.LAVA, false,
+                            position.x,position.y,position.z,
+                            0.2f,0.0f,0.2f,0.2f,30);
+                    if (packet instanceof IBloomParticle bloomParticle) {
+                        bloomParticle.setBloom();
+                    }
+                    for (var receiver : players){
+                        ForgeCommonEventListener.sendBloomParticles(serverLevel,
+                                receiver,false,
+                                position.x,position.y,position.z,packet);
+                    }
+                }
+            }
+        }
+    }
 
     @Override
     public void registerControllers(AnimationData data) {
@@ -73,7 +119,7 @@ public class LighterSword extends Item implements IAnimatable, ISyncable {
     }
 
     public LighterSword() {
-        super(new Properties().tab(CommonProxy.TAB_ITEMS).stacksTo(1));
+        super(Tiers.DIAMOND,3,-2.4f,new Properties().tab(CommonProxy.TAB_ITEMS).stacksTo(1));
         GeckoLibNetwork.registerSyncable(this);
     }
 
@@ -95,7 +141,9 @@ public class LighterSword extends Item implements IAnimatable, ISyncable {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        if (!pLevel.isClientSide) {
+        if (!pLevel.isClientSide ) {
+            if (pUsedHand == InteractionHand.OFF_HAND || !pPlayer.getItemInHand(InteractionHand.OFF_HAND).isEmpty())
+                return super.use(pLevel, pPlayer, pUsedHand);
             ItemStack stack = pPlayer.getItemInHand(pUsedHand);
             int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerLevel) pLevel);
             var nearBy = PacketDistributor.TRACKING_ENTITY.with(() -> pPlayer);
