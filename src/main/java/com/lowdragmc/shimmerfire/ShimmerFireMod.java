@@ -3,6 +3,7 @@ package com.lowdragmc.shimmerfire;
 import com.lowdragmc.shimmerfire.client.ClientProxy;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
@@ -32,5 +33,9 @@ public class ShimmerFireMod {
 
     public static boolean isModLoaded(String mod) {
         return ModList.get().isLoaded(mod);
+    }
+
+    public static ResourceLocation rl(String path){
+        return new ResourceLocation(MODID,path);
     }
 }

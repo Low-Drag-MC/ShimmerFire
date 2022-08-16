@@ -36,15 +36,15 @@ public class FirePedestalRenderer extends GeoBlockRenderer<FirePedestalBlockEnti
    public FirePedestalRenderer(BlockEntityRendererProvider.Context pContext) {
       super(pContext, new AnimatedGeoModel<>() {
          public ResourceLocation getAnimationFileLocation(FirePedestalBlockEntity animatable) {
-            return new ResourceLocation(ShimmerFireMod.MODID, "animations/fire_pedestal.animation.json");
+            return ShimmerFireMod.rl( "animations/fire_pedestal.animation.json");
          }
 
          public ResourceLocation getModelLocation(FirePedestalBlockEntity animatable) {
-            return new ResourceLocation(ShimmerFireMod.MODID, "geo/fire_pedestal.geo.json");
+            return ShimmerFireMod.rl( "geo/fire_pedestal.geo.json");
          }
 
          public ResourceLocation getTextureLocation(FirePedestalBlockEntity entity) {
-            return new ResourceLocation(ShimmerFireMod.MODID, "textures/blocks/fire_pedestal.png");
+            return ShimmerFireMod.rl( "textures/blocks/fire_pedestal.png");
          }
       });
       itemRenderer = Minecraft.getInstance().getItemRenderer();
@@ -80,7 +80,7 @@ public class FirePedestalRenderer extends GeoBlockRenderer<FirePedestalBlockEnti
          PoseStack finalStack = RenderUtils.copyPoseStack(stack);
          PostProcessing.BLOOM_UNREAL.postEntity(bufferSource -> {
             super.renderRecursively(bone, finalStack,
-                    bufferSource.getBuffer(RenderType.entityCutout(new ResourceLocation(ShimmerFireMod.MODID, "textures/blocks/fire_pedestal.png"))),
+                    bufferSource.getBuffer(RenderType.entityCutout(ShimmerFireMod.rl( "textures/blocks/fire_pedestal.png"))),
                     packedLightIn > 0 ? 0xf000f0 : packedLightIn, packedOverlayIn, red, green, blue, alpha);
          });
 

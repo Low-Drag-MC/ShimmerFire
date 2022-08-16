@@ -29,7 +29,7 @@ import java.util.function.Function;
  */
 @OnlyIn(Dist.CLIENT)
 public class FireSpiritParticle extends TextureParticle {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(ShimmerFireMod.MODID, "textures/particle/fire_spirit.png");
+    private static final ResourceLocation TEXTURE = ShimmerFireMod.rl( "textures/particle/fire_spirit.png");
 
     private boolean glint;
     private Function<FireSpiritParticle, Boolean> alive;

@@ -41,15 +41,15 @@ public class FireCultureTankRenderer extends GeoBlockRenderer<FireCultureTankBlo
    public FireCultureTankRenderer(BlockEntityRendererProvider.Context pContext) {
       super(pContext, new AnimatedGeoModel<>() {
          public ResourceLocation getAnimationFileLocation(FireCultureTankBlockEntity animatable) {
-            return new ResourceLocation(ShimmerFireMod.MODID, "animations/culture_tank.animation.json");
+            return ShimmerFireMod.rl( "animations/culture_tank.animation.json");
          }
 
          public ResourceLocation getModelLocation(FireCultureTankBlockEntity animatable) {
-            return new ResourceLocation(ShimmerFireMod.MODID, "geo/culture_tank.geo.json");
+            return ShimmerFireMod.rl( "geo/culture_tank.geo.json");
          }
 
          public ResourceLocation getTextureLocation(FireCultureTankBlockEntity entity) {
-            return new ResourceLocation(ShimmerFireMod.MODID, "textures/blocks/culture_tank.png");
+            return ShimmerFireMod.rl( "textures/blocks/culture_tank.png");
          }
       });
    }

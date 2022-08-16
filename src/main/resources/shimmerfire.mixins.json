@@ -1,31 +1,33 @@
 {
-  "required": true,
-  "package": "com.lowdragmc.shimmerfire.core.mixins",
-  "compatibilityLevel": "JAVA_17",
-  "refmap": "shimmerfire.refmap.json",
-  "minVersion": "0.8",
-  "client": [
-    "ClientLevelMixin",
-    "ClientPacketListenerMixin",
-    "FogRendererlMixin",
-    "MixinBufferUploader",
-    "MixinLevelRender",
-    "ParticleEngineMixin",
-    "PoseStackMixin",
-    "PoseStackPoseMixin",
-    "VertexFormatElementUsageAccessor",
-    "sideshow.ProjectorScreenMixin",
-    "ShimmerHotfixMixin",
-		"GameRenderMixin"
-  ],
-  "mixins": [
-    "ClientboundLevelParticlesPacketMixin",
-    "FireBlockMixin",
-    "LecternMixin",
+	"required": true,
+	"package": "com.lowdragmc.shimmerfire.core.mixins",
+	"compatibilityLevel": "JAVA_17",
+	"refmap": "shimmerfire.refmap.json",
+	"minVersion": "0.8",
+	"client": [
+		"ClientLevelMixin",
+		"ClientPacketListenerMixin",
+		"FogRendererlMixin",
+		"GameRenderMixin",
+		"MixinBufferUploader",
+		"MixinLevelRender",
+		"ParticleEngineMixin",
+		"PoseStackMixin",
+		"PoseStackPoseMixin",
+		"ShimmerHotfixMixin",
+		"StitcherMixin",
+		"TextureAtlasMixin",
+		"VertexFormatElementUsageAccessor",
+		"sideshow.ProjectorScreenMixin"
+	],
+	"mixins": [
+		"ClientboundLevelParticlesPacketMixin",
+		"FireBlockMixin",
+		"LecternMixin",
 		"PlayerMixin",
-    "RecipeWidgetMixin",
-    "SoulLanternMixin",
-    "sideshow.ProjectorBlockEntityMixin",
-    "sideshow.ProjectorRendererMixin"
-  ]
+		"RecipeWidgetMixin",
+		"SoulLanternMixin",
+		"sideshow.ProjectorBlockEntityMixin",
+		"sideshow.ProjectorRendererMixin"
+	]
 }

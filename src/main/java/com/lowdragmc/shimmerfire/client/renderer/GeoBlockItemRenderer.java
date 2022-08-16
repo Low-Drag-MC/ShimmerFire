@@ -20,15 +20,15 @@ public class GeoBlockItemRenderer extends GeoItemRenderer<GeoBlockItem> {
     public GeoBlockItemRenderer() {
         super(new AnimatedGeoModel<>() {
             public ResourceLocation getAnimationFileLocation(GeoBlockItem animatable) {
-                return new ResourceLocation(ShimmerFireMod.MODID, "animations/%s.animation.json".formatted(animatable.getModelName()));
+                return ShimmerFireMod.rl( "animations/%s.animation.json".formatted(animatable.getModelName()));
             }
 
             public ResourceLocation getModelLocation(GeoBlockItem animatable) {
-                return new ResourceLocation(ShimmerFireMod.MODID, "geo/%s.geo.json".formatted(animatable.getModelName()));
+                return ShimmerFireMod.rl( "geo/%s.geo.json".formatted(animatable.getModelName()));
             }
 
             public ResourceLocation getTextureLocation(GeoBlockItem animatable) {
-                return new ResourceLocation(ShimmerFireMod.MODID, "textures/blocks/%s.png".formatted(animatable.getModelName()));
+                return ShimmerFireMod.rl( "textures/blocks/%s.png".formatted(animatable.getModelName()));
             }
         });
     }

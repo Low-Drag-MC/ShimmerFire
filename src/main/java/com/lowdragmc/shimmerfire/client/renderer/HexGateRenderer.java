@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
  */
 public class HexGateRenderer extends GeoComponentRenderer {
 
-    private static final ResourceLocation RUNE_TEXTURE = new ResourceLocation(ShimmerFireMod.MODID, "textures/rune_magic_cycle.png");
+    private static final ResourceLocation RUNE_TEXTURE = ShimmerFireMod.rl( "textures/rune_magic_cycle.png");
 
     public HexGateRenderer() {
         super("hex_gate", false);

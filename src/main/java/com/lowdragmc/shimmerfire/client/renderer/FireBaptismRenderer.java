@@ -29,7 +29,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
  */
 public class FireBaptismRenderer  extends GeoComponentRenderer {
 
-    private static final ResourceLocation RUNE_TEXTURE = new ResourceLocation(ShimmerFireMod.MODID, "textures/rune_magic_cycle.png");
+    private static final ResourceLocation RUNE_TEXTURE = ShimmerFireMod.rl( "textures/rune_magic_cycle.png");
 
     public FireBaptismRenderer() {
         super("fire_baptism", false);

@@ -222,7 +222,7 @@ public class FireCultureTankBlockEntity extends FireContainer implements IAnimat
 
                 particle.scale(0.02f);
                 particle.setLight(0xf000f0);
-                particle.setTexture(new ResourceLocation(ShimmerFireMod.MODID, "textures/particle/fire_spark_2.png"));
+                particle.setTexture(ShimmerFireMod.rl("textures/particle/fire_spark_2.png"));
                 particle.setLifetime(random.nextInt(40) + 20);
                 particle.setColor((fire.colorVale >> 16 & 0xff)/256f,(fire.colorVale >> 8 & 0xff)/256f,(fire.colorVale & 0xff)/256f);
                 particle.addParticle();

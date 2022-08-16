@@ -122,7 +122,7 @@ public class FireTailParticle extends TrailParticle {
             int lastID = GL11.glGetInteger(GL30.GL_FRAMEBUFFER_BINDING);
 
             ShaderManager.getTempTarget().clear(false);
-            RenderTarget target = ShaderManager.getInstance().renderFullImageInFramebuffer(ShaderManager.getTempTarget(), Shaders.load(Shader.ShaderType.FRAGMENT, new ResourceLocation(ShimmerFireMod.MODID, "fire_trail")), uniformCache -> {
+            RenderTarget target = ShaderManager.getInstance().renderFullImageInFramebuffer(ShaderManager.getTempTarget(), Shaders.load(Shader.ShaderType.FRAGMENT, ShimmerFireMod.rl( "fire_trail")), uniformCache -> {
                 uniformCache.glUniform4F("color1", (color.colorVale >> 16 & 0xff)/256f,(color.colorVale >> 8 & 0xff)/256f,(color.colorVale & 0xff)/256f, 1);
                 uniformCache.glUniform4F("color2", 1,1,1, 1);
             }, shaderProgram -> shaderProgram.bindTexture("iChannel0", new ResourceLocation("ldlib:textures/particle/kila_tail.png")));

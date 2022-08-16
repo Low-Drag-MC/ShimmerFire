@@ -43,7 +43,7 @@ public class ColoredFlintItem extends FlintAndSteelItem {
     public final RawFire fire;
     public ColoredFlintItem(RawFire fire) {
         super(new Item.Properties().durability(64).tab(CommonProxy.TAB_ITEMS));
-        setRegistryName(new ResourceLocation(ShimmerFireMod.MODID, "flint_fire_" + fire.fireName));
+        setRegistryName(ShimmerFireMod.rl( "flint_fire_" + fire.fireName));
         this.fire = fire;
     }
 

@@ -63,14 +63,14 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
         createFirePort(CommonProxy.FIRE_RECEIVER_BLOCK.get(), "block/fire_receiver");
 
         createFlintModels();
-        getVariantBuilder(CommonProxy.FIRE_PEDESTAL_BLOCK.get()).forAllStates(blockState -> ConfiguredModel.builder().modelFile(models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/" + CommonProxy.FIRE_PEDESTAL_BLOCK.get().getRegistryName().getPath()))).build());
+        getVariantBuilder(CommonProxy.FIRE_PEDESTAL_BLOCK.get()).forAllStates(blockState -> ConfiguredModel.builder().modelFile(models().getExistingFile(ShimmerFireMod.rl( "block/" + CommonProxy.FIRE_PEDESTAL_BLOCK.get().getRegistryName().getPath()))).build());
         for (RegistryObject<ColoredDecorationBlock> coloredBloomBlock : CommonProxy.COLORED_BLOOM_BLOCKS) {
-            createSimpleBlock(coloredBloomBlock.get(), new ResourceLocation(ShimmerFireMod.MODID, "block/colored_bloom_block"));
+            createSimpleBlock(coloredBloomBlock.get(), ShimmerFireMod.rl( "block/colored_bloom_block"));
         }
     }
 
     private void createSimpleBlock(Block block) {
-        createSimpleBlock(block, new ResourceLocation(ShimmerFireMod.MODID, "block/" + block.getRegistryName().getPath()));
+        createSimpleBlock(block, ShimmerFireMod.rl( "block/" + block.getRegistryName().getPath()));
     }
 
     private void createSimpleBlock(Block block, ResourceLocation model) {
@@ -90,10 +90,10 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
 
     private void createFireContainer() {
         getVariantBuilder(CommonProxy.FIRE_CULTURE_TANK_BLOCK.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
-                .modelFile(models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_culture_tank")))
+                .modelFile(models().getExistingFile(ShimmerFireMod.rl( "block/fire_culture_tank")))
                 .build(), FireCultureTankBlock.HALF, FireCultureTankBlock.CHARGING);
         getVariantBuilder(CommonProxy.CREATIVE_FIRE_CULTURE_TANK_BLOCK.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
-                .modelFile(models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_culture_tank")))
+                .modelFile(models().getExistingFile(ShimmerFireMod.rl( "block/fire_culture_tank")))
                 .build(), FireCultureTankBlock.HALF, FireCultureTankBlock.CHARGING);
 
     }
@@ -102,19 +102,19 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(block).forAllStates(state -> {
             Direction dir = state.getValue(FirePortBlock.FACING);
             return ConfiguredModel.builder()
-                    .modelFile(models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, model)))
+                    .modelFile(models().getExistingFile(ShimmerFireMod.rl( model)))
                     .rotationX(dir == Direction.DOWN ? 180 : dir.getAxis().isHorizontal() ? 90 : 0)
                     .rotationY(dir.getAxis().isVertical() ? 0 : (((int) dir.toYRot()) + 180) % 360)
                     .build();
         });
-        simpleBlockItem(block, models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, model)));
+        simpleBlockItem(block, models().getExistingFile(ShimmerFireMod.rl( model)));
     }
 
     private void createFireJar() {
-        ModelFile fireJarModel = models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_jar"));
-        ModelFile emptyModel = models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_empty_jar"));
-        ModelFile translucentModel = models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_jar_translucent"));
-        ModelFile cutoutModel = models().getExistingFile(new ResourceLocation(ShimmerFireMod.MODID, "block/fire_jar_cutout"));
+        ModelFile fireJarModel = models().getExistingFile(ShimmerFireMod.rl( "block/fire_jar"));
+        ModelFile emptyModel = models().getExistingFile(ShimmerFireMod.rl( "block/fire_empty_jar"));
+        ModelFile translucentModel = models().getExistingFile(ShimmerFireMod.rl( "block/fire_jar_translucent"));
+        ModelFile cutoutModel = models().getExistingFile(ShimmerFireMod.rl( "block/fire_jar_cutout"));
         Function<RawFire, ModelFile> fireModelMap = fire -> {
             String name = "block/jar/" + fire.fireName;
             return models().getBuilder(name).customLoader(MultiLayerModelBuilder::begin)
@@ -138,7 +138,7 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
             return ConfiguredModel.builder().modelFile(modelFile).build();
         });
         int i = 0;
-        ResourceLocation fireKey = new ResourceLocation(ShimmerFireMod.MODID, "fire");
+        ResourceLocation fireKey = ShimmerFireMod.rl( "fire");
         var itemModel = itemModels()
                 .getBuilder(CommonProxy.FIRE_JAR_BLOCK.get().getRegistryName().getPath())
                 .override().predicate(fireKey, i++).model(emptyModel).end();
@@ -148,7 +148,7 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
     }
 
     private void createColoredCampfire() {
-        ResourceLocation fireModel = new ResourceLocation(ShimmerFireMod.MODID, "block/campfire_fire_lit");
+        ResourceLocation fireModel = ShimmerFireMod.rl( "block/campfire_fire_lit");
         ModelFile offModel = (this.models().withExistingParent("block/campfire/off", ModelLocationUtils.decorateBlockModelLocation("campfire_off")))
                 .texture("particle", "minecraft:block/campfire_log");
         getVariantBuilder(CommonProxy.CAMPFIRE_BLOCK.get()).forAllStatesExcept(state -> {
@@ -236,7 +236,7 @@ public class ShimmerFireBlockStateProvider extends BlockStateProvider {
     }
 
     private void createColorfulCampfire(){
-        ResourceLocation fireModel = new ResourceLocation(ShimmerFireMod.MODID, "block/campfire_fire_lit");
+        ResourceLocation fireModel = ShimmerFireMod.rl( "block/campfire_fire_lit");
         ModelFile offModel = (this.models().withExistingParent("block/campfire/off", ModelLocationUtils.decorateBlockModelLocation("campfire_off")))
                 .texture("particle", "minecraft:block/campfire_log");
         getVariantBuilder(CommonProxy.COLORFUL_CAMPFIRE_BLOCK.get()).forAllStatesExcept(state -> {

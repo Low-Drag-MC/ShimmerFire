@@ -179,19 +179,19 @@ public class LighterSword extends SwordItem implements IAnimatable, ISyncable {
         }
     }
 
-    public static final ResourceLocation textureLocation = new ResourceLocation(ShimmerFireMod.MODID, "textures/items/" + name + ".png");
+    public static final ResourceLocation textureLocation = ShimmerFireMod.rl( "textures/items/" + name + ".png");
 
 
     public static class FlameSwordModel extends AnimatedGeoModel<LighterSword> {
 
         @Override
         public ResourceLocation getAnimationFileLocation(LighterSword animatable) {
-            return new ResourceLocation(ShimmerFireMod.MODID, "animations/" + name + ".animation.json");
+            return ShimmerFireMod.rl( "animations/" + name + ".animation.json");
         }
 
         @Override
         public ResourceLocation getModelLocation(LighterSword animatable) {
-            return new ResourceLocation(ShimmerFireMod.MODID, "geo/" + name + ".geo.json");
+            return ShimmerFireMod.rl( "geo/" + name + ".geo.json");
         }
 
         @Override

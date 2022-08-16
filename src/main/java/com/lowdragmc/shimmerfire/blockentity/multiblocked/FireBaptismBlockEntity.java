@@ -220,7 +220,7 @@ public class FireBaptismBlockEntity extends ControllerTileEntity {
         );
     }
 
-    public final static ControllerDefinition FIRE_BAPTISM_DEFINITION = new ControllerDefinition(new ResourceLocation(ShimmerFireMod.MODID, "fire_baptism"), FireBaptismBlockEntity.class);
+    public final static ControllerDefinition FIRE_BAPTISM_DEFINITION = new ControllerDefinition(ShimmerFireMod.rl( "fire_baptism"), FireBaptismBlockEntity.class);
 
     public static void registerFireBaptism() {
 

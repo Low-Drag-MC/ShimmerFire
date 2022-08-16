@@ -16,6 +16,7 @@ import com.lowdragmc.shimmerfire.blockentity.ColorfulFireBlockEntity;
 import com.lowdragmc.shimmerfire.blockentity.FirePedestalBlockEntity;
 import com.lowdragmc.shimmerfire.client.particle.SparkParticle;
 import com.lowdragmc.shimmerfire.client.renderer.*;
+import com.lowdragmc.shimmerfire.item.CyberpunkGlassesItem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -23,21 +24,17 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.client.event.ColorHandlerEvent;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.client.event.RegisterShadersEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
 import org.teacon.nocaet.client.GarlicRenderTypes;
+import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
 import java.lang.reflect.Field;
 
@@ -110,15 +107,21 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
+    public void registerRenders(EntityRenderersEvent.AddLayers event){
+        GeoArmorRenderer.registerArmorRenderer(CyberpunkGlassesItem.class,
+                new CyberpunkGlassesItem.CyberpunkGlassesRender());
+    }
+
+    @SubscribeEvent
     public void shaderRegistry(RegisterShadersEvent event) {
         ResourceManager resourceManager = event.getResourceManager();
         try {
             event.registerShader(new ShaderInstance(resourceManager,
-                    new ResourceLocation(ShimmerFireMod.MODID, "rendertype_cutout_no_cull"),
+                    ShimmerFireMod.rl( "rendertype_cutout_no_cull"),
                     DefaultVertexFormat.NEW_ENTITY),
                     shaderInstance -> RenderTypes.EmissiveCutoutNoCullRenderType.emissiveCutoutNoCullShader = shaderInstance);
             event.registerShader(new ShaderInstance(resourceManager,
-                    new ResourceLocation(ShimmerFireMod.MODID,"rendertype_mimic_dissolve_solid"),
+                    ShimmerFireMod.rl("rendertype_mimic_dissolve_solid"),
                     RenderTypes.MimicDissolveRenderType.DissolveVertexFormat),
                     shaderInstance -> RenderTypes.MimicDissolveRenderType.SOLID_MIMIC_DISSOLVE_SHADER = shaderInstance);
         } catch (Exception e) {
@@ -182,7 +185,7 @@ public class ClientProxy extends CommonProxy {
                 return null;
             });
             ItemProperties.register(FIRE_JAR_ITEM.get(),
-                    new ResourceLocation(ShimmerFireMod.MODID, "fire"),
+                    ShimmerFireMod.rl( "fire"),
                     (itemStack, clientWorld, entity, seed) -> itemStack.getDamageValue());
         });
     }
@@ -231,6 +234,11 @@ public class ClientProxy extends CommonProxy {
     public static boolean isWearingGlasses() {
         Player player = Minecraft.getInstance().player;
         return player != null && player.getInventory().getArmor(EquipmentSlot.HEAD.getIndex()).is(CommonProxy.CYBERPUNK_GLASSES.get());
+    }
+
+    @SubscribeEvent
+    public void switchTexture(RegisterClientReloadListenersEvent event){
+        event.registerReloadListener(GlassAtlas.instance);
     }
 
 }

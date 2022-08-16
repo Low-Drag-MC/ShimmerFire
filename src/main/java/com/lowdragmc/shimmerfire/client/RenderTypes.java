@@ -76,7 +76,7 @@ public class RenderTypes {
 
         public static final RenderStateShard.MultiTextureStateShard TEXTURE = new RenderStateShard.MultiTextureStateShard.Builder()
                 .add(InventoryMenu.BLOCK_ATLAS, false, true)
-                .add(new ResourceLocation(ShimmerFireMod.MODID,"textures/noise.png"),false,true)
+                .add(ShimmerFireMod.rl("textures/noise.png"),false,true)
                 .build();
 
         public static final RenderType MIMIC_DISSOLVE = create("mimic_dissolve", DissolveVertexFormat,

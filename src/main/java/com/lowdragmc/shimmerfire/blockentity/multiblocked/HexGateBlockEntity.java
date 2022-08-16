@@ -250,7 +250,7 @@ public class HexGateBlockEntity extends ControllerTileEntity {
                 TextureBeamParticle beamParticle = new TextureBeamParticle(clientLevel,
                         new Vector3(from).add(0.5),
                         new Vector3(from.relative(getFrontFacing(), 256)).add(0.5));
-                beamParticle.setTexture(new ResourceLocation(ShimmerFireMod.MODID, "textures/particle/laser.png"));
+                beamParticle.setTexture(ShimmerFireMod.rl( "textures/particle/laser.png"));
                 beamParticle.setFullLight();
                 beamParticle.setLifetime(50);
                 beamParticle.setEmit(0.3F);
@@ -376,7 +376,7 @@ public class HexGateBlockEntity extends ControllerTileEntity {
                 pos.relative(dir.getOpposite(), 5).relative(Direction.DOWN, 5).relative(getFrontFacing(), isIdle() ? 2 : 20));
     }
 
-    public final static ControllerDefinition HEX_GATE_DEFINITION = new ControllerDefinition(new ResourceLocation(ShimmerFireMod.MODID, "hex_gate_controller"), HexGateBlockEntity.class);
+    public final static ControllerDefinition HEX_GATE_DEFINITION = new ControllerDefinition(ShimmerFireMod.rl( "hex_gate_controller"), HexGateBlockEntity.class);
 
     public static void registerHexGate() {
 
